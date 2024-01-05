@@ -19,11 +19,11 @@ namespace InternshipManagementSystem.API.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            _studentReadRepository.GetAll();
-            return Ok();
+         var x=   _studentReadRepository.GetAll();
+            return Ok(x);
         }
-        [HttpGet("/get")]
-        public IActionResult Get()
+        [HttpGet("/AddRange")]
+        public IActionResult AddRange()
         {
             _studentWriteRepository.AddAsyncRange(
                                new()

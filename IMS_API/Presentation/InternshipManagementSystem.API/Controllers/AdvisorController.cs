@@ -1,5 +1,4 @@
 ﻿using İnternshipManagementSystem.Application.Repositories;
-using İnternshipManagementSystem.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternshipManagementSystem.API.Controllers
@@ -20,49 +19,55 @@ namespace InternshipManagementSystem.API.Controllers
         [HttpGet]
         public async Task Get()
         {
-            //   _advisorWriteRepository.AddAsyncRange(
-            //       new()
-            //       {
-            //           new (){
-            //               id= Guid.NewGuid(),
-            //               AdviserName="Ali",
-            //               AdviserSurname="Yılmaz",
-            //               TC_ID="12345678910",
-            //               DepartmentName="Bilgisayar Mühendisliği",
-            //               AdviserGSMNumber    ="05321234567",
-            //               Address="İstanbul",
-            //               Email=""
+            _advisorWriteRepository.AddAsyncRange(
+                new()
+                {
+                       new (){
+                           id= Guid.NewGuid(),
+                           AdviserID=Guid.NewGuid().ToString(),
 
-            //           },
-            //           new()
-            //           {
-            //               id= Guid.NewGuid(),
-            //               AdviserName="Ayşe",
-            //               AdviserSurname="Yılmaz",
-            //               TC_ID="12345678910",
-            //               DepartmentName="Bilgisayar Mühendisliği",
-            //               AdviserGSMNumber    ="05321234567",
-            //               Address="İstanbul",
-            //               Email=""
-            //           },
-            //           new()
-            //           {
-            //               id = Guid.NewGuid(),
-            //               AdviserName = "Ahmet",
-            //               AdviserSurname = "Yılmaz",
-            //               TC_ID = "12345678910",
-            //               DepartmentName = "Bilgisayar Mühendisliği",
-            //               AdviserGSMNumber = "05321234567",
-            //               Address = "İstanbul",
-            //               Email = ""
-            //           }
+                           AdviserName="Ali",
+                           AdviserSurname="Yılmaz",
+                           TC_ID="12345678910",
+                           DepartmentName="Bilgisayar Mühendisliği",
+                           AdviserGSMNumber    ="05321234567",
+                           Address="İstanbul",
+                           Email=""
+
+                       },
+                       new()
+                       {
+                           id= Guid.NewGuid(),
+                                                  AdviserID=Guid.NewGuid().ToString(),
 
 
-            //       }
+                           AdviserName="Ayşe",
+                           AdviserSurname="Yılmaz",
+                           TC_ID="12345678910",
+                           DepartmentName="Bilgisayar Mühendisliği",
+                           AdviserGSMNumber    ="05321234567",
+                           Address="İstanbul",
+                           Email=""
+                       },
+                       new()
+                       {
+                           id = Guid.NewGuid(),
+                           AdviserID=Guid.NewGuid().ToString(),
+                           AdviserName = "Ahmet",
+                           AdviserSurname = "Yılmaz",
+                           TC_ID = "12345678910",
+                           DepartmentName = "Bilgisayar Mühendisliği",
+                           AdviserGSMNumber = "05321234567",
+                           Address = "İstanbul",
+                           Email = ""
+                       }
 
-            //       );
-            //var couınt =   await _advisorWriteRepository.SaveAsync();
-            //
+
+                }
+
+                ); ;
+            var couınt = await _advisorWriteRepository.SaveAsync();
+
             //
             //Tracking testi
             ///
@@ -74,52 +79,13 @@ namespace InternshipManagementSystem.API.Controllers
 
         }
 
-        [HttpGet("/GetA")]
+        [HttpGet("/GetAll")]
 
-        public async Task GetA()
+        public  IActionResult GetAll()
         {
-            await _advisorWriteRepository.AddAsyncRange(
-                                 new()
-                                 {
-                    new()
-                    {
-                        id= Guid.NewGuid(),
-                        AdviserID=Guid.NewGuid() .ToString (),
-                        AdviserName="Alis",
-                        AdviserSurname="Yılmaz",
-                        TC_ID="12345678910",
-                        DepartmentName="Bilgisayar Mühendisliği",
-                        AdviserGSMNumber    ="05321234567",
-                        Address="İstanbul",
-                        Email="",
+            var data = _advisorReadRepository.GetAll();
+            return Ok(data);
 
-                    },
-                    new()
-                    {
-                        id= Guid.NewGuid(),
-                           AdviserID=Guid.NewGuid() .ToString (),
-                        AdviserName="Ayşea",
-                        AdviserSurname="Yılmaz",
-                        TC_ID="12345678910",
-                        DepartmentName="Bilgisayar Mühendisliği",
-                        AdviserGSMNumber    ="05321234567",
-                        Address="İstanbul",
-                        Email=""
-                    },
-                    new()
-                    {
-                        id = Guid.NewGuid(),
-                           AdviserID=Guid.NewGuid() .ToString (),
-                        AdviserName = "Ahmetd",
-                        AdviserSurname = "Yılmaz",
-                        TC_ID = "12345678910",
-                        DepartmentName = "Bilgisayar Mühendisliği",
-                        AdviserGSMNumber = "05321234567",
-                        Address = "İstanbul",
-                        Email = ""
-                    }
-                                 });
-            await _advisorWriteRepository.SaveAsync();
         }
 
 
