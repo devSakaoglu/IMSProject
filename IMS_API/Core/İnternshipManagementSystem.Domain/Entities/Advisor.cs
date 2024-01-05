@@ -2,7 +2,7 @@
 {
     public class Advisor :BaseEntity
     {
-        public string AdviserID { get; set; }
+        public string? AdviserID { get; set; }
         public string? AdviserName { get; set; }
         public string? AdviserSurname { get; set; }
         public string? TC_ID { get; set; }

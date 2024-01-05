@@ -10,7 +10,7 @@ namespace İnternshipManagementSystem.Domain.Entities
     public class Student : BaseEntity
     {
 
-        public string StudentID { get; set; }
+        public string? StudentID { get; set; }
         public string? AdviserID { get; set; }
         public string? StudentName { get; set; }
         public string? StudentSurname { get; set; }
