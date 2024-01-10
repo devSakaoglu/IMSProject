@@ -5,7 +5,7 @@ using System.Linq;
 namespace InternshipManagementSystem.Persistence.Contexts
 {
     public class InternshipManagementSystemDbContext : DbContext
-    {
+    {`
         public InternshipManagementSystemDbContext(DbContextOptions<InternshipManagementSystemDbContext> options) : base(options)
         {
 

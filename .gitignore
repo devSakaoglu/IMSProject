@@ -265,6 +265,9 @@ ServiceFabricBackup/
 *.mdf
 *.ldf
 *.ndf
+*.sql
+*.py
+
 
 # Business Intelligence projects
 *.rdl.data
@@ -369,6 +372,9 @@ healthchecksdb
 
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
+/migrations/
+migrations/
+
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/

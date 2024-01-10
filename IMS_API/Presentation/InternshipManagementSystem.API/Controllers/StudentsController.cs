@@ -25,47 +25,7 @@ namespace InternshipManagementSystem.API.Controllers
         [HttpGet("/AddRange")]
         public IActionResult AddRange()
         {
-            _studentWriteRepository.AddAsyncRange(
-                               new()
-                               {
-                    new()
-                    {
-                        id= Guid.NewGuid(),
-                        StudentID=Guid.NewGuid() .ToString (),
-                        StudentName="Ali",
-                        StudentSurname="Yılmaz",
-                        TC_ID="12345678910",
-                        DepartmentName="Bilgisayar Mühendisliği",
-                        StudentGSMNumber    ="05321234567",
-                        Address="İstanbul",
-                        Email=""
-
-                    },
-                    new()
-                    {
-                        id= Guid.NewGuid(),
-                        StudentID=Guid.NewGuid() .ToString (),
-                        StudentName="Ayşe",
-                        StudentSurname="Yılmaz",
-                        TC_ID="12345678910",
-                        DepartmentName="Bilgisayar Mühendisliği",
-                        StudentGSMNumber    ="05321234567",
-                        Address="İstanbul",
-                        Email=""
-                    },
-                    new()
-                    {
-                        id = Guid.NewGuid(),
-                        StudentID=Guid.NewGuid() .ToString (),
-                        StudentName = "Ahmet",
-                        StudentSurname = "Yılmaz",
-                        TC_ID = "12345678910",
-                        DepartmentName = "Bilgisayar Mühendisliği",
-                        StudentGSMNumber = "05321234567",
-                        Address = "İstanbul",
-                        Email = ""
-                    }
-                               });
+           
             var count = _studentWriteRepository.SaveAsync().Result;
             return Ok(count);
         }   
