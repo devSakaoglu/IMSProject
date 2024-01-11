@@ -9,7 +9,7 @@ namespace InternshipManagementSystem.Application.DTO
 {
     internal class InternshipApplicationInfoForAdviserExcelDTO
     {
-        public string StudentN{ get; set; }
+        public string StudentNo{ get; set; }
         public string FullName { get; set; }
         public string TC_No { get; set; }
         public string InternshipStartDate { get; set; }
