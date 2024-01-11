@@ -1,6 +1,4 @@
-﻿using InternshipManagementSystem.Application.Abstractions;
-using InternshipManagementSystem.Application.Repositories;
-using InternshipManagementSystem.Persistence.Concretes;
+﻿using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Persistence.Contexts;
 using InternshipManagementSystem.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;

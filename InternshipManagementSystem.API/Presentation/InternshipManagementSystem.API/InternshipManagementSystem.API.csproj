@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\InternshipManagementSystem.Application\InternshipManagementSystem.Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\InternshipManagementSystem.Persistence\InternshipManagementSystem.Persistence.csproj" />
   </ItemGroup>
 
