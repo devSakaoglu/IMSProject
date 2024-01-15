@@ -1,32 +1,24 @@
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterModule } from '@angular/router';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { StajYonComponent } from './staj-yon/staj-yon.component';
-import { StajDefComponent } from './staj-def/staj-def.component';
-import { FormlarComponent } from './formlar/formlar.component';
-import { IgBelgeComponent } from './ig-belge/ig-belge.component';
-import { LoginComponent } from './login/login.component';
+import { AdminModule } from './admin/admin.module';
+import { UiModule } from './ui/ui.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 @NgModule({
- declarations: [
-    AppComponent,
-    HomeComponent,
-    StajYonComponent,
-    StajDefComponent,
-    FormlarComponent,
-    IgBelgeComponent,
-    LoginComponent
- ],
- imports: [
+  declarations: [
+    AppComponent
+  ],
+  imports: [
     BrowserModule,
-    RouterModule.forRoot([]),
-    AppRoutingModule
- ],
- providers: [],
- bootstrap: [AppComponent],
- schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    AdminModule, UiModule,
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

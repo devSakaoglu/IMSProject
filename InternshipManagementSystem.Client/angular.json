@@ -3,9 +3,20 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "project1": {
+    "proje1": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss",
+          "standalone": false
+        },
+        "@schematics/angular:directive": {
+          "standalone": false
+        },
+        "@schematics/angular:pipe": {
+          "standalone": false
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -13,21 +24,35 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/project1",
+            "outputPath": "dist/proje1",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets"             
             ],
             "styles": [
-              "src/styles.css"
+              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/assets/css/fontawesome.css",
+              "src/assets/css/templatemo-edu-meeting.css",
+              "src/assets/css/owl.css",
+              "node_modules/lightbox/dist/bundle-main.css",
+              "node_modules/lightbox/dist/bundle-assets.css",
+              "src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/owl.carousel2/docs/assets/owlcarousel/owl.carousel.min.js",
+              "node_modules/lightbox/dist/bundle-main.js",
+              "src/assets/js/c-active.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -57,10 +82,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "project1:build:production"
+              "buildTarget": "proje1:build:production"
             },
             "development": {
-              "buildTarget": "project1:build:development"
+              "buildTarget": "proje1:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -68,7 +93,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "project1:build"
+            "buildTarget": "proje1:build"
           }
         },
         "test": {
@@ -79,12 +104,14 @@
               "zone.js/testing"
             ],
             "tsConfig": "tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/styles.scss"             
             ],
             "scripts": []
           }
