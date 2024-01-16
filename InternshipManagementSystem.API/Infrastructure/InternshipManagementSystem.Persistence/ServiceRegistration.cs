@@ -15,7 +15,9 @@ namespace InternshipManagementSystem.Persistence
         public static void AddPersistanceService(this
             IServiceCollection services)
         {
-            //services.<AppRole, AppUser>().AddEntityFrameworkStores<InternshipManagementSystemDbContext>(); 
+            services.AddIdentityCore<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<AppRole>()
+                .AddEntityFrameworkStores<InternshipManagementSystemDbContext>();
             services.AddDbContext<InternshipManagementSystemDbContext>(options => options.UseNpgsql(Configuration.ConnectionString),ServiceLifetime.Singleton);
             services.AddScoped<IAdvisorReadRepository, AdvisorReadRepository>();
             services.AddScoped<IAdvisorWriteRepository, AdvisorWriteRepository>();
