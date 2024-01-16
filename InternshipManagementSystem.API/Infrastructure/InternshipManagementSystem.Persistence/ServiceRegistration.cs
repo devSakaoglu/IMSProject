@@ -5,7 +5,9 @@ using InternshipManagementSystem.Persistence.Contexts;
 using InternshipManagementSystem.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection; 
 namespace InternshipManagementSystem.Persistence
 {
     public static class ServiceRegistration
@@ -13,7 +15,7 @@ namespace InternshipManagementSystem.Persistence
         public static void AddPersistanceService(this
             IServiceCollection services)
         {
-            services.AddIdentity<AppRole, AppUser>().AddEntityFrameworkStores<InternshipManagementSystemDbContext>(); 
+            //services.<AppRole, AppUser>().AddEntityFrameworkStores<InternshipManagementSystemDbContext>(); 
             services.AddDbContext<InternshipManagementSystemDbContext>(options => options.UseNpgsql(Configuration.ConnectionString),ServiceLifetime.Singleton);
             services.AddScoped<IAdvisorReadRepository, AdvisorReadRepository>();
             services.AddScoped<IAdvisorWriteRepository, AdvisorWriteRepository>();
