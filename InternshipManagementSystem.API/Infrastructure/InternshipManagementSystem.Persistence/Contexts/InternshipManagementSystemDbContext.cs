@@ -1,7 +1,6 @@
 ﻿using InternshipManagementSystem.Domain.Entities;
 using InternshipManagementSystem.Domain.Entities.AppUser;
 using InternshipManagementSystem.Domain.Entities.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

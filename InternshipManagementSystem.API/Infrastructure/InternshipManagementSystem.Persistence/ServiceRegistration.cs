@@ -1,4 +1,6 @@
 ﻿using InternshipManagementSystem.Application.Repositories;
+using InternshipManagementSystem.Domain.Entities.AppUser;
+using InternshipManagementSystem.Domain.Entities.Identity;
 using InternshipManagementSystem.Persistence.Contexts;
 using InternshipManagementSystem.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +13,7 @@ namespace InternshipManagementSystem.Persistence
         public static void AddPersistanceService(this
             IServiceCollection services)
         {
+            services.AddIdentity<AppRole, AppUser>().AddEntityFrameworkStores<InternshipManagementSystemDbContext>(); 
             services.AddDbContext<InternshipManagementSystemDbContext>(options => options.UseNpgsql(Configuration.ConnectionString),ServiceLifetime.Singleton);
             services.AddScoped<IAdvisorReadRepository, AdvisorReadRepository>();
             services.AddScoped<IAdvisorWriteRepository, AdvisorWriteRepository>();
