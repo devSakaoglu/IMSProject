@@ -1,9 +1,13 @@
 ﻿using InternshipManagementSystem.Domain.Entities;
+using InternshipManagementSystem.Domain.Entities.AppUser;
+using InternshipManagementSystem.Domain.Entities.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace InternshipManagementSystem.Persistence.Contexts
 {
-    public class InternshipManagementSystemDbContext : DbContext
+    public class InternshipManagementSystemDbContext : IdentityDbContext<AppUser,AppRole,string>
     {
         public InternshipManagementSystemDbContext(DbContextOptions<InternshipManagementSystemDbContext> options) : base(options)
         {
