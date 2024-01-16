@@ -9,6 +9,6 @@ namespace InternshipManagementSystem.Domain.Entities.AppUser
 {
     public class AppUser : IdentityUser<string>
     {
-        
+            
     }
 }
