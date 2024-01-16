@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +9,6 @@ namespace InternshipManagementSystem.Domain.Entities.AppUser
 {
     public class AppUser : IdentityUser<string>
     {
+            
     }
 }
