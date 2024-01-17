@@ -1,8 +1,9 @@
 ﻿using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.ViewModels.StudentViewModels;
 using InternshipManagementSystem.Application.ViewModels.StuentViewModels;
-using InternshipManagementSystem.Persistence.Repositories;
+using InternshipManagementSystem.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace InternshipManagementSystem.API.Controllers
 {
@@ -12,17 +13,22 @@ namespace InternshipManagementSystem.API.Controllers
     {
         private readonly IStudentReadRepository _studentReadRepository;
         private readonly IStudentWriteRepository _studentWriteRepository;
+        private readonly IAdvisorReadRepository _advisorReadRepository;
+        private readonly IAdvisorWriteRepository _advisorWriteRepository;
 
-        public StudentsController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository)
+        public StudentsController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository)
         {
             _studentReadRepository = studentReadRepository;
             _studentWriteRepository = studentWriteRepository;
+            _advisorReadRepository = advisorReadRepository;
+            _advisorWriteRepository = advisorWriteRepository;
+
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-         var x=   _studentReadRepository.GetAll();
+            var x = _studentReadRepository.GetAll();
             return Ok(x);
         }
         [HttpGet("{id}")]
@@ -34,7 +40,7 @@ namespace InternshipManagementSystem.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(VM_Create_Student model)
         {
-            await _studentWriteRepository.AddAsync(new()
+            Student student = new()
             {
                 AdvisorID = model.AdvisorID,
                 Address = model.Address,
@@ -48,12 +54,13 @@ namespace InternshipManagementSystem.API.Controllers
                 DepartmentName = model.DepartmentName,
                 ProgramNameName = model.ProgramNameName,
                 FacultyName = model.FacultyName,
-                
+            };
 
-
-            });
+            var advisor = await _advisorReadRepository.GetAll().Include(x => x.Students).FirstOrDefaultAsync(x => x.ID == model.AdvisorID);
+            advisor.Students.Add(student);
+            await _advisorWriteRepository.SaveAsync();
             await _studentWriteRepository.SaveAsync();
-            return Ok();
+            return Ok(student);
         }
         [HttpPut]
         public async Task<IActionResult> Update(VM_Update_Student model)

@@ -36,18 +36,19 @@ namespace InternshipManagementSystem.Persistence.Contexts
                         break;
 
                     case EntityState.Unchanged:
-                        // Burada ek bir işlem yapmak istiyorsanız ekleyebilirsiniz.
+                        return base.SaveChangesAsync(cancellationToken);                    
                         break;
 
-                    case EntityState.Detached:
-                        break;
+                    //case EntityState.Detached:
+                    //    break;
 
 
-                    case EntityState.Deleted:
-                        break;
+                    //case EntityState.Deleted:
+                    //    break;
 
 
                     default:
+                        return base.SaveChangesAsync(cancellationToken);
                         break;
                 }
             }
@@ -57,12 +58,7 @@ namespace InternshipManagementSystem.Persistence.Contexts
 
 
         }
-        //override protected void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<Advisor>().Property(e => e.id).ValueGeneratedOnAdd();
-        //    modelBuilder.Entity<Student>().Property(e => e.id).ValueGeneratedOnAdd();
-        //    modelBuilder.Entity<Internship>().Property(e => e.id).ValueGeneratedOnAdd();
-        //}
+
 
 
     }
