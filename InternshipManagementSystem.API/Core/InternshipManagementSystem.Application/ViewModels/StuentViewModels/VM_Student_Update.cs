@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-namespace InternshipManagementSystem.Domain.Entities
+namespace InternshipManagementSystem.Application.ViewModels.StuentViewModels
 {
-    public class Student : BaseEntity
+    public class VM_Student_Update
     {
-
         public string StudentNo { get; set; }
-        public Guid AdvisorID { get; set; }
         public string StudentName { get; set; }
         public string StudentSurname { get; set; }
         public string TC_ID { get; set; }
@@ -21,9 +18,5 @@ namespace InternshipManagementSystem.Domain.Entities
         public string StudentGSMNumber { get; set; }
         public string Address { get; set; }
         public string Email { get; set; }
-        public ICollection<Internship> Internships { get; set; }
-
-
     }
-
 }

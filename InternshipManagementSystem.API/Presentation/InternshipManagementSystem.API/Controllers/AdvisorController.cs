@@ -1,5 +1,5 @@
 ﻿using InternshipManagementSystem.Application.Repositories;
-using InternshipManagementSystem.Domain.Entities;
+using InternshipManagementSystem.Application.ViewModels.AdvisorViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternshipManagementSystem.API.Controllers
@@ -16,8 +16,8 @@ namespace InternshipManagementSystem.API.Controllers
             _advisorReadRepository = advisorReadRepository;
             _advisorWriteRepository = advisorWriteRepository;
         }
-        [HttpGet("id")]
 
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
             var advisor = await _advisorReadRepository.GetByIdAsync(id, false);
@@ -25,32 +25,53 @@ namespace InternshipManagementSystem.API.Controllers
 
         }
 
-        [HttpPost("/Add")]
-        public async Task Add(Advisor advisor)
+        [HttpGet]
+        public async Task<IActionResult> Get()
         {
-            var Advisor = advisor;
+            var data = _advisorReadRepository.GetAll(false);
+            return Ok(data);
 
-            await _advisorWriteRepository.AddAsync(Advisor);
+        }
+
+        [HttpPost]
+        public async Task Post(VM_Create_Advisor model)
+        {
+            await _advisorWriteRepository.AddAsync(new()
+            {
+                TC_No = model.TC_No,
+                Email = model.Email,
+                Address = model.Address,
+                AdvisorName = model.AdvisorName,
+                AdviserSurname = model.AdviserSurname,
+                DepartmentName = model.DepartmentName,
+                FacultyName = model.FacultyName,
+                ProgramName = model.ProgramName,
+                Students = []
+            });
             await _advisorWriteRepository.SaveAsync();
 
         }
-
-        [HttpDelete("/Delete{id}")]
-        public async Task Delete(string id)
+        [HttpPut]
+        public async Task<IActionResult> Update(VM_Update_Advisor model)
+        {
+            var advisor = await _advisorReadRepository.GetByIdAsync(model.ID.ToString());
+            advisor.TC_No = model.TC_No;
+            advisor.Email = model.Email;
+            advisor.Address = model.Address;
+            advisor.AdvisorName = model.AdvisorName;
+            advisor.AdviserSurname = model.AdviserSurname;
+            advisor.DepartmentName = model.DepartmentName;
+            advisor.FacultyName = model.FacultyName;
+            advisor.ProgramName = model.ProgramName;
+            await _advisorWriteRepository.SaveAsync();
+            return Ok();
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
         {
             await _advisorWriteRepository.RemoveAsync(id);
-        }
-
-
-
-
-        [HttpGet("/GetAll")]
-
-        public IActionResult GetAll()
-        {
-            var data = _advisorReadRepository.GetAll();
-            return Ok(data);
-
+            await _advisorWriteRepository.SaveAsync();
+            return Ok();
         }
 
 

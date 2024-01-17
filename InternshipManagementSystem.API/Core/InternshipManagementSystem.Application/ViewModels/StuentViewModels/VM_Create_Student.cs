@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InternshipManagementSystem.Application.ViewModels.StuentViewModels
+namespace InternshipManagementSystem.Application.ViewModels.StudentViewModels
 {
     public class VM_Create_Student
     {
@@ -13,7 +13,7 @@ namespace InternshipManagementSystem.Application.ViewModels.StuentViewModels
         public string StudentSurname { get; set; }
         public string TC_ID { get; set; }
         public string DepartmentName { get; set; }
-        public string ProgramName { get; set; }
+        public string ProgramNameName { get; set; }
         public float GPA { get; set; }
         public string StudentGSMNumber { get; set; }
         public string Address { get; set; }

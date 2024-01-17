@@ -1,5 +1,5 @@
 ﻿using InternshipManagementSystem.Application.Repositories;
-using InternshipManagementSystem.Application.ViewModels.StuentViewModels;
+using InternshipManagementSystem.Application.ViewModels.StudentViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternshipManagementSystem.API.Controllers
@@ -45,7 +45,7 @@ namespace InternshipManagementSystem.API.Controllers
                 StudentSurname = model.StudentSurname,
                 TC_ID = model.TC_ID,
                 DepartmentName = model.DepartmentName,
-                ProgramName = model.ProgramName
+                ProgramNameName = model.ProgramNameName
 
 
             });

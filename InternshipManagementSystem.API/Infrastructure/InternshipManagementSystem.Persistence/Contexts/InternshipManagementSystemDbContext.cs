@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InternshipManagementSystem.Persistence.Contexts
 {
-    public class InternshipManagementSystemDbContext : IdentityDbContext<AppUser,AppRole,string>
+    public class InternshipManagementSystemDbContext : IdentityDbContext<AppUser, AppRole, string>
     {
         public InternshipManagementSystemDbContext(DbContextOptions<InternshipManagementSystemDbContext> options) : base(options)
         {
@@ -40,13 +40,15 @@ namespace InternshipManagementSystem.Persistence.Contexts
                         break;
 
                     case EntityState.Detached:
-                        throw new NotImplementedException();
+                        break;
+
 
                     case EntityState.Deleted:
-                        throw new NotImplementedException();
+                        break;
+
 
                     default:
-                        throw new NotImplementedException();
+                        break;
                 }
             }
 
