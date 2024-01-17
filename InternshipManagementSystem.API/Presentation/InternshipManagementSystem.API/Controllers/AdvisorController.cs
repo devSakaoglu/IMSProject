@@ -71,7 +71,12 @@ namespace InternshipManagementSystem.API.Controllers
         {
             await _advisorWriteRepository.RemoveAsync(id);
             await _advisorWriteRepository.SaveAsync();
-            return Ok();
+            return Ok(
+                new
+                {
+                    Deletion_Process = "Successful",
+                    StatusCode = 200
+                });
         }
 
 

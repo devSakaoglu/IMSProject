@@ -20,7 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\InternshipManagementSystem.Infrastructure\InternshipManagementSystem.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\InternshipManagementSystem.Persistence\InternshipManagementSystem.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

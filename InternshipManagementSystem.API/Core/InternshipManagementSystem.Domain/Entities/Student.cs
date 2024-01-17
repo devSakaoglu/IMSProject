@@ -14,7 +14,8 @@ namespace InternshipManagementSystem.Domain.Entities
         public Guid AdvisorID { get; set; }
         public string StudentName { get; set; }
         public string StudentSurname { get; set; }
-        public string TC_ID { get; set; }
+        public string TC_No { get; set; }
+        public string FacultyName { get; set; }
         public string DepartmentName { get; set; }
         public string ProgramNameName { get; set; }
         public float GPA { get; set; }
