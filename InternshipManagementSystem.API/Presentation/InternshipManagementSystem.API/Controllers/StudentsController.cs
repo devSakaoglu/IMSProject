@@ -15,18 +15,20 @@ namespace InternshipManagementSystem.API.Controllers
         private readonly IStudentWriteRepository _studentWriteRepository;
         private readonly IAdvisorReadRepository _advisorReadRepository;
         private readonly IAdvisorWriteRepository _advisorWriteRepository;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public StudentsController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository)
+        public StudentsController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IWebHostEnvironment webHostEnvironment)
         {
             _studentReadRepository = studentReadRepository;
             _studentWriteRepository = studentWriteRepository;
             _advisorReadRepository = advisorReadRepository;
             _advisorWriteRepository = advisorWriteRepository;
-
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
+
         {
             var x = _studentReadRepository.GetAll();
             return Ok(x);
@@ -91,6 +93,40 @@ namespace InternshipManagementSystem.API.Controllers
                     StatusCode = 200
                 });
         }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Upload([FromForm] IFormFile file)
+        {
+            var req = Request;
+            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files");
 
+            Guid guid = Guid.NewGuid();
+            string fullPath = Path.Combine(uploadPath, $"{guid.ToString()}{file.FileName.Replace(" ", "_")}");
+
+            if (!Directory.Exists(uploadPath))
+            {
+                Directory.CreateDirectory(uploadPath);
+            }
+
+            using FileStream fileStream = new(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024, useAsync: false);
+
+            try
+            {
+                await file.CopyToAsync(fileStream);
+                await fileStream.FlushAsync();
+                return Ok("completed");
+            }
+            catch (Exception e)
+            {
+                await Console.Out.WriteLineAsync(e.Message);
+                await fileStream.FlushAsync();
+                return Ok("not completed");
+
+            }
+
+
+
+            return Ok("Some Problems");
+
+        }
     }
 }

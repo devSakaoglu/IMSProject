@@ -3,6 +3,7 @@ using InternshipManagementSystem.Application.Validators.Advisor;
 using InternshipManagementSystem.Application.Validators.Student;
 using InternshipManagementSystem.Infrastructure.Filters;
 using InternshipManagementSystem.Persistence;
+using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddPersistanceService();
+
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
