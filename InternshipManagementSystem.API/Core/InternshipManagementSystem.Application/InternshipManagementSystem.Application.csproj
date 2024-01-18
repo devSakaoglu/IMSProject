@@ -31,8 +31,4 @@
     <ProjectReference Include="..\InternshipManagementSystem.Domain\InternshipManagementSystem.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Validators\Student\" />
-  </ItemGroup>
-
 </Project>

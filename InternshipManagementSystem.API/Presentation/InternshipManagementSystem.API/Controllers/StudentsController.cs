@@ -52,7 +52,7 @@ namespace InternshipManagementSystem.API.Controllers
                 StudentSurname = model.StudentSurname,
                 TC_No = model.TC_No,
                 DepartmentName = model.DepartmentName,
-                ProgramNameName = model.ProgramNameName,
+                ProgramNameName = model.ProgramName,
                 FacultyName = model.FacultyName,
             };
 
@@ -75,7 +75,7 @@ namespace InternshipManagementSystem.API.Controllers
             student.StudentGSMNumber = model.StudentGSMNumber;
             student.GPA = model.GPA;
             student.DepartmentName = model.DepartmentName;
-            student.ProgramNameName = model.ProgramNameName;
+            student.ProgramNameName = model.ProgramName;
             await _studentWriteRepository.SaveAsync();
             return Ok();
         }

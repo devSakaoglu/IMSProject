@@ -1,5 +1,6 @@
 using FluentValidation.AspNetCore;
 using InternshipManagementSystem.Application.Validators.Advisor;
+using InternshipManagementSystem.Application.Validators.Student;
 using InternshipManagementSystem.Infrastructure.Filters;
 using InternshipManagementSystem.Persistence;
 
@@ -10,6 +11,8 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.Al
 builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>())
     .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<CreateAdvisorValidator>())
     .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<UpdateAdvisorValidator>())
+    .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<CreateStudentValidator>())
+    .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<UpdateStudentValidator>())
     .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
 
 
