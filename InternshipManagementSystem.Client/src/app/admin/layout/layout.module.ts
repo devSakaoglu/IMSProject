@@ -17,7 +17,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
     MatSidenavModule
   ],
   exports: [
-    LayoutComponent
+    LayoutComponent,
   ]
 })
 export class LayoutModule { }
