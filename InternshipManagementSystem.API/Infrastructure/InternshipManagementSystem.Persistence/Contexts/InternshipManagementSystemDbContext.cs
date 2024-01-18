@@ -15,6 +15,9 @@ namespace InternshipManagementSystem.Persistence.Contexts
         DbSet<Advisor> Advisors { get; set; }
         DbSet<Student> Students { get; set; }
         DbSet<Internship> Internships { get; set; }
+        DbSet<InternshipDocument> InternshipDocuments { get; set; }
+        DbSet<InternshipApplicationInfoForAdviserExcel> InternshipApplicationInfoForAdviserExcels { get; set; }
+        DbSet<InternAppAcceptForm> InternAppAcceptForms { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
