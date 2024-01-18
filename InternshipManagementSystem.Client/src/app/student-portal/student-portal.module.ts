@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LayoutModule } from './layout/layout.module';
 import { ComponentsModule } from './components/components.module';
+import { SpLayoutModule } from './sp-layout/sp-layout.module';
 
 
 
@@ -9,11 +9,11 @@ import { ComponentsModule } from './components/components.module';
   declarations: [],
   imports: [
     CommonModule,
-    LayoutModule,
+    SpLayoutModule,
     ComponentsModule
   ],
   exports: [
-    LayoutModule
+    SpLayoutModule
   ]
 })
 export class StudentPortalModule { }

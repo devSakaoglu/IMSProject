@@ -16,7 +16,5 @@ import { StudentIntershipInfoModule } from './student-intership-info/student-int
     StudentIntershipInfoModule,
     StudentIntershipNotebookModule
   ],
-  
-
 })
 export class ComponentsModule { }

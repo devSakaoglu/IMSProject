@@ -7,6 +7,7 @@ import { AdminModule } from './admin/admin.module';
 import { UiModule } from './ui/ui.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StudentPortalModule } from './student-portal/student-portal.module';
+import { AdvisorPortalModule } from './advisor-portal/advisor-portal.module';
 
 
 @NgModule({
@@ -17,8 +18,9 @@ import { StudentPortalModule } from './student-portal/student-portal.module';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    AdminModule, UiModule,
-    StudentPortalModule
+    AdminModule, UiModule, 
+    StudentPortalModule,
+    AdvisorPortalModule
   ],
   providers: [],
   bootstrap: [AppComponent]
