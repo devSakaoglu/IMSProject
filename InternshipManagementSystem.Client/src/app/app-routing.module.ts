@@ -21,11 +21,14 @@ const routes: Routes = [
   { path: "staj-yon", loadChildren: () => import("./ui/components/staj-yon/staj-yon.module").then(module => module.StajYonModule) },
   { path: "login", loadChildren: () => import("./ui/components/login/login.module").then(module => module.LoginModule) },
 
-  { path: "", component: StudentInfoComponent },
-  { path: "student-intership-approval", loadChildren: () => import("./student-portal/components/student-intership-approval/student-intership-approval.module").then(module => module.StudentIntershipApprovalModule) },
-  {path: "student-intership-info", loadChildren: ()=> import("./student-portal/components/student-intership-info/student-intership-info.module").then(module => module.StudentIntershipInfoModule)},
-  {path: "student-intership-notebook", loadChildren: ()=> import("./student-portal/components/student-intership-notebook/student-intership-notebook.module").then(module=> module.StudentIntershipNotebookModule)}
-
+  { 
+    path: "student-portal", component: LayoutComponent, children: [
+      { path: "student-info", loadChildren: () => import("./student-portal/components/student-info/student-info.module").then(module => module.StudentInfoModule) },
+      { path: "student-intership-approval", loadChildren: () => import("./student-portal/components/student-intership-approval/student-intership-approval.module").then(module => module.StudentIntershipApprovalModule) },
+      {path: "student-intership-info", loadChildren: ()=> import("./student-portal/components/student-intership-info/student-intership-info.module").then(module => module.StudentIntershipInfoModule)},
+      {path: "student-intership-notebook", loadChildren: ()=> import("./student-portal/components/student-intership-notebook/student-intership-notebook.module").then(module=> module.StudentIntershipNotebookModule)}
+    ]
+  }  
 
 ];
 
