@@ -3,6 +3,8 @@ namespace InternshipManagementSystem.Domain.Entities
 {
     public class InternshipApplicationInfoForAdviserExcel : BaseEntity
     {
+        public Guid StudentID { get; set; }
+
         public string StudentNo { get; set; }
         public string FullName { get; set; }
         public string TC_No { get; set; }

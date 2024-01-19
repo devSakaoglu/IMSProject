@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InternshipManagementSystem.Persistence.Contexts
 {
-    public class InternshipManagementSystemDbContext : IdentityDbContext<AppUser,AppRole,string>
+    public class InternshipManagementSystemDbContext : IdentityDbContext<AppUser, AppRole, string>
     {
         public InternshipManagementSystemDbContext(DbContextOptions<InternshipManagementSystemDbContext> options) : base(options)
         {
@@ -15,6 +15,9 @@ namespace InternshipManagementSystem.Persistence.Contexts
         DbSet<Advisor> Advisors { get; set; }
         DbSet<Student> Students { get; set; }
         DbSet<Internship> Internships { get; set; }
+        DbSet<InternshipDocument> InternshipDocuments { get; set; }
+        DbSet<InternshipApplicationInfoForAdviserExcel> InternshipApplicationInfoForAdviserExcels { get; set; }
+        DbSet<InternAppAcceptForm> InternAppAcceptForms { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -36,17 +39,20 @@ namespace InternshipManagementSystem.Persistence.Contexts
                         break;
 
                     case EntityState.Unchanged:
-                        // Burada ek bir işlem yapmak istiyorsanız ekleyebilirsiniz.
+                        return base.SaveChangesAsync(cancellationToken);                    
                         break;
 
-                    case EntityState.Detached:
-                        throw new NotImplementedException();
+                    //case EntityState.Detached:
+                    //    break;
 
-                    case EntityState.Deleted:
-                        throw new NotImplementedException();
+
+                    //case EntityState.Deleted:
+                    //    break;
+
 
                     default:
-                        throw new NotImplementedException();
+                        return base.SaveChangesAsync(cancellationToken);
+                        break;
                 }
             }
 
@@ -55,12 +61,7 @@ namespace InternshipManagementSystem.Persistence.Contexts
 
 
         }
-        //override protected void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<Advisor>().Property(e => e.id).ValueGeneratedOnAdd();
-        //    modelBuilder.Entity<Student>().Property(e => e.id).ValueGeneratedOnAdd();
-        //    modelBuilder.Entity<Internship>().Property(e => e.id).ValueGeneratedOnAdd();
-        //}
+
 
 
     }

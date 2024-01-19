@@ -62,6 +62,6 @@ namespace InternshipManagementSystem.Persistence.Repositories
         {
             EntityEntry<T> entityEntry = Table.Update(entity);
             return entityEntry.State == EntityState.Modified;
-        }   
+        }
     }
 }
