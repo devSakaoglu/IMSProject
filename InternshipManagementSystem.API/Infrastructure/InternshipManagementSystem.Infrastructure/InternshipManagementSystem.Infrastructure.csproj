@@ -17,4 +17,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\InternshipManagementSystem.Application\InternshipManagementSystem.Application.csproj" />
+  </ItemGroup>
+
 </Project>

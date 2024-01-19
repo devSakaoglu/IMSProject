@@ -3,6 +3,8 @@
 
     public class InternAppAcceptForm : BaseEntity
     {
+        public Guid InternshipID { get; set; }
+
         public string StudentName { get; set; }
         public string StudentSurname { get; set; }
         public string TC_No { get; set; }
