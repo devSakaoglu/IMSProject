@@ -15,6 +15,7 @@ namespace InternshipManagementSystem.API.Controllers
         {
             _mediator=mediator;
         }
+        [HttpPost("[action]")]
         public async Task<IActionResult> CreateUser(CreateUserCommandRequest createUserCommandRequest)
         {
           CreateUserCommandRequestResponse response =await _mediator.Send(createUserCommandRequest);
