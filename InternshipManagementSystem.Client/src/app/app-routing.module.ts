@@ -3,8 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './admin/layout/layout.component';
 import { DashboardComponent } from './admin/components/dashboard/dashboard.component';
 import { HomeComponent } from './ui/components/home/home.component';
-import { AdvisorsModule } from './admin/components/advisors/advisors.module';
-import { StudentInfoComponent } from './student-portal/components/student-info/student-info.component';
 import { SpLayoutComponent } from './student-portal/sp-layout/sp-layout.component';
 import { ApLayoutComponent } from './advisor-portal/ap-layout/ap-layout.component';
 
