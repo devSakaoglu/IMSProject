@@ -8,12 +8,12 @@ namespace InternshipManagementSystem.Application.ViewModels.StudentViewModels
 {
     public class VM_Create_Student
     {
-        public Guid AdvisorID { get; set; }
+        public Guid ?AdvisorID { get; set; }
 
         public string StudentNo { get; set; }
         public string StudentName { get; set; }
         public string StudentSurname { get; set; }
-        public string TC_No { get; set; }
+        public string TC_NO { get; set; }
         public string FacultyName { get; set; }
         public string DepartmentName { get; set; }
         public string ProgramName { get; set; }

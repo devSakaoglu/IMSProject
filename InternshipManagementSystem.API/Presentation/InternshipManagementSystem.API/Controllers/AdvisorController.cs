@@ -1,86 +1,161 @@
 ﻿using InternshipManagementSystem.Application.Repositories;
+using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Application.ViewModels.AdvisorViewModels;
+using InternshipManagementSystem.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternshipManagementSystem.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AdvisorController : ControllerBase
-    {
-        readonly private IAdvisorReadRepository _advisorReadRepository;
-        readonly private IAdvisorWriteRepository _advisorWriteRepository;
+   [Route("api/[controller]")]
+   [ApiController]
+   public class AdvisorController : ControllerBase
+   {
+      readonly private IAdvisorReadRepository _advisorReadRepository;
+      readonly private IAdvisorWriteRepository _advisorWriteRepository;
 
-        public AdvisorController(IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository)
-        {
-            _advisorReadRepository = advisorReadRepository;
-            _advisorWriteRepository = advisorWriteRepository;
-        }
+      public AdvisorController(IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository)
+      {
+         _advisorReadRepository = advisorReadRepository;
+         _advisorWriteRepository = advisorWriteRepository;
+      }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
-        {
-            var advisor = await _advisorReadRepository.GetByIdAsync(id, false);
-            return Ok(advisor);
+      [HttpGet("{id}")]
+      public async Task<IActionResult> Get(string id)
+      {
+         var advisor = await _advisorReadRepository.GetByIdAsync(id, false);
+         return Ok(
+            new ResponseModel(true, "Succesful", advisor, 200)
+            ); ;
 
-        }
+      }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            var data = _advisorReadRepository.GetAll(false);
-            return Ok(data);
-
-        }
-
-        [HttpPost]
-        public async Task Post(VM_Create_Advisor model)
-        {
-            await _advisorWriteRepository.AddAsync(new()
+      [HttpGet]
+      public async Task<IActionResult> Get()
+      {
+         var data = _advisorReadRepository.GetAll(false);
+         return Ok(
+         new ResponseModel(true, "Succesful", data, 200)
+      );
+      }
+      [HttpPost]
+      public async Task<IActionResult> Post(VM_Create_Advisor model)
+      {
+         Advisor e = _advisorReadRepository.GetSingleAsync(x => x.TC_NO == model.TC_NO, false).Result;
+         if (e is not null)
+         {
+            var str = e.TC_NO == model.TC_NO ? "Student Number" : "";
+            return Ok(new ResponseModel()
             {
-                TC_No = model.TC_No,
-                Email = model.Email,
-                Address = model.Address,
-                AdvisorName = model.AdvisorName,
-                AdviserSurname = model.AdviserSurname,
-                DepartmentName = model.DepartmentName,
-                FacultyName = model.FacultyName,
-                ProgramName = model.ProgramName,
-                Students = []
+               IsSuccess = false,
+               Message = $"There is a student with same {str} number",
+               Data = null,
+               StatusCode = 400
+
             });
+
+         }
+
+         Advisor advisor = new()
+         {
+            Address = model.Address,
+            Email = model.Email,
+            AdvisorName = model.AdvisorName,
+            AdviserSurname = model.AdviserSurname,
+            TC_NO = model.TC_NO,
+            DepartmentName = model.DepartmentName,
+            ProgramName = model.ProgramName,
+            FacultyName = model.FacultyName,
+         };
+
+
+
+         try
+         {
+            await _advisorWriteRepository.AddAsync(advisor);
+            await _advisorWriteRepository.SaveAsync();
+            return Ok(new ResponseModel()
+            {
+               IsSuccess = true,
+               Message = "Successful",
+               Data = advisor,
+               StatusCode = 200
+
+            });
+         }
+         catch (Exception ex)
+         {
+            return Ok(new ResponseModel()
+            {
+               IsSuccess = false,
+               Message = ex.Message,
+               Data = null,
+               StatusCode = 400
+
+            });
+         }
+
+
+         return Ok(new ResponseModel()
+         {
+            IsSuccess = false,
+            Message = "Some problems",
+            Data = null,
+            StatusCode = 499
+
+         });
+
+      }
+      [HttpPut]
+      public async Task<IActionResult> Update(VM_Update_Advisor model)
+      {
+
+         var advisor = await _advisorReadRepository.GetByIdAsync(model.AdvisorID.ToString());
+
+         if (advisor is null)
+         {
+            return Ok(new ResponseModel()
+            {
+               IsSuccess = false,
+               Message = "Advisor not found",
+               Data = null,
+               StatusCode = 400
+
+            });
+         }
+
+         advisor.TC_NO = model.TC_NO;
+         advisor.Email = model.Email;
+         advisor.Address = model.Address;
+         advisor.AdvisorName = model.AdvisorName;
+         advisor.AdviserSurname = model.AdviserSurname;
+         advisor.DepartmentName = model.DepartmentName;
+         advisor.FacultyName = model.FacultyName;
+         advisor.ProgramName = model.ProgramName;
+         await _advisorWriteRepository.SaveAsync();
+         return Ok(
+            new ResponseModel(true, "Succesful", advisor, 200)
+            );
+      }
+      [HttpDelete("{id}")]
+      public async Task<IActionResult> Delete(string id)
+      {
+         if (await _advisorWriteRepository.RemoveAsync(id))
+         {
             await _advisorWriteRepository.SaveAsync();
 
-        }
-        [HttpPut]
-        public async Task<IActionResult> Update(VM_Update_Advisor model)
-        {
-            var advisor = await _advisorReadRepository.GetByIdAsync(model.ID.ToString());
-            advisor.TC_No = model.TC_No;
-            advisor.Email = model.Email;
-            advisor.Address = model.Address;
-            advisor.AdvisorName = model.AdvisorName;
-            advisor.AdviserSurname = model.AdviserSurname;
-            advisor.DepartmentName = model.DepartmentName;
-            advisor.FacultyName = model.FacultyName;
-            advisor.ProgramName = model.ProgramName;
-            await _advisorWriteRepository.SaveAsync();
-            return Ok();
-        }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
-        {
-            await _advisorWriteRepository.RemoveAsync(id);
-            await _advisorWriteRepository.SaveAsync();
             return Ok(
-                new
-                {
-                    Deletion_Process = "Successful",
-                    StatusCode = 200
-                });
-        }
+              new ResponseModel(true, "Succesful", null, 200)
+               );
+         }
+         else
+         {
+            return Ok(new ResponseModel(false, "Delete is not complete possible id value is not correct", null, 400));
+         }
+
+      }
 
 
 
 
-    }
+   }
 }

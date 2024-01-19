@@ -7,7 +7,7 @@
 
         public string StudentName { get; set; }
         public string StudentSurname { get; set; }
-        public string TC_No { get; set; }
+        public string TC_NO { get; set; }
         public bool SPAS { get; set; }
         public string CompanyName { get; set; }
         public string CompanyAddress { get; set; }
