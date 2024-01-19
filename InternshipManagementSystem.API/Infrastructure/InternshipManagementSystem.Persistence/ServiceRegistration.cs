@@ -1,5 +1,4 @@
 ﻿using InternshipManagementSystem.Application.Repositories;
-using InternshipManagementSystem.Domain.Entities.AppUser;
 using InternshipManagementSystem.Domain.Entities.Identity;
 using InternshipManagementSystem.Persistence.Contexts;
 using InternshipManagementSystem.Persistence.Repositories;
