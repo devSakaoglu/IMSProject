@@ -116,7 +116,7 @@ namespace InternshipManagementSystem.API.Controllers
          }
          await _studentWriteRepository.AddAsync(new Student()
          {
-            AdvisorID = model.AdvisorID,
+            //AdvisorID = model.AdvisorID,
             Address = model.Address,
             Email = model.Email,
             GPA = model.GPA,

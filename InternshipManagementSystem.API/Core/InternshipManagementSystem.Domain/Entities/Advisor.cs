@@ -10,7 +10,7 @@
         public string ProgramName { get; set; }
         public string Address { get; set; }
         public string Email { get; set; }
-        public ICollection<Student> Students { get; set; }
+        public ICollection<Student>? Students { get; set; }
 
 
     }

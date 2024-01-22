@@ -2,7 +2,7 @@
 {
    public class Student : BaseEntity
    {
-      public Guid ?AdvisorID { get; set; }
+      public Advisor? Advisor { get; set; }
       public string StudentNo { get; set; }
       public string StudentName { get; set; }
       public string StudentSurname { get; set; }
@@ -14,7 +14,7 @@
       public string StudentGSMNumber { get; set; }
       public string Address { get; set; }
       public string Email { get; set; }
-      public ICollection<Internship> Internships { get; set; }
+      public ICollection<Internship>? Internships { get; set; }
 
 
    }
