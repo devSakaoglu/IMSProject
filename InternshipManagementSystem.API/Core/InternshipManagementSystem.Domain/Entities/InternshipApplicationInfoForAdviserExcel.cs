@@ -3,7 +3,7 @@ namespace InternshipManagementSystem.Domain.Entities
 {
     public class InternshipApplicationInfoForAdviserExcel : BaseEntity
     {
-        public Guid StudentID { get; set; }
+        public Internship internship { get; set; }
 
         public string StudentNo { get; set; }
         public string FullName { get; set; }
@@ -27,7 +27,7 @@ namespace InternshipManagementSystem.Domain.Entities
         public int BirthDateMonth { get; set; }
         public int BirthDateYear { get; set; }
         public string EmailSendingDate { get; set; }
-        public InternshipLevel Level { get; set; }
+        public InternshipLevel? Level { get; set; }
         public string Description { get; set; }
 
     }
