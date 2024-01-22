@@ -11,7 +11,7 @@ namespace InternshipManagementSystem.Domain.Entities
       public InternshipFiles? InternshipFiles { get; set; }
 
 
-   }
+    }
 
 
 
