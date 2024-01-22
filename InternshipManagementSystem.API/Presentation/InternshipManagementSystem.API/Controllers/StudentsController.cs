@@ -30,8 +30,8 @@ namespace InternshipManagementSystem.API.Controllers
          _fileService = fileService;
       }
 
-      [HttpGet]
-      public async Task<IActionResult> Get()
+        [HttpGet]
+        public async Task<IActionResult> Get()
 
       {
          var x = _studentReadRepository.GetAll();
@@ -57,9 +57,9 @@ namespace InternshipManagementSystem.API.Controllers
                Data = null,
                StatusCode = 400
 
-            });
+                });
 
-         }
+            }
 
 
 
@@ -95,16 +95,16 @@ namespace InternshipManagementSystem.API.Controllers
                   Data = null,
                   StatusCode = 400
 
-               });
-            }
+                    });
+                }
 
-         }
-         return Ok(new ResponseModel()
-         {
-            IsSuccess = false,
-            Message = "Some problems",
-            Data = null,
-            StatusCode = 499
+            }
+            return Ok(new ResponseModel()
+            {
+                IsSuccess = false,
+                Message = "Some problems",
+                Data = null,
+                StatusCode = 499
 
          });
 
@@ -148,37 +148,37 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(
                new ResponseModel(true, "Student added", student, 200)
 
-               );
+                   );
 
-         }
-         else
-         {
-            return Ok(
-                   new ResponseModel(false, "Some problems", null, 400)
-                                       );
-         }
-
-
-
-
-      }
-
-      [HttpPut]
-      public async Task<IActionResult> Update(VM_Update_Student model)
-      {
-         var student = await _studentReadRepository.GetByIdAsync(model.StudentID.ToString());
-
-         if (student is null)
-         {
-            return Ok(new ResponseModel()
+            }
+            else
             {
-               IsSuccess = false,
-               Message = "Student not found",
-               Data = null,
-               StatusCode = 400
+                return Ok(
+                       new ResponseModel(false, "Some problems", null, 400)
+                                           );
+            }
 
-            });
-         }
+
+
+
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(VM_Update_Student model)
+        {
+            var student = await _studentReadRepository.GetByIdAsync(model.StudentID.ToString());
+
+            if (student is null)
+            {
+                return Ok(new ResponseModel()
+                {
+                    IsSuccess = false,
+                    Message = "Student not found",
+                    Data = null,
+                    StatusCode = 400
+
+                });
+            }
 
          student.TC_NO = model.TC_NO;
          student.Email = model.Email;
@@ -220,7 +220,8 @@ namespace InternshipManagementSystem.API.Controllers
             StatusCode = 200
          });
 
+         return Ok("Some Problems");
 
-      }
-   }
+        }
+    }
 }
