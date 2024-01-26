@@ -12,7 +12,7 @@ import { StudentsModule } from './students/students.module';
     CommonModule,
     AdvisorsModule,
     StudentsModule,
-    DashboardModule
+    DashboardModule,
   ]
 })
 export class ComponentsModule { }

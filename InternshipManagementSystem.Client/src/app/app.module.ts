@@ -11,14 +11,18 @@ import { AdvisorPortalModule } from './advisor-portal/advisor-portal.module';
 import { BaseComponent } from './base/base.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { HttpClientModule } from '@angular/common/http';
+import { LogoComponent } from './logo/logo.component';
+
+
+
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    
-    
+    LogoComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -28,7 +32,7 @@ import { HttpClientModule } from '@angular/common/http';
     StudentPortalModule,
     AdvisorPortalModule,
     NgxSpinnerModule,
-    HttpClientModule
+    HttpClientModule,    
   ],
   providers: [],
   bootstrap: [AppComponent]
