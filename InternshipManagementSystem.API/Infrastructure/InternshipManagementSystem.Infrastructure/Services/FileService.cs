@@ -5,39 +5,39 @@ using Microsoft.AspNetCore.Http;
 
 namespace InternshipManagementSystem.Infrastructure.Services
 {
-   public class FileService : IFileService
-   {
-      readonly IWebHostEnvironment _webHostEnvironment;
+    public class FileService : IFileService
+    {
+        readonly IWebHostEnvironment _webHostEnvironment;
 
-      public FileService(IWebHostEnvironment webHostEnvironment)
-      {
-         _webHostEnvironment = webHostEnvironment;
-      }
+        public FileService(IWebHostEnvironment webHostEnvironment)
+        {
+            _webHostEnvironment = webHostEnvironment;
+        }
 
-      public async Task<bool> CopyFileAsync(string sourcePath, IFormFile formFile)
-      {
-         try
-         {
-            await using var fileStream = new FileStream(sourcePath, FileMode.Create);
-            await formFile.CopyToAsync(fileStream);
-            await fileStream.FlushAsync();
-            return true;
-         }
-         catch (Exception ex)
-         {
-            //TODO: Log
-            throw ex;
-         }
-      }
+        public async Task<bool> CopyFileAsync(string sourcePath, IFormFile formFile)
+        {
+            try
+            {
+                await using var fileStream = new FileStream(sourcePath, FileMode.Create);
+                await formFile.CopyToAsync(fileStream);
+                await fileStream.FlushAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log
+                throw ex;
+            }
+        }
 
-      private async Task<string> FileRenameAsync(string path, string fileName, bool first = true)
-      {
-         string newFileName = await Task.Run<string>(async () =>
-             {
+        private async Task<string> FileRenameAsync(string path, string fileName, bool first = true)
+        {
+            string newFileName = await Task.Run<string>(async () =>
+                {
 
-                string extension = Path.GetExtension(fileName);
-                string oldname = Path.GetFileNameWithoutExtension(fileName);
-                string newFileName = $"{NameOperation.CharacterRegulator(oldname)}{extension}";
+                    string extension = Path.GetExtension(fileName);
+                    string oldname = Path.GetFileNameWithoutExtension(fileName);
+                    string newFileName = $"{NameOperation.CharacterRegulator(oldname)}{extension}";
 
                 if (first)
                 {
@@ -81,51 +81,51 @@ namespace InternshipManagementSystem.Infrastructure.Services
                 }
 
 
-                if (File.Exists($"{path}/{newFileName}"))
-                {
+                    if (File.Exists($"{path}/{newFileName}"))
+                    {
                    return await FileRenameAsync(path, newFileName, false);
-                }
-                else
-                {
-                   return newFileName;
-                }
+                    }
+                    else
+                    {
+                        return newFileName;
+                    }
 
-             });
+                });
          return newFileName;
 
 
-      }
+        }
 
 
 
-      public async Task<List<(string fileName, string path)>> UploadAsync(string path, IFormFileCollection files)
-      {
-         string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, path);
-         if (!Directory.Exists(uploadPath))
-            Directory.CreateDirectory(uploadPath);
+        public async Task<List<(string fileName, string path)>> UploadAsync(string path, IFormFileCollection files)
+        {
+            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, path);
+            if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
 
-         List<(string fileName, string path)> datas = new();
-         List<bool> results = new();
+            List<(string fileName, string path)> datas = new();
+            List<bool> results = new();
 
-         foreach (IFormFile file in files)
-         {
+            foreach (IFormFile file in files)
+            {
             var fileNewName = await FileRenameAsync(uploadPath, file.FileName);
             var filePath = $"{uploadPath}\\{fileNewName}";
 
-            bool result = await CopyFileAsync(filePath, file);
+                bool result = await CopyFileAsync(filePath, file);
             datas.Add((fileNewName, $"{uploadPath}\\{fileNewName}"));
-            results.Add(result);
+                results.Add(result);
          
-            //TODO: exeptioon message return
-            //if (result.Equals(false)) any
+                //TODO: exeptioon message return
+                //if (result.Equals(false)) any
             //return null;
 
-         }
+            }
          if (results.TrueForAll(r => r.Equals(true)))
          {
             return datas;
          }
-         return null;
-      }
-   }
+            return null;
+        }
+    }
 }
