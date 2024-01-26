@@ -3,7 +3,8 @@
 
     public class Internship : BaseEntity
     {
-        public Student Student { get; set; }
+        public Advisor? Advisor { get; set; }
+        public Student? Student { get; set; }
         public InternshipStatus? Status { get; set; }
         private InternAppAcceptForm? Form { get; set; }
         private InternshipApplicationInfoForAdviserExcel? Excel { get; set; }
