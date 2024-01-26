@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SpLayoutComponent } from './sp-layout.component';
 import { ComponentsModule } from '../components/components.module';
 import { RouterModule } from '@angular/router';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import {MatSidenavModule} from '@angular/material/sidenav';
 
 
 @NgModule({
@@ -14,7 +14,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
         CommonModule,
         ComponentsModule,
         RouterModule,
-        MatSidenavModule,
+        MatSidenavModule
+      
     ],
     exports: [
         SpLayoutComponent
