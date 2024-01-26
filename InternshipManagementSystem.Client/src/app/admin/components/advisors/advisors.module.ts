@@ -7,12 +7,12 @@ import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
-    AdvisorsComponent
+    AdvisorsComponent,
   ],
   imports: [
     CommonModule,
     RouterModule.forChild([
-      { path: "advisors", component: AdvisorsComponent}
+      { path: "", component: AdvisorsComponent}
     ])
   ]
 })

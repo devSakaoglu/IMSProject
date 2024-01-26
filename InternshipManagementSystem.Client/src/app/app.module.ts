@@ -8,7 +8,6 @@ import { UiModule } from './ui/ui.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StudentPortalModule } from './student-portal/student-portal.module';
 import { AdvisorPortalModule } from './advisor-portal/advisor-portal.module';
-import { BaseComponent } from './base/base.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -17,9 +16,6 @@ import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
-    
-    
-    
   ],
   imports: [
     BrowserModule,
@@ -29,7 +25,7 @@ import { HttpClientModule } from '@angular/common/http';
     StudentPortalModule,
     AdvisorPortalModule,
     NgxSpinnerModule,
-    HttpClientModule
+    HttpClientModule,    
   ],
   providers: [],
   bootstrap: [AppComponent]
