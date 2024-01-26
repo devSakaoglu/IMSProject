@@ -33,7 +33,7 @@ namespace InternshipManagementSystem.Infrastructure.StaticServices
                 .Replace("?", "").Replace("!", "").Replace(":", "")
                 .Replace(";", "").Replace("(", "").Replace(")", "")
                 .Replace("[", "").Replace("]", "").Replace("{", "")
-                .Replace("}", "").Replace("/", "").Replace("\\", "")
+                .Replace("}", "").Replace("/", "").Replace("\\",   "")
                 .Replace("'", "").Replace("\"", "").Replace("<", "")
                 .Replace(">", "").Replace(",", "").Replace(".", "")
                 .Replace("–", "-").Replace("—", "-").Replace("---", "-")
