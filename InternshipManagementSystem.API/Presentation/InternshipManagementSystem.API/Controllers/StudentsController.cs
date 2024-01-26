@@ -1,4 +1,5 @@
 ﻿using InternshipManagementSystem.Application.Repositories;
+using InternshipManagementSystem.Application.Services;
 using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Application.ViewModels.StudentViewModels;
 using InternshipManagementSystem.Application.ViewModels.StuentViewModels;
@@ -17,14 +18,16 @@ namespace InternshipManagementSystem.API.Controllers
         private readonly IAdvisorReadRepository _advisorReadRepository;
         private readonly IAdvisorWriteRepository _advisorWriteRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IFileService _fileService;
 
-        public StudentsController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IWebHostEnvironment webHostEnvironment)
+        public StudentsController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService)
         {
             _studentReadRepository = studentReadRepository;
             _studentWriteRepository = studentWriteRepository;
             _advisorReadRepository = advisorReadRepository;
             _advisorWriteRepository = advisorWriteRepository;
             _webHostEnvironment = webHostEnvironment;
+            _fileService = fileService;
         }
 
         [HttpGet]
@@ -193,38 +196,17 @@ namespace InternshipManagementSystem.API.Controllers
                 });
         }
         [HttpPost("[action]")]
-        public async Task<IActionResult> Upload([FromForm] IFormFile file)
+        public async Task<IActionResult> Upload([FromForm] IFormFileCollection file)
         {
-            var req = Request;
-            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "files");
-
-            Guid guid = Guid.NewGuid();
-            string fullPath = Path.Combine(uploadPath, $"{guid.ToString()}{file.FileName.Replace(" ", "_")}");
-
-            if (!Directory.Exists(uploadPath))
+          var data = await  _fileService.UploadAsync("Students", file);
+            return Ok(new ResponseModel()
             {
-                Directory.CreateDirectory(uploadPath);
-            }
-
-            using FileStream fileStream = new(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024, useAsync: false);
-
-            try
-            {
-                await file.CopyToAsync(fileStream);
-                await fileStream.FlushAsync();
-                return Ok("completed");
-            }
-            catch (Exception e)
-            {
-                await Console.Out.WriteLineAsync(e.Message);
-                await fileStream.FlushAsync();
-                return Ok("not completed");
-
-            }
-
-
-
-            return Ok("Some Problems");
+                Data=data,
+                IsSuccess=true,
+                Message="Successful",
+                StatusCode=200
+            });
+          
 
         }
     }
