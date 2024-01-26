@@ -9,8 +9,11 @@ import { LoginModule } from './login/login.module';
 
 
 
+
 @NgModule({
-  declarations: [],
+  declarations: [
+    
+  ],
   imports: [
     CommonModule,
     HomeModule,
@@ -18,7 +21,8 @@ import { LoginModule } from './login/login.module';
     IgBelgeModule,
     StajDefModule,
     StajYonModule,
-    LoginModule
+    LoginModule,
+  
   ]
 })
 export class ComponentsModule { }
