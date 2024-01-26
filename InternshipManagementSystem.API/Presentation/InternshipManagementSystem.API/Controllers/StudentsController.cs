@@ -196,12 +196,12 @@ namespace InternshipManagementSystem.API.Controllers
                 });
         }
         [HttpPost("[action]")]
-        public async Task<IActionResult> Upload([FromForm] IFormFileCollection file)
+        public async Task<IActionResult> Upload([FromForm] IFormFileCollection file,string StudentID = "2",string InternshipID ="1")
         {
-          var data = await  _fileService.UploadAsync("Students", file);
+          var data = await  _fileService.UploadAsync($"Students\\{StudentID}\\{InternshipID}\\", file);
             return Ok(new ResponseModel()
             {
-                Data=data,
+                Data=data.ToDictionary(),
                 IsSuccess=true,
                 Message="Successful",
                 StatusCode=200
