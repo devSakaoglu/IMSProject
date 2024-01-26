@@ -27,6 +27,8 @@ builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>
 
 builder.Services.AddInfrastuctureServices();
 
+builder.Services.AddInfrastuctureServices();
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
