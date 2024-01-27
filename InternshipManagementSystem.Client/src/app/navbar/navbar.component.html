@@ -1,5 +1,4 @@
 
-<!-- 
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
@@ -39,39 +38,10 @@
           </li>
     
         </ul>
-         <form class="d-flex" role="search">
+        <!-- <form class="d-flex" role="search">
           <input class="form-control me-2" type="search" placeholder="Arama Yap.." aria-label="Arama Yap">
           <button class="btn btn-outline-success" type="submit">Arama Yap</button>
         </form> -->
-      <!-- </div>
+      </div>
     </div>
-</nav> --> 
-
-<div *ngIf="showNavbarContent()">
-
-  <app-navbar></app-navbar>
-
-</div>
-
-
-<div *ngIf="showloginContent()">
-
-  <a routerLink="/login"></a>
-
-</div>
-
-
-<div *ngIf="showstudentportalContent()">
-
-  <a routerLink="/student-portal"></a>
-
-</div>
-
-<app-sp-layout (loginSuccess)="onLoginSuccess($event)"></app-sp-layout>
-
-
-<ngx-spinner size="default" name="newton" type="ball-newton-cradle" ></ngx-spinner>
-
-
-
-<router-outlet></router-outlet>
+</nav>
