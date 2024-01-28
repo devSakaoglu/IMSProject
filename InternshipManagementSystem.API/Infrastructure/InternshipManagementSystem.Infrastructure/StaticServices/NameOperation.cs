@@ -11,39 +11,19 @@ namespace InternshipManagementSystem.Infrastructure.StaticServices
         public static string CharacterRegulator(string name)
         {
 
-            return name.Trim().ToLower().Replace(" ", "-")
+            return name.Trim().ToLower()
+                .Replace(" ", "-")
                 .Replace("ç", "c").Replace("ğ", "g").Replace("ı", "i")
                 .Replace("ö", "o").Replace("ş", "s").Replace("ü", "u")
                 .Replace("â", "a").Replace("î", "i").Replace("û", "u")
-                .Replace(" ", "-").Replace("?", "").Replace("!", "")
-                .Replace(":", "").Replace(";", "").Replace("(", "")
-                .Replace(")", "").Replace("[", "").Replace("]", "")
-                .Replace("{", "").Replace("}", "").Replace("/", "")
-                .Replace("\\", "").Replace("'", "").Replace("\"", "")
-                .Replace("<", "").Replace(">", "").Replace(",", "")
-                .Replace(".", "").Replace("–", "-").Replace("—", "-")
-                .Replace("---", "-").Replace("--", "-").Replace("?", "")
-                .Replace("!", "").Replace(":", "").Replace(";", "")
-                .Replace("(", "").Replace(")", "").Replace("[", "")
-                .Replace("]", "").Replace("{", "").Replace("}", "")
-                .Replace("/", "").Replace("\\", "").Replace("'", "")
-                .Replace("\"", "").Replace("<", "").Replace(">", "")
-                .Replace(",", "").Replace(".", "").Replace("–", "-")
-                .Replace("—", "-").Replace("---", "-").Replace("--", "-")
                 .Replace("?", "").Replace("!", "").Replace(":", "")
                 .Replace(";", "").Replace("(", "").Replace(")", "")
                 .Replace("[", "").Replace("]", "").Replace("{", "")
-                .Replace("}", "").Replace("/", "").Replace("\\",   "")
-                .Replace("'", "").Replace("\"", "").Replace("<", "")
-                .Replace(">", "").Replace(",", "").Replace(".", "")
-                .Replace("–", "-").Replace("—", "-").Replace("---", "-")
-                .Replace("--", "-").Replace("?", "").Replace("!", "")
-                .Replace(":", "").Replace(";", "").Replace("(", "")
-                .Replace(")", "").Replace("[", "").Replace("]", "")
-                .Replace("{", "").Replace("}", "").Replace("/", "")
-                .Replace("\\", "").Replace("'", "").Replace("\"", "")
-                .Replace("<", "").Replace(">", "").Replace(",", "");
-
+                .Replace("}", "").Replace("/", "").Replace("\\", "")
+                .Replace("'", "").Replace("\"", "")
+                .Replace("<", "").Replace(">", "")
+                .Replace(",", "").Replace(".", "")
+                .Replace("–", "-").Replace("—", "-").Replace("---", "-").Replace("--", "-");
         }
     }
 }

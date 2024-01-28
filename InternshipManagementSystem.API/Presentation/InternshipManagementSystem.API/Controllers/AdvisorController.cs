@@ -32,12 +32,13 @@ namespace InternshipManagementSystem.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var  data = _advisorReadRepository.GetAll(false);
+            var data = _advisorReadRepository.GetAll(false);
             return Ok(
             new ResponseModel(true, "Successful", data, 200)
          );
         }
         [HttpPost]
+        //Todo Post metthodu student icine yazilacak
         public async Task<IActionResult> Post(VM_Create_Advisor model)
         {
             Advisor e = _advisorReadRepository.GetSingleAsync(x => x.TC_NO == model.TC_NO, false).Result;
@@ -105,11 +106,13 @@ namespace InternshipManagementSystem.API.Controllers
             });
 
         }
+
+
         [HttpPut]
         public async Task<IActionResult> Update(VM_Update_Advisor model)
         {
 
-            var advisor = await _advisorReadRepository.GetByIdAsync(model.AdvisorID.ToString());
+            var advisor = await _advisorReadRepository.GetByIdAsync(model.id.ToString());
 
             if (advisor is null)
             {
@@ -136,24 +139,22 @@ namespace InternshipManagementSystem.API.Controllers
                new ResponseModel(true, "Successful", advisor, 200)
                );
         }
-        [HttpDelete("{id}")]
+
+
+        [HttpDelete]
         public async Task<IActionResult> Delete(string id)
         {
-            if (await _advisorWriteRepository.RemoveAsync(id))
+            bool result = await _advisorWriteRepository.RemoveAsync(id);
+
+            if (result)
             {
                 await _advisorWriteRepository.SaveAsync();
-
-                return Ok(
-                  new ResponseModel(true,
+                return Ok(new ResponseModel(true,
                                     "Successful",
                                     null,
-                                    200)
-                   );
+                                    200));
             }
-            else
-            {
-                return Ok(new ResponseModel(false, "Delete is not complete possible id value is not correct", null, 400));
-            }
+            return BadRequest(new ResponseModel(false, "Delete is not complete possible id value is not correct", null, 400));
 
         }
 

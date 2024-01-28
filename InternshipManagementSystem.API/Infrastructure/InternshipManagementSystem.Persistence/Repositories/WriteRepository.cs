@@ -38,8 +38,25 @@ namespace InternshipManagementSystem.Persistence.Repositories
 
         public async Task<bool> RemoveAsync(string id)
         {
-            T model = await Table.FirstOrDefaultAsync(e => e.ID == Guid.Parse(id));
-            return Remove(model);
+            if (Guid.TryParse(id, out Guid ID))
+            {
+
+                T model = await Table.FirstOrDefaultAsync(e => e.ID == ID);
+                if (model!= null)
+                {
+                    return Remove(model);
+
+                }
+                return false;
+
+            }
+            else
+            {
+                return false;
+
+            }
+           
+            
         }
 
 

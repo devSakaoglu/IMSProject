@@ -8,7 +8,7 @@ namespace InternshipManagementSystem.Application.ViewModels.AdvisorViewModels
 {
     public class VM_Update_Advisor
     {
-        public Guid AdvisorID { get; set; }
+        public Guid id { get; set; }
         public string AdvisorName { get; set; }
         public string AdviserSurname { get; set; }
         public string TC_NO { get; set; }

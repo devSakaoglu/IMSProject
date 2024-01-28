@@ -41,12 +41,14 @@ namespace InternshipManagementSystem.Persistence.Contexts
                         return base.SaveChangesAsync(cancellationToken);                    
                         break;
 
-                    //case EntityState.Detached:
-                    //    break;
+                    case EntityState.Detached:
+                        return base.SaveChangesAsync(cancellationToken);
+                        break;
 
 
-                    //case EntityState.Deleted:
-                    //    break;
+                    case EntityState.Deleted:
+                        return base.SaveChangesAsync(cancellationToken);
+                        break;
 
 
                     default:
