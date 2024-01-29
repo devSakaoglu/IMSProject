@@ -67,9 +67,6 @@ namespace InternshipManagementSystem.API.Controllers
                 ProgramName = model.ProgramName,
                 FacultyName = model.FacultyName,
             };
-
-
-
             try
             {
                 await _advisorWriteRepository.AddAsync(advisor);
