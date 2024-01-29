@@ -15,8 +15,16 @@ namespace InternshipManagementSystem.Persistence
                 configurationManager.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../Presentation/InternshipManagementSystem.API"));
                 configurationManager.AddJsonFile("appsettings.json");
 
+                var envConnectionString = Environment.GetEnvironmentVariable("SQLCONNSTR_DATABASE_CONNECTION");
 
-                return new(configurationManager.GetConnectionString("PosgreSql"));
+                if (!string.IsNullOrWhiteSpace(envConnectionString))
+                {
+                    return envConnectionString;
+                }
+                else
+                {
+                    return new(configurationManager.GetConnectionString("PosgreSql"));
+                }
 
             }
         }
