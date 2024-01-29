@@ -17,5 +17,17 @@ export class UserService {
     if (callBackFunction) {
       callBackFunction();
     }
+
+    authenticate(StudentNo, String, Password, String);  {
+      // Kullanıcı adı ve şifre kontrolü
+      // Eğer doğru ise true, aksi halde false dönebilirsiniz
+      return (UserName === 'dogruKullaniciAdi' && Password === 'dogruSifre');
+    }
+
+
 }
 }
+function authenticate(StudentNo: string, string: any, Password: string, string1: any) {
+  throw new Error('Function not implemented.');
+}
+
