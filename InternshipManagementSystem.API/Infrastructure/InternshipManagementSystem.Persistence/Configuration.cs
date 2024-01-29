@@ -15,10 +15,22 @@ namespace InternshipManagementSystem.Persistence
                 configurationManager.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../Presentation/InternshipManagementSystem.API"));
                 configurationManager.AddJsonFile("appsettings.json");
 
+                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Developmentsadfasdf")
+                {
+                    return new(configurationManager.GetConnectionString("PosgreSql"));
+                }
+                else
+                {
+                    var connectionString = "Server=tcp:imsproject.database.windows.net,1433;Initial Catalog=imsdb;Persist Security Info=False;User ID=imsdb;Password=Imsproject18;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
-                return new(configurationManager.GetConnectionString("PosgreSql"));
+                    //var connectionString = Environment.GetEnvironmentVariable("SQLCONNSTR_DATABASE_CONNECTION");
 
+                    //if (connectionString is null) throw new Exception("Connection string is null");
+
+                    return connectionString;
+                }
             }
         }
+
     }
 }
