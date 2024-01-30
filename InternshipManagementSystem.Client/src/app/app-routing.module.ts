@@ -5,6 +5,8 @@ import { DashboardComponent } from './admin/components/dashboard/dashboard.compo
 import { HomeComponent } from './ui/components/home/home.component';
 import { SpLayoutComponent } from './student-portal/sp-layout/sp-layout.component';
 import { ApLayoutComponent } from './advisor-portal/ap-layout/ap-layout.component';
+import { StudentInfoComponent } from './student-portal/components/student-info/student-info.component';
+import { OgBilgiComponent } from './advisor-portal/components/og-bilgi/og-bilgi.component';
 
 const routes: Routes = [
   {
@@ -23,7 +25,7 @@ const routes: Routes = [
 
   { 
     path: "student-portal", component: SpLayoutComponent, children: [
-      { path: "student-info", loadChildren: () => import("./student-portal/components/student-info/student-info.module").then(module => module.StudentInfoModule) },
+      { path: "", component: StudentInfoComponent},
       { path: "student-intership-approval", loadChildren: () => import("./student-portal/components/student-intership-approval/student-intership-approval.module").then(module => module.StudentIntershipApprovalModule) },
       {path: "student-intership-info", loadChildren: ()=> import("./student-portal/components/student-intership-info/student-intership-info.module").then(module => module.StudentIntershipInfoModule)},
       {path: "student-intership-notebook", loadChildren: ()=> import("./student-portal/components/student-intership-notebook/student-intership-notebook.module").then(module=> module.StudentIntershipNotebookModule)}
@@ -32,7 +34,7 @@ const routes: Routes = [
 
   { 
     path: "advisor-portal", component: ApLayoutComponent, children: [
-      { path: "og-bilgi", loadChildren: () => import("./advisor-portal/components/og-bilgi/og-bilgi.module").then(module => module.OgBilgiModule) },
+      { path: "", component: OgBilgiComponent },
       { path: "og-staj-def", loadChildren: () => import("./advisor-portal/components/og-staj-def/og-staj-def.module").then(module => module.OgStajDefModule) },
       {path: "onayb-og", loadChildren: ()=> import("./advisor-portal/components/onayb-og/onayb-og.module").then(module => module.OnaybOgModule)},
     ]

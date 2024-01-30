@@ -10,12 +10,15 @@ import { StudentPortalModule } from './student-portal/student-portal.module';
 import { AdvisorPortalModule } from './advisor-portal/advisor-portal.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { HttpClientModule } from '@angular/common/http';
+import { NavbarComponent } from './navbar/navbar.component';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    NavbarComponent,
+
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-import { Component ,OnInit} from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from '../../../base/base.component';
@@ -11,19 +11,33 @@ import { BaseComponent, SpinnerType } from '../../../base/base.component';
 export class LoginComponent extends BaseComponent implements OnInit {
   userService: any;
 
-  constructor(userService: UserService, spinner: NgxSpinnerService){
+  constructor(userService: UserService, spinner: NgxSpinnerService) {
     super(spinner)
-    
+
   }
-  ngOnInit(): void{}
+  ngOnInit(): void {
 
-    async login(StudentNo: string, Password: string, UserName: string){
-      this.showSpinner(SpinnerType.BallNewton)
-      await this.userService.login(UserName,Password,StudentNo, ()=> this.hideSpinner(SpinnerType.BallNewton));
+    this.showSpinner(SpinnerType.BallNewton);
 
-    }
-  
+  }
 
-  
+  async login(StudentNo: string, Password: string, UserName: string) {
+    this.showSpinner(SpinnerType.BallNewton)
+
+        // Kullanıcı adı ve şifre kontrolü
+        if (this.userService.authenticate(this.username, this.password)) {
+          this.loginSuccess.emit(true);
+        } else {
+          // Kullanıcı adı ve şifre hatalı
+          this.loginSuccess.emit(false);
+        }
+
+  }
+
+  @Output() loginSuccess = new EventEmitter<boolean>();
+  username: string = '';
+  password: string = '';
+
+
 
 }
