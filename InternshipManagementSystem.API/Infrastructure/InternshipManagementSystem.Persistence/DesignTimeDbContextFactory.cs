@@ -14,6 +14,7 @@ namespace InternshipManagementSystem.Persistence
          configurationManager.AddJsonFile("appsettings.json");
 
          DbContextOptionsBuilder<InternshipManagementSystemDbContext> dbContextOptionsBuilder = new();
+
          dbContextOptionsBuilder.UseNpgsql(Configuration.ConnectionString);
 
          //dbContextOptionsBuilder.UseSqlServer(Configuration.ConnectionString);
