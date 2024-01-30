@@ -1,17 +1,23 @@
 /* app.component.scss */
 
 .navbar {
-    background-color: #ffffff; /* Arka plan beyaz */
-    color: #000000; /* Yazılar siyah */
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #333; /* Navbar arkaplan rengi */
+  color: white; /* Metin rengi */
+}
 
-  }
-  
-  .navbar-brand {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-right: 75px;
-  }
+.navbar-brand {
+  font-size: 18px; /* İstediğiniz boyutu burada belirleyin */
+}
+
+.logo {
+  width: 50px; /* İstediğiniz boyutu burada belirleyin */
+  height: auto; /* Genişliğe göre oranlı olarak yüksekliği otomatik ayarlamak için */
+}
+
 
   .brand-container {
     display: flex;
