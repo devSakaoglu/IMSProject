@@ -5,6 +5,8 @@ using InternshipManagementSystem.Infrastructure;
 using InternshipManagementSystem.Infrastructure.Filters;
 using InternshipManagementSystem.Persistence;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +25,23 @@ builder.Services.AddInfrastuctureServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddPersistanceService();
+builder.Services.AddAuthentication("Student")
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new()
+        {
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
 
+            ValidAudience = builder.Configuration["Token:Audience"],
+            ValidIssuer = builder.Configuration["Token:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"]))
+
+        };
+
+    });
 
 var app = builder.Build();
 

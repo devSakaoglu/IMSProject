@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InternshipManagementSystem.Application.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,23 @@ namespace InternshipManagementSystem.Application.Features.Commands.AppUser.Login
 {
     public class LoginUserCommandResponse
     {
+    }
+    public class LoginUserSuccessCommandResponse : LoginUserCommandResponse
+    {
+
+        public DTO.Token Token { get; set; }
+
 
     }
+    public class LoginUserErrorCommandResponse : LoginUserCommandResponse 
+    {
+
+        public string Message { get; set; }
+
+
+
+    }
+
+
+
 }
