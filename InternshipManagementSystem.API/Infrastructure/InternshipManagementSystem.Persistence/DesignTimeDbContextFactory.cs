@@ -9,14 +9,14 @@ namespace InternshipManagementSystem.Persistence
     {
         public InternshipManagementSystemDbContext CreateDbContext(string[] args)
         {
-            //ConfigurationManager configurationManager = new();
-            //configurationManager.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../Presentation/InternshipManagementSystem.API"));
-            //configurationManager.AddJsonFile("appsettings.json");
+         ConfigurationManager configurationManager = new();
+         configurationManager.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../Presentation/InternshipManagementSystem.API"));
+         configurationManager.AddJsonFile("appsettings.json");
 
-            DbContextOptionsBuilder<InternshipManagementSystemDbContext> dbContextOptionsBuilder = new();
-            //dbContextOptionsBuilder.UseNpgsql(Configuration.ConnectionString);
+         DbContextOptionsBuilder<InternshipManagementSystemDbContext> dbContextOptionsBuilder = new();
+         dbContextOptionsBuilder.UseNpgsql(Configuration.ConnectionString);
 
-            dbContextOptionsBuilder.UseSqlServer(Configuration.ConnectionString);
+         //dbContextOptionsBuilder.UseSqlServer(Configuration.ConnectionString);
 
 
             return new(dbContextOptionsBuilder.Options);
