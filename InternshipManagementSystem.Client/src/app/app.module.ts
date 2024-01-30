@@ -8,11 +8,15 @@ import { UiModule } from './ui/ui.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StudentPortalModule } from './student-portal/student-portal.module';
 import { AdvisorPortalModule } from './advisor-portal/advisor-portal.module';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { HttpClientModule } from '@angular/common/http';
+
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -20,7 +24,12 @@ import { AdvisorPortalModule } from './advisor-portal/advisor-portal.module';
     AppRoutingModule,
     AdminModule, UiModule, 
     StudentPortalModule,
-    AdvisorPortalModule
+    AdvisorPortalModule,
+    NgxSpinnerModule,
+    HttpClientModule,    
+    AdvisorPortalModule,
+    NgxSpinnerModule,
+    HttpClientModule,    
   ],
   providers: [],
   bootstrap: [AppComponent]
