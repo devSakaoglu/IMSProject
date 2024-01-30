@@ -39,8 +39,8 @@ namespace InternshipManagementSystem.API.Controllers
         }
         [HttpPost]
         public async Task<IActionResult> Post(VM_Create_Advisor model)
-        {
-            Advisor e = _advisorReadRepository.GetSingleAsync(x => x.TC_NO == model.TC_NO, false).Result;
+         {
+            Advisor e = await _advisorReadRepository.GetSingleAsync(x => x.TC_NO == model.TC_NO, false);
             if (e is not null)
             {
                 var str = e.TC_NO == model.TC_NO ? "Student Number" : "";

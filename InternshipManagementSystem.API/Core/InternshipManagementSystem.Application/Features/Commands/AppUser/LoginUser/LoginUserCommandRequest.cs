@@ -9,7 +9,7 @@ namespace InternshipManagementSystem.Application.Features.Commands.AppUser.Login
 {
     public class LoginUserCommandRequest : IRequest<LoginUserCommandResponse>
     {
-        public string StudentNo { get; set; }
+        public string UserName { get; set; }
         public string Password { get; set; }
     }
 }
