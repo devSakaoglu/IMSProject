@@ -16,7 +16,7 @@ namespace InternshipManagementSystem.Persistence
                 .AddRoles<AppRole>()
                 .AddEntityFrameworkStores<InternshipManagementSystemDbContext>();
 
-            if(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            if(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
             {
                 services.AddDbContext<InternshipManagementSystemDbContext>(options => options.UseSqlServer(Configuration.ConnectionString), ServiceLifetime.Singleton);
             }

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "InternshipManagementSystem.Persistence": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DATABASE_CONNECTION": "Server=tcp:imsproject.database.windows.net,1433;Initial Catalog=imsdb;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication=\"Active Directory Default\";"
+      }
+    }
+  }
+}

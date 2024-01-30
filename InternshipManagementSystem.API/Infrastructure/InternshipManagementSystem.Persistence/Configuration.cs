@@ -15,7 +15,7 @@ namespace InternshipManagementSystem.Persistence
                 configurationManager.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../Presentation/InternshipManagementSystem.API"));
                 configurationManager.AddJsonFile("appsettings.json");
 
-                var envConnectionString = Environment.GetEnvironmentVariable("SQLCONNSTR_DATABASE_CONNECTION");
+                var envConnectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION");
 
                 if (!string.IsNullOrWhiteSpace(envConnectionString))
                 {
