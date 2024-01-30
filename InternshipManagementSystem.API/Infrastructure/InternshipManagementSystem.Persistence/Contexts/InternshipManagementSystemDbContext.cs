@@ -23,7 +23,7 @@ namespace InternshipManagementSystem.Persistence.Contexts
             //ChangeTracker : track edilen verleri yakalar insert disinda track edilen verileri yakalar
             //update operasyonlarinda track edilen verileri yakalar
             var datas = ChangeTracker
-                .Entries<BaseEntity>();
+                .Entries<BaseEntity>();   
 
             foreach (var data in datas)
             {
