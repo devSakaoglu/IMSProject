@@ -17,7 +17,10 @@ import { NavbarComponent } from './navbar/navbar.component';
 @NgModule({
   declarations: [
     AppComponent,
+<<<<<<< HEAD
     NavbarComponent,
+=======
+>>>>>>> 9f102ca6b93483f051c1450aa2668731e77f19c7
 
   ],
   imports: [
@@ -26,6 +29,9 @@ import { NavbarComponent } from './navbar/navbar.component';
     AppRoutingModule,
     AdminModule, UiModule, 
     StudentPortalModule,
+    AdvisorPortalModule,
+    NgxSpinnerModule,
+    HttpClientModule,    
     AdvisorPortalModule,
     NgxSpinnerModule,
     HttpClientModule,    
