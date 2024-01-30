@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrl: './student-intership-info.component.scss'
 })
 export class StudentIntershipInfoComponent {
+onSubmit() {
+throw new Error('Method not implemented.');
+}
 
 }
