@@ -36,10 +36,10 @@ namespace InternshipManagementSystem.Application.Features.Commands.AppUser.Login
 
         public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
         {
-            Domain.Entities.Identity.AppUser user = await _usermanager.FindByNameAsync(request.StudentNo);
+            Domain.Entities.Identity.AppUser user = await _usermanager.FindByNameAsync(request.UserName);
             if (user == null)
             {
-                throw new NotFoundUserException("Öğrenci no veya şifre hatalı");
+                throw new NotFoundUserException("Kullanıcı adı veya şifre hatalı");
             }
 
             SignInResult result = await _signinmanager.CheckPasswordSignInAsync(user, request.Password, false);

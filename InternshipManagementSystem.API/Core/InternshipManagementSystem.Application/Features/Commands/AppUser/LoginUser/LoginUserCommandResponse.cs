@@ -12,20 +12,13 @@ namespace InternshipManagementSystem.Application.Features.Commands.AppUser.Login
     }
     public class LoginUserSuccessCommandResponse : LoginUserCommandResponse
     {
-
         public DTO.Token Token { get; set; }
-
 
     }
     public class LoginUserErrorCommandResponse : LoginUserCommandResponse 
     {
-
         public string Message { get; set; }
 
-
-
     }
-
-
 
 }
