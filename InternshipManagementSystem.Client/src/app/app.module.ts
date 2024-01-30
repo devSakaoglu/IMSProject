@@ -27,6 +27,9 @@ import { HttpClientModule } from '@angular/common/http';
     AdvisorPortalModule,
     NgxSpinnerModule,
     HttpClientModule,    
+    AdvisorPortalModule,
+    NgxSpinnerModule,
+    HttpClientModule,    
   ],
   providers: [],
   bootstrap: [AppComponent]
