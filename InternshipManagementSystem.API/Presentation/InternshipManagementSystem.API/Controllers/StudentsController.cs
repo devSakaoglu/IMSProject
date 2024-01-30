@@ -45,7 +45,8 @@ namespace InternshipManagementSystem.API.Controllers
       }
       [HttpPost("[action]")]
       public async Task<IActionResult> AddToAdvisor(VM_Add_Student_to_Advisor model)
-      {  
+      
+         `{  
          Student student = await _studentReadRepository.GetSingleAsync(s => s.ID == model.StudentID, true);
          if (student is null)
          {
@@ -62,13 +63,18 @@ namespace InternshipManagementSystem.API.Controllers
 
 
 
-         var advisor = await _advisorReadRepository.GetAll().Include(x => x.Students).FirstOrDefaultAsync(x => x.ID == model.AdvisorID);
+         var advisor = await _advisorReadRepository.GetAll().FirstOrDefaultAsync(x => x.ID == model.AdvisorID);
+         var ifStudentExists = advisor.Students.Any(student => student.ID == model.StudentID);
+         if (ifStudentExists)
+         {
+            throw new Exception("Student already exists");
+         }
          if (advisor != null)
          {
             try
             {
-               advisor.Students.Add(student);
-               var x = await _advisorWriteRepository.SaveAsync();
+               student.AdvisorID= advisor.ID; //TODO Student icindeki Advisor ID guidi kaldirip sadece entity kullanilabilecek hale getir
+
                var y = await _studentWriteRepository.SaveAsync();
                var res = new ResponseModel()
                {
@@ -78,7 +84,7 @@ namespace InternshipManagementSystem.API.Controllers
                   StatusCode = 200
 
                };
-               return Ok(res);
+               
             }
             catch (Exception ex)
             {
