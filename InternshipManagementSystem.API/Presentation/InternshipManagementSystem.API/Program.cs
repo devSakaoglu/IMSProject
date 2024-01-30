@@ -7,6 +7,7 @@ using InternshipManagementSystem.Persistence;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,12 @@ builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>
     .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<UpdateAdvisorValidator>())
     .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<CreateStudentValidator>())
     .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<UpdateStudentValidator>())
-    .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
+    .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true)
+    .AddJsonOptions(options =>
+    {
+       options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+       options.JsonSerializerOptions.MaxDepth = 0; // Set the maximum depth to 0 to disable circular reference handling
+    });
 
 builder.Services.AddInfrastuctureServices();
 

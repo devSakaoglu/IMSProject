@@ -9,7 +9,7 @@ namespace InternshipManagementSystem.Persistence.Contexts
     {
         public InternshipManagementSystemDbContext(DbContextOptions<InternshipManagementSystemDbContext> options) : base(options)
         {
-
+            
         }
         DbSet<Advisor> Advisors { get; set; }
         DbSet<Student> Students { get; set; }
@@ -18,7 +18,8 @@ namespace InternshipManagementSystem.Persistence.Contexts
         DbSet<InternshipApplicationInfoForAdviserExcel> InternshipApplicationInfoForAdviserExcels { get; set; }
         DbSet<InternAppAcceptForm> InternAppAcceptForms { get; set; }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+      
+      public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             //ChangeTracker : track edilen verleri yakalar insert disinda track edilen verileri yakalar
             //update operasyonlarinda track edilen verileri yakalar
