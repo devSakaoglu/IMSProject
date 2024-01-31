@@ -3,6 +3,7 @@ using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Application.ViewModels.AdvisorViewModels;
 using InternshipManagementSystem.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace InternshipManagementSystem.API.Controllers
 {
@@ -32,14 +33,26 @@ namespace InternshipManagementSystem.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var  data = _advisorReadRepository.GetAll(false);
+            var data = _advisorReadRepository.GetAll(false);
             return Ok(
             new ResponseModel(true, "Successful", data, 200)
          );
         }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetStudentsOfAllAdvisors()
+        {
+            var data = _advisorReadRepository.GetAll().Include(x => x.Students);
+            var students = data.SelectMany(x => x.Students).ToList();
+            return Ok(
+                           new ResponseModel(true, "Successful", students, 200)
+                                   );
+
+
+        }
         [HttpPost]
         public async Task<IActionResult> Post(VM_Create_Advisor model)
-         {
+        {
             Advisor e = await _advisorReadRepository.GetSingleAsync(x => x.TC_NO == model.TC_NO, false);
             if (e is not null)
             {
