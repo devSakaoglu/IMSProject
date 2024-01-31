@@ -19,19 +19,20 @@ import { NavbarComponent } from './navbar/navbar.component';
     AppComponent,
     NavbarComponent,
 
+
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    AdminModule, UiModule, 
+    AdminModule, UiModule,
     StudentPortalModule,
     AdvisorPortalModule,
     NgxSpinnerModule,
-    HttpClientModule,    
+    HttpClientModule,
     AdvisorPortalModule,
     NgxSpinnerModule,
-    HttpClientModule,    
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
