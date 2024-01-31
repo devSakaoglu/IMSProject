@@ -7,6 +7,7 @@ using InternshipManagementSystem.Persistence;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using InternshipManagementSystem.Application;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,8 +31,7 @@ builder.Services.AddInfrastuctureServices();
 builder.Services.AddInfrastuctureServices();
 
 builder.Services.AddInfrastuctureServices();
-
-
+builder.Services.AddApplicationServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddPersistanceService();
