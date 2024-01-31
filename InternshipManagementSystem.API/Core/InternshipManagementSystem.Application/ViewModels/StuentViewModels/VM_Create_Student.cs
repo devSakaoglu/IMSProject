@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 namespace InternshipManagementSystem.Application.ViewModels.StudentViewModels
 {
     public class VM_Create_Student
-    {
-        public Guid ?AdvisorID { get; set; }
-
+   {
         public string StudentNo { get; set; }
         public string StudentName { get; set; }
         public string StudentSurname { get; set; }
