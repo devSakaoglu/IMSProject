@@ -54,6 +54,21 @@
 </div>
 
 
+
+
+
+
+<app-sp-layout (loginSuccess)="onLoginSuccess($event)"></app-sp-layout>
+
+ 
+
+<div *ngIf="showNavbarContent()">
+
+  <app-navbar></app-navbar>
+
+</div>
+
+
 <div *ngIf="showloginContent()">
 
   <a routerLink="/login"></a>
@@ -66,7 +81,10 @@
 
 
 <ngx-spinner size="default" name="newton" type="ball-newton-cradle" ></ngx-spinner>
+<ngx-spinner size="default" name="newton" type="ball-newton-cradle" ></ngx-spinner>
 
 
 
-<router-outlet></router-outlet>
+  <router-outlet></router-outlet>
+  <ngx-spinner size="default" name="newton" type="ball-newton-cradle" ></ngx-spinner>
+  

@@ -58,5 +58,9 @@ namespace InternshipManagementSystem.Persistence.Repositories
                 query = query.AsNoTracking();
             return query.Where(method);
         }
-    }
+
+      
+
+    
+   }
 }

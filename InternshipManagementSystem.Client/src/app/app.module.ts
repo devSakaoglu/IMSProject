@@ -29,6 +29,9 @@ import { NavbarComponent } from './navbar/navbar.component';
     AdvisorPortalModule,
     NgxSpinnerModule,
     HttpClientModule,    
+    AdvisorPortalModule,
+    NgxSpinnerModule,
+    HttpClientModule,    
   ],
   providers: [],
   bootstrap: [AppComponent]
