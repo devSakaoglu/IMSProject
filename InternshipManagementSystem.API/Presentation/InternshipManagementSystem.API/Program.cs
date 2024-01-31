@@ -7,6 +7,7 @@ using InternshipManagementSystem.Persistence;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using InternshipManagementSystem.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,8 +21,7 @@ builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>
     .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
 
 builder.Services.AddInfrastuctureServices();
-
-
+builder.Services.AddApplicationServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddPersistanceService();
