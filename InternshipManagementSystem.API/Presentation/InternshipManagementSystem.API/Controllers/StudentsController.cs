@@ -45,8 +45,7 @@ namespace InternshipManagementSystem.API.Controllers
       }
       [HttpPost("[action]")]
       public async Task<IActionResult> AddToAdvisor(VM_Add_Student_to_Advisor model)
-      
-         `{  
+        { 
          Student student = await _studentReadRepository.GetSingleAsync(s => s.ID == model.StudentID, true);
          if (student is null)
          {
