@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Concretes\**" />
+    <EmbeddedResource Remove="Concretes\**" />
+    <None Remove="Concretes\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,10 +29,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\InternshipManagementSystem.Application\InternshipManagementSystem.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Concretes\" />
   </ItemGroup>
 
 </Project>

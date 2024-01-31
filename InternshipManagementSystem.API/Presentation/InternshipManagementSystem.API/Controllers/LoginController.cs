@@ -8,4 +8,5 @@ namespace InternshipManagementSystem.API.Controllers
     public class LoginController : ControllerBase
     {
     }
+    
 }

@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@angular/common": "^17.0.9",
+    "@angular/core": "^17.0.9",
+    "@angular/material": "^17.0.5",
+    "@angular/router": "^17.0.9",
+    "typescript": "^5.3.3"
+  }
+}
