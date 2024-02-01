@@ -13,25 +13,25 @@ namespace InternshipManagementSystem.Persistence
             IServiceCollection services)
         {
             services.AddIdentityCore<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddRoles<AppRole>()   
+                .AddRoles<AppRole>()
                 .AddEntityFrameworkStores<InternshipManagementSystemDbContext>();
 
 
-         if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
-         {
-            services.AddDbContext<InternshipManagementSystemDbContext>(options => options.UseSqlServer(Configuration.ConnectionString), ServiceLifetime.Singleton);
-         }  
-         else
-         {
-            services.AddDbContext<InternshipManagementSystemDbContext>(options => options.UseNpgsql(Configuration.ConnectionString), ServiceLifetime.Singleton);
-         }
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            {
+                services.AddDbContext<InternshipManagementSystemDbContext>(options => options.UseSqlServer(Configuration.ConnectionString), ServiceLifetime.Singleton);
+            }
+            else
+            {
+                services.AddDbContext<InternshipManagementSystemDbContext>(options => options.UseNpgsql(Configuration.ConnectionString), ServiceLifetime.Singleton);
+            }
 
-         services.AddScoped<IAdvisorReadRepository, AdvisorReadRepository>();
+            services.AddScoped<IAdvisorReadRepository, AdvisorReadRepository>();
             services.AddScoped<IAdvisorWriteRepository, AdvisorWriteRepository>();
             services.AddScoped<IInternshipReadRepository, InternshipReadRepository>();
             services.AddScoped<IInternshipWriteRepository, InternshipWriteRepository>();
             services.AddScoped<IStudentReadRepository, StudentReadRepository>();
             services.AddScoped<IStudentWriteRepository, StudentWriteRepository>();
-        }                      
+        }
     }
 }
