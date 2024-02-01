@@ -16,7 +16,7 @@
       public string Email { get; set; }
       public ICollection<Internship>? Internships { get; set; }
 
-
-   }
+     
+    }
 
 }
