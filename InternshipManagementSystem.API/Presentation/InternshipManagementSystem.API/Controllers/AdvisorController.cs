@@ -50,6 +50,15 @@ namespace InternshipManagementSystem.API.Controllers
 
 
         }
+        [HttpGet("[action]/{id}")]
+        public async Task<IActionResult> GetStudentsOfAdvisor(string id)
+        {
+            var data = await _advisorReadRepository.Table.Include(x=>x.Students).FirstOrDefaultAsync(x=>x.ID==Guid.Parse(id));
+            var students = data.Students;
+            return Ok(
+                                          new ResponseModel(true, "Successful", students, 200)
+                                                                            );
+        }
         [HttpPost]
         public async Task<IActionResult> Post(VM_Create_Advisor model)
         {

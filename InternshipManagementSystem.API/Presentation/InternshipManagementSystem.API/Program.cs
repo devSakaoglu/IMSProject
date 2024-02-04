@@ -27,7 +27,6 @@ builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>
     });
 
 builder.Services.AddInfrastuctureServices();
-
 builder.Services.AddInfrastuctureServices();
 
 builder.Services.AddInfrastuctureServices();
@@ -55,11 +54,12 @@ builder.Services.AddAuthentication("Student")
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment()  || true)
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+Console.WriteLine(app.Environment.IsDevelopment());
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseCors();

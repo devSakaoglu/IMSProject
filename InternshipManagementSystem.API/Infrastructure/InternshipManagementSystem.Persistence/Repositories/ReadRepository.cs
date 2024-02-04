@@ -30,7 +30,6 @@ namespace InternshipManagementSystem.Persistence.Repositories
         }
 
         public async Task<T> GetByIdAsync(string id, bool tracking = true)
-        //=> await Table.FirstOrDefaultAsync(e=>e.id==Guid.Parse(id));
         {
                var query = Table.AsQueryable();
             if (!tracking)

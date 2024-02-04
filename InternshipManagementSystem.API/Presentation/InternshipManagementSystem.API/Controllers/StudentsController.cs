@@ -62,11 +62,18 @@ namespace InternshipManagementSystem.API.Controllers
 
 
 
-            var advisor = await _advisorReadRepository.GetAll().FirstOrDefaultAsync(x => x.ID == model.AdvisorID);
+            var advisor = await _advisorReadRepository.GetAll().Include(a=>a.Students).FirstOrDefaultAsync(x => x.ID == model.AdvisorID);
             var ifStudentExists = advisor.Students.Any(student => student.ID == model.StudentID);
             if (ifStudentExists)
             {
-                throw new Exception("Student already exists");
+                return Ok(new ResponseModel()
+                {
+                    IsSuccess =false,
+                    Message = "Student already exists",
+                    Data = null,
+                    StatusCode = 400
+
+                });
             }
             if (advisor != null)
             {
@@ -83,6 +90,8 @@ namespace InternshipManagementSystem.API.Controllers
                         StatusCode = 200
 
                     };
+                    return Ok(res);
+
 
                 }
                 catch (Exception ex)
@@ -140,9 +149,9 @@ namespace InternshipManagementSystem.API.Controllers
             };
 
             bool progres = await _studentWriteRepository.AddAsync(student);
+            await _studentWriteRepository.SaveAsync();
 
-
-            if (await _studentWriteRepository.SaveAsync() == 1)
+            if (progres == true)
             {
                 return Ok(
                    new ResponseModel(true, "Student added", student, 200)
@@ -208,7 +217,7 @@ namespace InternshipManagementSystem.API.Controllers
         }
         [HttpPost("[action]")]
 
-        public async Task<IActionResult> Upload([FromForm] IFormFileCollection file, string StudentID = "2", string InternshipID = "1")
+        public async Task<IActionResult> Upload([FromForm] IFormFileCollection file, string StudentID , string InternshipID )
         {
             var data = await _fileService.UploadAsync($"Students\\{StudentID}\\{InternshipID}\\", file);
             return Ok(new ResponseModel()

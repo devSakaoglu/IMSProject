@@ -32,6 +32,27 @@ namespace InternshipManagementSystem.API.Controllers
         {
             return Ok("Internship Deleted");
         }
-        
+
+        [HttpPost("upload")]    
+        public IActionResult UploadFile(IFormCollection files)
+        {
+            return Ok("File Uploaded");
+        }
+
+        [HttpGet("download/{id}")]
+        public IActionResult DownloadFile(string id)
+        {
+            return Ok("File Downloaded");
+        }
+
+        [HttpDelete("delete/{id}")]
+        public IActionResult DeleteFile(string id)
+        {
+            return Ok("File Deleted");
+        }
+
+   
+
+
     }
 }
