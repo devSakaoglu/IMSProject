@@ -1,9 +1,11 @@
 ﻿using InternshipManagementSystem.Application.Repositories;
+using InternshipManagementSystem.Application.Token;
 using InternshipManagementSystem.Domain.Entities.Identity;
 using InternshipManagementSystem.Persistence.Contexts;
 using InternshipManagementSystem.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using InternshipManagementSystem.Infrastructure.Services.Token;
 
 namespace InternshipManagementSystem.Persistence
 {
@@ -32,6 +34,7 @@ namespace InternshipManagementSystem.Persistence
             services.AddScoped<IInternshipWriteRepository, InternshipWriteRepository>();
             services.AddScoped<IStudentReadRepository, StudentReadRepository>();
             services.AddScoped<IStudentWriteRepository, StudentWriteRepository>();
+            services.AddSingleton<ITokenHandler, TokenHandler>();
         }                      
     }
 }
