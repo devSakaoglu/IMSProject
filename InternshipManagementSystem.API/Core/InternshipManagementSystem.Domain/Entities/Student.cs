@@ -2,7 +2,7 @@
 {
    public class Student : BaseEntity
    {
-      public Advisor? Advisor { get; set; }
+      public Guid? AdvisorID { get; set; }
       public string StudentNo { get; set; }
       public string StudentName { get; set; }
       public string StudentSurname { get; set; }

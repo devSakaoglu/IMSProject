@@ -35,7 +35,13 @@ namespace InternshipManagementSystem.API.Controllers
 
         {
             var x = _studentReadRepository.GetAll();
-            return Ok(x);
+            return Ok(new ResponseModel()
+            {
+                Data = x,
+                IsSuccess = true,
+                Message = "Successful",
+                StatusCode=200
+            });
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
@@ -44,9 +50,10 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(advisor);
         }
         [HttpPost("[action]")]
-        public async Task<IActionResult> Add(VM_Create_Student model)
+        public async Task<IActionResult> AddToAdvisor(VM_Add_Student_to_Advisor model)
+
         {
-            Student student = await _studentReadRepository.GetSingleAsync(x => x.TC_NO == model.TC_NO || x.StudentNo == model.StudentNo, false);
+            Student student = await _studentReadRepository.GetSingleAsync(s => s.ID == model.StudentID, true);
             if (student is null)
             {
                 return Ok(new ResponseModel()
@@ -63,21 +70,27 @@ namespace InternshipManagementSystem.API.Controllers
 
 
             var advisor = await _advisorReadRepository.GetAll().Include(x => x.Students).FirstOrDefaultAsync(x => x.ID == model.AdvisorID);
+            var ifStudentExists = advisor.Students.Any(student => student.ID == model.StudentID);
+            if (ifStudentExists)
+            {
+                throw new Exception("Student already exists");
+            }
             if (advisor != null)
             {
                 try
                 {
-                    advisor.Students.Add(student);
-                    await _advisorWriteRepository.SaveAsync();
-                    await _studentWriteRepository.SaveAsync();
-                    return Ok(new ResponseModel()
+                    student.AdvisorID = advisor.ID; //TODO Student icindeki Advisor ID guidi kaldirip sadece entity kullanilabilecek hale getir
+
+                    var y = await _studentWriteRepository.SaveAsync();
+                    var res = new ResponseModel()
                     {
                         IsSuccess = true,
                         Message = "Successful",
                         Data = student,
                         StatusCode = 200
 
-                    });
+                    };
+                  
                 }
                 catch (Exception ex)
                 {
@@ -94,12 +107,13 @@ namespace InternshipManagementSystem.API.Controllers
             }
             return Ok(new ResponseModel()
             {
-                IsSuccess = false,
-                Message = "Some problems",
-                Data = null,
-                StatusCode = 499
+                IsSuccess = true,
+                Message = "Success",
+                Data = student,
+                StatusCode = 200
 
             });
+
         }
         [HttpPost]
         public async Task<IActionResult> Post(VM_Create_Student model)
@@ -117,7 +131,7 @@ namespace InternshipManagementSystem.API.Controllers
 
                 });
             }
-            await _studentWriteRepository.AddAsync(new Student()
+            Student student = new()
             {
                 Address = model.Address,
                 Email = model.Email,
@@ -130,13 +144,17 @@ namespace InternshipManagementSystem.API.Controllers
                 DepartmentName = model.DepartmentName,
                 ProgramName = model.ProgramName,
                 FacultyName = model.FacultyName,
-            });
+            };
+
+            bool progres = await _studentWriteRepository.AddAsync(student);
+
+
             if (await _studentWriteRepository.SaveAsync() == 1)
             {
                 return Ok(
-                   new ResponseModel(true, "Student added", null, 200)
+                   new ResponseModel(true, "Student added", student, 200)
 
-                   );
+                       );
 
             }
             else
@@ -197,17 +215,18 @@ namespace InternshipManagementSystem.API.Controllers
         }
         [HttpPost("[action]")]
 
-        public async Task<IActionResult> Upload([FromForm] IFormFileCollection file,string StudentID = "2",string InternshipID ="1")
+        public async Task<IActionResult> Upload([FromForm] IFormFileCollection file, string StudentID = "2", string InternshipID = "1")
         {
-          var data = await  _fileService.UploadAsync($"Students\\{StudentID}\\{InternshipID}\\", file);
+            var data = await _fileService.UploadAsync($"Students\\{StudentID}\\{InternshipID}\\", file);
             return Ok(new ResponseModel()
             {
-                Data=data.ToDictionary(),
-                IsSuccess=true,
-                Message="Successful",
-                StatusCode=200
+                Data = data.ToDictionary(),
+                IsSuccess = true,
+                Message = "Successful",
+                StatusCode = 200
             });
-          
+
+            return Ok("Some Problems");
 
         }
     }

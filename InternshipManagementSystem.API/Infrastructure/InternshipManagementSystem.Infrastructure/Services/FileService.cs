@@ -81,16 +81,16 @@ namespace InternshipManagementSystem.Infrastructure.Services
                 }
 
 
-                if (File.Exists($"{path}/{newFileName}"))
-                {
+                    if (File.Exists($"{path}/{newFileName}"))
+                    {
                    return await FileRenameAsync(path, newFileName, false);
-                }
-                else
-                {
-                   return newFileName;
-                }
+                    }
+                    else
+                    {
+                        return newFileName;
+                    }
 
-             });
+                });
          return newFileName;
 
 
@@ -107,25 +107,25 @@ namespace InternshipManagementSystem.Infrastructure.Services
          List<(string fileName, string path)> datas = new();
          List<bool> results = new();
 
-         foreach (IFormFile file in files)
-         {
+            foreach (IFormFile file in files)
+            {
             var fileNewName = await FileRenameAsync(uploadPath, file.FileName);
             var filePath = $"{uploadPath}\\{fileNewName}";
 
-            bool result = await CopyFileAsync(filePath, file);
+                bool result = await CopyFileAsync(filePath, file);
             datas.Add((fileNewName, $"{uploadPath}\\{fileNewName}"));
-            results.Add(result);
+                results.Add(result);
          
-            //TODO: exeptioon message return
-            //if (result.Equals(false)) any
+                //TODO: exeptioon message return
+                //if (result.Equals(false)) any
             //return null;
 
-         }
+            }
          if (results.TrueForAll(r => r.Equals(true)))
          {
             return datas;
          }
-         return null;
-      }
-   }
+            return null;
+        }
+    }
 }
