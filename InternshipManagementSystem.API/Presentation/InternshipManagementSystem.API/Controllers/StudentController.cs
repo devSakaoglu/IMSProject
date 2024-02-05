@@ -11,7 +11,7 @@ namespace InternshipManagementSystem.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentsController : ControllerBase
+    public class StudentController : ControllerBase
     {
         private readonly IStudentReadRepository _studentReadRepository;
         private readonly IStudentWriteRepository _studentWriteRepository;
@@ -20,7 +20,7 @@ namespace InternshipManagementSystem.API.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IFileService _fileService;
 
-        public StudentsController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService)
+        public StudentController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService)
         {
             _studentReadRepository = studentReadRepository;
             _studentWriteRepository = studentWriteRepository;
