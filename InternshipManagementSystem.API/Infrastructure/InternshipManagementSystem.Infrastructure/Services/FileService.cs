@@ -14,12 +14,16 @@ namespace InternshipManagementSystem.Infrastructure.Services
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IInternshipReadRepository _internshipReadRepository;
         private readonly IInternshipWriteRepository  _internshipWriteRepository ;
+        private readonly IInternshipDocumentReadRepository _internshipDocumentReadRepository;
+        private readonly IInternshipDocumentWriteRepository _internshipDocumentWriteRepository;
 
-        public FileService(IWebHostEnvironment webHostEnvironment , IInternshipWriteRepository internshipWriteRepository , IInternshipReadRepository intershipReadRepository)
+        public FileService(IWebHostEnvironment webHostEnvironment, IInternshipReadRepository internshipReadRepository, IInternshipWriteRepository internshipWriteRepository, IInternshipDocumentReadRepository internshipDocumentReadRepository, IInternshipDocumentWriteRepository internshipDocumentWriteRepository)
         {
             _webHostEnvironment = webHostEnvironment;
-            _internshipReadRepository = intershipReadRepository;
+            _internshipReadRepository = internshipReadRepository;
             _internshipWriteRepository = internshipWriteRepository;
+            _internshipDocumentReadRepository = internshipDocumentReadRepository;
+            _internshipDocumentWriteRepository = internshipDocumentWriteRepository;
         }
 
         public async Task<bool> CopyFileAsync(string sourcePath, IFormFile formFile)
@@ -147,8 +151,10 @@ namespace InternshipManagementSystem.Infrastructure.Services
                         FileType =   Path.GetExtension(data.fileName)
                     };
                     //todo sabah devam et
+                   await _internshipDocumentWriteRepository.AddAsync(internshipDocument);
 
                 }
+                await _internshipDocumentWriteRepository.SaveAsync();
                 return datas;
             }
             return null;

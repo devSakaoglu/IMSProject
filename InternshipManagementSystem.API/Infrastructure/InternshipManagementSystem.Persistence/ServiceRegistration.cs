@@ -32,6 +32,8 @@ namespace InternshipManagementSystem.Persistence
             services.AddScoped<IInternshipWriteRepository, InternshipWriteRepository>();
             services.AddScoped<IStudentReadRepository, StudentReadRepository>();
             services.AddScoped<IStudentWriteRepository, StudentWriteRepository>();
+            services.AddScoped<IInternshipDocumentReadRepository, InternshipDocumentReadRepository>();
+            services.AddScoped<IInternshipDocumentWriteRepository, InternshipDocumentWriteRepository>();
         }
     }
 }

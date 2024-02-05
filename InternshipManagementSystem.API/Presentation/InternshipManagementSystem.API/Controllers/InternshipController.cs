@@ -19,10 +19,12 @@ namespace InternshipManagementSystem.API.Controllers
         private readonly IAdvisorWriteRepository _advisorWriteRepository;
         private readonly IInternshipReadRepository _internshipReadRepository;
         private readonly IInternshipWriteRepository _internshipWriteRepository;
+        private readonly IInternshipDocumentReadRepository  _internshipDocumentReadRepository;
+        private readonly IInternshipDocumentWriteRepository _internshipDocumentWriteRepository; 
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IFileService _fileService;
 
-        public InternshipController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IInternshipReadRepository internshipReadRepository, IInternshipWriteRepository internshipWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService)
+        public InternshipController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IInternshipReadRepository internshipReadRepository, IInternshipWriteRepository internshipWriteRepository, IInternshipDocumentReadRepository internshipDocumentReadRepository, IInternshipDocumentWriteRepository internshipDocumentWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService)
         {
             _studentReadRepository = studentReadRepository;
             _studentWriteRepository = studentWriteRepository;
@@ -30,6 +32,8 @@ namespace InternshipManagementSystem.API.Controllers
             _advisorWriteRepository = advisorWriteRepository;
             _internshipReadRepository = internshipReadRepository;
             _internshipWriteRepository = internshipWriteRepository;
+            _internshipDocumentReadRepository = internshipDocumentReadRepository;
+            _internshipDocumentWriteRepository = internshipDocumentWriteRepository;
             _webHostEnvironment = webHostEnvironment;
             _fileService = fileService;
         }
