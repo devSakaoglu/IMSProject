@@ -1,11 +1,9 @@
 ﻿using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.Services;
-using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Domain.Entities;
 using InternshipManagementSystem.Infrastructure.StaticServices;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace InternshipManagementSystem.Infrastructure.Services
 {
@@ -153,16 +151,33 @@ namespace InternshipManagementSystem.Infrastructure.Services
                             FileType = Path.GetExtension(data.fileName)
                         };
                         //todo sabah devam et
-                        var sonucWrite =  _internshipDocumentWriteRepository.AddAsync(internshipDocument).Result;
+                        var sonucWrite = _internshipDocumentWriteRepository.AddAsync(internshipDocument).Result;
 
                     });
- 
+
 
                 }
                 var result = await _internshipDocumentWriteRepository.SaveAsync();
                 return datas;
             }
             return null;
+        }
+
+        public async Task<bool> DeleteFileAsync(string path)
+        {
+            try
+            {
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
 

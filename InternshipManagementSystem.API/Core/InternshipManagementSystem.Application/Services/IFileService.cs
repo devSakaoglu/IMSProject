@@ -13,6 +13,7 @@ namespace InternshipManagementSystem.Application.Services
 
         Task<bool> CopyFileAsync(string sourcePath, IFormFile formFile);
 
+        Task<bool> DeleteFileAsync(string path);
 
     }
 }

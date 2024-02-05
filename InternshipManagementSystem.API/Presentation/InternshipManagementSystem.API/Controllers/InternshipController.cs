@@ -4,6 +4,7 @@ using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Application.ViewModels.InternshipViewModelss;
 using InternshipManagementSystem.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace InternshipManagementSystem.API.Controllers
@@ -89,8 +90,8 @@ namespace InternshipManagementSystem.API.Controllers
                     AdvisorID = model.AdvisorID,
                     StudentID = adata.ID,
                     InternshipStatus = InternshipStatus.ApplicationPending,
-                    FormID = model.FormID,
-                    ExcelID = model.ExcelID,
+                    InternAppAcceptFormID = model.FormID,
+                    InternshipApplicationInfoForAdviserExcelID = model.ExcelID,
                 };
                 await _internshipWriteRepository.AddAsync(internship);
                 _internshipWriteRepository.SaveAsync();
@@ -124,8 +125,8 @@ namespace InternshipManagementSystem.API.Controllers
             {
                 data = new Internship()
                 {
-                    FormID = model.FormID,
-                    ExcelID = model.ExcelID,
+                    InternAppAcceptFormID = model.FormID,
+                    InternshipApplicationInfoForAdviserExcelID= model.ExcelID,
                     InternshipBookID = model.InternshipBookID,
                     SPASID = model.SPASID,
                     AttendanceScheduleID = model.AttendanceScheduleID,
@@ -184,16 +185,73 @@ namespace InternshipManagementSystem.API.Controllers
             });
         }
 
-        [HttpGet("[action]")]
-        public IActionResult DownloadFile(string id)
+        [HttpGet("[action]/{internShipDocumentId}")]
+        public async Task<IActionResult> DownloadFile(string internShipDocumentId)
         {
-            return Ok("File Downloaded");
-        }
+            var data = await _internshipDocumentReadRepository.GetByIdAsync(internShipDocumentId);
+                return Ok(new ResponseModel()
+                {
+                    Data = data == null ? null : data.FilePath,
+                    IsSuccess =data == null ? false : true,
+                    Message = data == null ? "File Not Found" : "File Found",
+                    StatusCode = data == null ? 404 : 200
+                });
 
-        [HttpDelete("delete/{id}")]
-        public IActionResult DeleteFile(string id)
+
+
+        }
+        [HttpGet("[action]/{internshipId}")]
+        public async Task<IActionResult> GetAllDocuments(string internshipId)
         {
-            return Ok("File Deleted");
+            var data =  _internshipReadRepository.GetAll().Where(x => x.ID == Guid.Parse(internshipId)).Select(x => x.InternsipDocuments).ToList();   
+            return Ok(new ResponseModel()
+            {
+                Data = data,
+                IsSuccess = data == null ? false : true,
+                Message = data == null ? "No Document Found" : "Documents Found",
+                StatusCode = data == null ? 404 : 200
+            });
+        }
+        [HttpDelete("deletefile/{id}")]
+        public async Task<IActionResult> DeleteFile(string id)
+        {
+            var data = _internshipDocumentReadRepository.GetByIdAsync(id);
+            if (data == null)
+            {
+                return Ok(new ResponseModel()
+                {
+                    Data = null,
+                    IsSuccess = false,
+                    Message = "File Not Found",
+                    StatusCode = 404
+                });
+            }
+            else
+            {
+             
+                if (await _fileService.DeleteFileAsync(data.Result.FilePath) == false)
+                {
+                    return Ok(new ResponseModel()
+                    {
+                        Data = null,
+                        IsSuccess = false,
+                        Message = "File Not Deleted",
+                        StatusCode = 404
+                    });
+                }else
+                {
+
+                    _internshipDocumentWriteRepository.RemoveAsync(id);
+                    return Ok(new ResponseModel()
+                    {
+                        Data = null,
+                        IsSuccess = true,
+                        Message = "File Deleted",
+                        StatusCode = 200
+                    });
+                }
+
+            }
         }
 
 

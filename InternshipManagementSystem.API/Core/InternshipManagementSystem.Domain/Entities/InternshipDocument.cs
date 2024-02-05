@@ -2,7 +2,7 @@
 {
    public class InternshipDocument : BaseEntity
    {
-      public Guid? InternshipID { get; set; }
+      public Guid InternshipID { get; set; }
       public string FileName { get; set; }
       public string FileType { get; set; }
 
