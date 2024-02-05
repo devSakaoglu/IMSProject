@@ -1,0 +1,1037 @@
+{
+"openapi"
+:
+"3.0.1",
+"info": {
+"title"
+:
+"InternshipManagementSystem.API",
+"version"
+:
+"1.0"
+},
+"paths": {
+"/api/Advisor/{id}": {
+"get": {
+"tags": [
+"Advisor"
+],
+"parameters": [
+{
+"name"
+:
+"id",
+"in"
+:
+"path",
+"required"
+:
+true,
+"schema": {
+"type"
+:
+"string"
+}
+}
+],
+"responses": {
+"200": {
+"description"
+:
+"Success"
+}
+}
+},
+"delete": {
+"tags": [
+"Advisor"
+],
+"parameters": [
+{
+"name"
+:
+"id",
+"in"
+:
+"path",
+"required"
+:
+true,
+"schema": {
+"type"
+:
+"string"
+}
+}
+],
+"responses": {
+"200": {
+"description"
+:
+"Success"
+}
+}
+}
+},
+"/api/Advisor": {
+"get": {
+"tags": [
+"Advisor"
+],
+"responses": {
+"200": {
+"description"
+:
+"Success"
+}
+}
+},
+"post": {
+"tags": [
+"Advisor"
+],
+"requestBody": {
+"content": {
+"application/json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/VM_Create_Advisor"
+}
+},
+"text/json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/VM_Create_Advisor"
+}
+},
+"application/*+json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/VM_Create_Advisor"
+}
+}
+}
+},
+"responses": {
+"200": {
+"description"
+:
+"Success"
+}
+}
+},
+"put": {
+"tags": [
+"Advisor"
+],
+"requestBody": {
+"content": {
+"application/json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/VM_Update_Advisor"
+}
+},
+"text/json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/VM_Update_Advisor"
+}
+},
+"application/*+json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/VM_Update_Advisor"
+}
+}
+}
+},
+"responses": {
+"200": {
+"description"
+:
+"Success"
+}
+}
+}
+},
+"/api/Advisor/GetStudentsOfAllAdvisor": {
+"get": {
+"tags": [
+"Advisor"
+],
+"parameters": [
+{
+"name"
+:
+"AdvisorID",
+"in"
+:
+"query",
+"schema": {
+"type"
+:
+"string"
+}
+}
+],
+"responses": {
+"200": {
+"description"
+:
+"Success"
+}
+}
+}
+},
+"/api/Advisor/GetInternshipsOfAllAdvisor": {
+"get": {
+"tags": [
+"Advisor"
+],
+"parameters": [
+{
+"name"
+:
+"AdvisorID",
+"in"
+:
+"query",
+"schema": {
+"type"
+:
+"string"
+}
+}
+],
+"responses": {
+"200": {
+"description"
+:
+"Success"
+}
+}
+}
+},
+"/api/Students": {
+"get": {
+"tags": [
+"Students"
+],
+"responses": {
+"200": {
+"description"
+:
+"Success"
+}
+}
+},
+"post": {
+"tags": [
+"Students"
+],
+"requestBody": {
+"content": {
+"application/json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/VM_Create_Student"
+}
+},
+"text/json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/VM_Create_Student"
+}
+},
+"application/*+json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/VM_Create_Student"
+}
+}
+}
+},
+"responses": {
+"200": {
+"description"
+:
+"Success"
+}
+}
+},
+"put": {
+"tags": [
+"Students"
+],
+"requestBody": {
+"content": {
+"application/json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/VM_Update_Student"
+}
+},
+"text/json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/VM_Update_Student"
+}
+},
+"application/*+json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/VM_Update_Student"
+}
+}
+}
+},
+"responses": {
+"200": {
+"description"
+:
+"Success"
+}
+}
+}
+},
+"/api/Students/{id}": {
+"get": {
+"tags": [
+"Students"
+],
+"parameters": [
+{
+"name"
+:
+"id",
+"in"
+:
+"path",
+"required"
+:
+true,
+"schema": {
+"type"
+:
+"string"
+}
+}
+],
+"responses": {
+"200": {
+"description"
+:
+"Success"
+}
+}
+},
+"delete": {
+"tags": [
+"Students"
+],
+"parameters": [
+{
+"name"
+:
+"id",
+"in"
+:
+"path",
+"required"
+:
+true,
+"schema": {
+"type"
+:
+"string"
+}
+}
+],
+"responses": {
+"200": {
+"description"
+:
+"Success"
+}
+}
+}
+},
+"/api/Students/AddToAdvisor": {
+"post": {
+"tags": [
+"Students"
+],
+"requestBody": {
+"content": {
+"application/json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/VM_Add_Student_to_Advisor"
+}
+},
+"text/json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/VM_Add_Student_to_Advisor"
+}
+},
+"application/*+json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/VM_Add_Student_to_Advisor"
+}
+}
+}
+},
+"responses": {
+"200": {
+"description"
+:
+"Success"
+}
+}
+}
+},
+"/api/Students/Upload": {
+"post": {
+"tags": [
+"Students"
+],
+"parameters": [
+{
+"name"
+:
+"StudentID",
+"in"
+:
+"query",
+"schema": {
+"type"
+:
+"string",
+"default"
+:
+"2"
+}
+},
+{
+"name"
+:
+"InternshipID",
+"in"
+:
+"query",
+"schema": {
+"type"
+:
+"string",
+"default"
+:
+"1"
+}
+}
+],
+"requestBody": {
+"content": {
+"multipart/form-data": {
+"schema": {
+"type"
+:
+"object",
+"properties": {
+"file": {
+"type"
+:
+"array",
+"items": {
+"type"
+:
+"string",
+"format"
+:
+"binary"
+}
+}
+}
+},
+"encoding": {
+"file": {
+"style"
+:
+"form"
+}
+}
+}
+}
+},
+"responses": {
+"200": {
+"description"
+:
+"Success"
+}
+}
+}
+},
+"/api/Users/CreateUser": {
+"post": {
+"tags": [
+"Users"
+],
+"requestBody": {
+"content": {
+"application/json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/CreateUserCommandRequest"
+}
+},
+"text/json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/CreateUserCommandRequest"
+}
+},
+"application/*+json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/CreateUserCommandRequest"
+}
+}
+}
+},
+"responses": {
+"200": {
+"description"
+:
+"Success"
+}
+}
+}
+},
+"/api/Users/Login": {
+"post": {
+"tags": [
+"Users"
+],
+"requestBody": {
+"content": {
+"application/json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/LoginUserCommandRequest"
+}
+},
+"text/json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/LoginUserCommandRequest"
+}
+},
+"application/*+json": {
+"schema": {
+"$ref"
+:
+"#/components/schemas/LoginUserCommandRequest"
+}
+}
+}
+},
+"responses": {
+"200": {
+"description"
+:
+"Success"
+}
+}
+}
+}
+},
+"components": {
+"schemas": {
+"CreateUserCommandRequest": {
+"type"
+:
+"object",
+"properties": {
+"nameSurname": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"username": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"email": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"password": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"passwordConfirm": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+}
+},
+"additionalProperties"
+:
+false
+},
+"LoginUserCommandRequest": {
+"type"
+:
+"object",
+"properties": {
+"userName": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"password": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+}
+},
+"additionalProperties"
+:
+false
+},
+"VM_Add_Student_to_Advisor": {
+"type"
+:
+"object",
+"properties": {
+"advisorID": {
+"type"
+:
+"string",
+"format"
+:
+"uuid"
+},
+"studentID": {
+"type"
+:
+"string",
+"format"
+:
+"uuid"
+}
+},
+"additionalProperties"
+:
+false
+},
+"VM_Create_Advisor": {
+"type"
+:
+"object",
+"properties": {
+"advisorName": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"adviserSurname": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"tC_NO": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"facultyName": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"departmentName": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"programName": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"address": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"email": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+}
+},
+"additionalProperties"
+:
+false
+},
+"VM_Create_Student": {
+"type"
+:
+"object",
+"properties": {
+"studentNo": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"studentName": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"studentSurname": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"tC_NO": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"facultyName": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"departmentName": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"programName": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"gpa": {
+"type"
+:
+"number",
+"format"
+:
+"float"
+},
+"studentGSMNumber": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"address": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"email": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+}
+},
+"additionalProperties"
+:
+false
+},
+"VM_Update_Advisor": {
+"type"
+:
+"object",
+"properties": {
+"advisorID": {
+"type"
+:
+"string",
+"format"
+:
+"uuid"
+},
+"advisorName": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"adviserSurname": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"tC_NO": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"facultyName": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"departmentName": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"programName": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"address": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"email": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+}
+},
+"additionalProperties"
+:
+false
+},
+"VM_Update_Student": {
+"type"
+:
+"object",
+"properties": {
+"studentID": {
+"type"
+:
+"string",
+"format"
+:
+"uuid"
+},
+"studentNo": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"studentName": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"studentSurname": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"tC_NO": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"facultyName": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"departmentName": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"programName": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"gpa": {
+"type"
+:
+"number",
+"format"
+:
+"float"
+},
+"studentGSMNumber": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"address": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+},
+"email": {
+"type"
+:
+"string",
+"nullable"
+:
+true
+}
+},
+"additionalProperties"
+:
+false
+}
+}
+}
+}

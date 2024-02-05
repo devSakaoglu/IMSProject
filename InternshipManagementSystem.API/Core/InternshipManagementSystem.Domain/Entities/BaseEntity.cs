@@ -5,7 +5,7 @@ namespace InternshipManagementSystem.Domain.Entities
     public class BaseEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid ID { get; set; }    
+        public System.Guid ID { get; set; }    
 
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
