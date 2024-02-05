@@ -49,7 +49,9 @@ namespace InternshipManagementSystem.API.Controllers
         [HttpGet("health")]
         public async Task<IActionResult> Health()
         {
-            return Ok();
+            var envConnectionString = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DEFAULT");
+
+            return Ok($"Connection string health:{envConnectionString != null}, DB connection healthy:{_studentReadRepository != null}");
         }
 
         [HttpGet("[action]{id}")]

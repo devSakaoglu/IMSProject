@@ -14,15 +14,15 @@ namespace InternshipManagementSystem.Persistence
                 configurationManager.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../Presentation/InternshipManagementSystem.API"));
                 configurationManager.AddJsonFile("appsettings.json");
 
-                var envConnectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION");
 
-                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
                 {
-                    return envConnectionString;
+                    return new(configurationManager.GetConnectionString("PosgreSql"));
                 }
                 else
                 {
-                    return new(configurationManager.GetConnectionString("PosgreSql"));
+                    var envConnectionString = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DEFAULT");
+                    return envConnectionString;
                 }
 
             }
