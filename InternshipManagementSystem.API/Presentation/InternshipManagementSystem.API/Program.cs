@@ -54,6 +54,7 @@ builder.Services.AddAuthentication("Student")
 
     });
 builder.Services.AddAuthorization();
+builder.Services.AddAuthenticationCore();
 builder.Services.AddIdentity<AppUser, AppRole>(options =>
 {
     // Disable email verification
