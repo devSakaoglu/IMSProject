@@ -4,6 +4,7 @@ using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Application.ViewModels.InternshipViewModelss;
 using InternshipManagementSystem.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace InternshipManagementSystem.API.Controllers
 {
@@ -19,8 +20,8 @@ namespace InternshipManagementSystem.API.Controllers
         private readonly IAdvisorWriteRepository _advisorWriteRepository;
         private readonly IInternshipReadRepository _internshipReadRepository;
         private readonly IInternshipWriteRepository _internshipWriteRepository;
-        private readonly IInternshipDocumentReadRepository  _internshipDocumentReadRepository;
-        private readonly IInternshipDocumentWriteRepository _internshipDocumentWriteRepository; 
+        private readonly IInternshipDocumentReadRepository _internshipDocumentReadRepository;
+        private readonly IInternshipDocumentWriteRepository _internshipDocumentWriteRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IFileService _fileService;
 
@@ -160,19 +161,20 @@ namespace InternshipManagementSystem.API.Controllers
         public async Task<IActionResult> DeleteInternship(Guid id)
         {
             //Todo test et
-            var result   = await _internshipWriteRepository.RemoveAsync(id.ToString());
-            return Ok(new ResponseModel() {
-            Data= result,
-            IsSuccess=result == true ? true : false,    
-            Message=result == true ? "Internship Deleted" : "Internship Not Found",
-            StatusCode=result == true ? 200 : 404
+            var result = await _internshipWriteRepository.RemoveAsync(id.ToString());
+            return Ok(new ResponseModel()
+            {
+                Data = result,
+                IsSuccess = result == true ? true : false,
+                Message = result == true ? "Internship Deleted" : "Internship Not Found",
+                StatusCode = result == true ? 200 : 404
             });
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Upload([FromForm] IFormFileCollection file, string StudentID, string InternshipID )
+        public async Task<IActionResult> UploadDocument([FromForm] IFormFileCollection file, string StudentID, string InternshipID)
         {
-            var data = await _fileService.UploadAsync($"Students\\{StudentID}\\{InternshipID}", file,  StudentID,  InternshipID);
+            var data = await _fileService.UploadAsync($"Students\\{StudentID}\\{InternshipID}", file, StudentID, InternshipID);
             return Ok(new ResponseModel()
             {
                 Data = data.ToDictionary(),
@@ -180,10 +182,9 @@ namespace InternshipManagementSystem.API.Controllers
                 Message = data == null ? "Some Problems" : "Successful",
                 StatusCode = data == null ? 404 : 200
             });
-
         }
 
-        [HttpGet("download/{id}")]
+        [HttpGet("[action]")]
         public IActionResult DownloadFile(string id)
         {
             return Ok("File Downloaded");

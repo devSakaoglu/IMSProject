@@ -215,21 +215,23 @@ namespace InternshipManagementSystem.API.Controllers
                     StatusCode = 200
                 });
         }
-        [HttpPost("[action]")]
 
-        public async Task<IActionResult> Upload([FromForm] IFormFileCollection file, string StudentID , string InternshipID)
-        {
-            var data = await _fileService.UploadAsync($"Students\\{StudentID}\\{InternshipID}\\", file , StudentID , InternshipID);
-            return Ok(new ResponseModel()
-            {
-                Data = data.ToDictionary(),
-                IsSuccess = data == null ? false : true,    
-                Message = data== null ? "Some Problems" : "Successful", 
-                StatusCode = data == null ? 400 : 200
-            });
 
-            return Ok("Some Problems");
+        //[HttpPost("[action]")]
 
-        }
+        //public async Task<IActionResult> Upload([FromForm] IFormFileCollection file, string StudentID , string InternshipID)
+        //{
+        //    var data = await _fileService.UploadAsync($"Students\\{StudentID}\\{InternshipID}\\", file , StudentID , InternshipID);
+        //    return Ok(new ResponseModel()
+        //    {
+        //        Data = data.ToDictionary(),
+        //        IsSuccess = data == null ? false : true,    
+        //        Message = data== null ? "Some Problems" : "Successful", 
+        //        StatusCode = data == null ? 400 : 200
+        //    });
+
+        //    return Ok("Some Problems");
+
+        //}
     }
 }

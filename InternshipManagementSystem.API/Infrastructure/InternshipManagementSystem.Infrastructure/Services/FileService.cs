@@ -13,7 +13,7 @@ namespace InternshipManagementSystem.Infrastructure.Services
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IInternshipReadRepository _internshipReadRepository;
-        private readonly IInternshipWriteRepository  _internshipWriteRepository ;
+        private readonly IInternshipWriteRepository _internshipWriteRepository;
         private readonly IInternshipDocumentReadRepository _internshipDocumentReadRepository;
         private readonly IInternshipDocumentWriteRepository _internshipDocumentWriteRepository;
 
@@ -109,9 +109,9 @@ namespace InternshipManagementSystem.Infrastructure.Services
         }
 
 
-        public async Task<List<(string fileName, string path)>> UploadAsync(string path, IFormFileCollection files , string StudentID, string InternshipID)
+        public async Task<List<(string fileName, string path)>> UploadAsync(string path, IFormFileCollection files, string StudentID, string InternshipID)
         {
-           var intern =  _internshipReadRepository.GetSingleAsync(e => e.ID == Guid.Parse(InternshipID));
+            var intern = _internshipReadRepository.GetSingleAsync(e => e.ID == Guid.Parse(InternshipID));
             if (intern == null)
             {
                 return null;
@@ -143,23 +143,28 @@ namespace InternshipManagementSystem.Infrastructure.Services
             {
                 foreach (var data in datas)
                 {
-                    InternshipDocument internshipDocument = new()
+                    Task.Run(() =>
                     {
-                        InternshipID = Guid.Parse(InternshipID),
-                        FileName = data.fileName,
-                        FilePath = data.path,
-                        FileType =   Path.GetExtension(data.fileName)
-                    };
-                    //todo sabah devam et
-                   await _internshipDocumentWriteRepository.AddAsync(internshipDocument);
+                        InternshipDocument internshipDocument = new()
+                        {
+                            InternshipID = Guid.Parse(InternshipID),
+                            FileName = data.fileName,
+                            FilePath = data.path,
+                            FileType = Path.GetExtension(data.fileName)
+                        };
+                        //todo sabah devam et
+                        var sonucWrite =  _internshipDocumentWriteRepository.AddAsync(internshipDocument).Result;
+
+                    });
+ 
 
                 }
-                await _internshipDocumentWriteRepository.SaveAsync();
+                var result = await _internshipDocumentWriteRepository.SaveAsync();
                 return datas;
             }
             return null;
         }
 
-        
+
     }
 }
