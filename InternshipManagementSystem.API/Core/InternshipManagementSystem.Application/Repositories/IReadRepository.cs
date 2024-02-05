@@ -12,6 +12,8 @@ namespace InternshipManagementSystem.Application.Repositories
         Task<T> GetSingleAsync(Expression<Func<T, bool>> method, bool tracking = true);
         Task<T> GetByIdAsync(string id ,bool tracking = true);
 
+        Task<bool> AnyAsync(Expression<Func<T, bool>> method ,bool tracking = true); 
+
 
 
 

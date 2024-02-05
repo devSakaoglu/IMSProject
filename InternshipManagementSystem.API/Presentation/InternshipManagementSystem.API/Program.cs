@@ -9,6 +9,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using InternshipManagementSystem.Application;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.DependencyInjection;
+using InternshipManagementSystem.Domain.Entities.Identity;
+using InternshipManagementSystem.Persistence.Contexts;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,9 +30,6 @@ builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>
        options.JsonSerializerOptions.MaxDepth = 0; // Set the maximum depth to 0 to disable circular reference handling
     });
 
-builder.Services.AddInfrastuctureServices();
-
-builder.Services.AddInfrastuctureServices();
 
 builder.Services.AddInfrastuctureServices();
 builder.Services.AddApplicationServices();
@@ -52,17 +53,40 @@ builder.Services.AddAuthentication("Student")
         };
 
     });
-
+builder.Services.AddAuthorization();
+builder.Services.AddAuthenticationCore();
+builder.Services.AddIdentity<AppUser, AppRole>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    // Disable email verification
+    options.SignIn.RequireConfirmedEmail = false;
+   
+    // Disable lockout
+    options.Lockout.AllowedForNewUsers = false;
+    options.Lockout.MaxFailedAccessAttempts = 10;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+})
+    .AddEntityFrameworkStores<InternshipManagementSystemDbContext>()
+    .AddDefaultTokenProviders();
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment()  || true)
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+Console.WriteLine(app.Environment.IsDevelopment());
 app.UseStaticFiles();
 app.UseHttpsRedirection();
-app.UseCors();
+app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

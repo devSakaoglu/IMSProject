@@ -7,53 +7,136 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using InternshipManagementSystem.Application.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace InternshipManagementSystem.Application.Features.Commands.AppUser.LoginUser
 {
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, LoginUserCommandResponse>
     {
+
+
         readonly ITokenHandler _tokenHandler;
-
-        public LoginUserCommandHandler(ITokenHandler tokenHandler)
-        {
-            _tokenHandler = tokenHandler;
-        }
-
         readonly UserManager<Domain.Entities.Identity.AppUser> _usermanager;
+        readonly SignInManager<Domain.Entities.Identity.AppUser> _signinmanager;
+        readonly IStudentReadRepository _studentReadRepository;
+        private readonly IStudentWriteRepository _studentWriteRepository;
+        readonly IAdvisorReadRepository _advisorReadRepository;
+        private readonly IAdvisorWriteRepository _advisorWriteRepository;
 
-        public LoginUserCommandHandler(UserManager<Domain.Entities.Identity.AppUser> usermanager)
+        public LoginUserCommandHandler(
+            UserManager<Domain.Entities.Identity.AppUser> usermanager,
+            SignInManager<Domain.Entities.Identity.AppUser> signinmanager,
+            IStudentReadRepository studentReadRepository,
+            IStudentWriteRepository studentWriteRepository,
+            IAdvisorReadRepository advisorReadRepository,
+            IAdvisorWriteRepository advisorWriteRepository,
+            ITokenHandler tokenHandler
+            )
         {
             _usermanager = usermanager;
-        }
-
-        readonly SignInManager<Domain.Entities.Identity.AppUser> _signinmanager;
-
-        public LoginUserCommandHandler(SignInManager<Domain.Entities.Identity.AppUser> signinmanager)
-        {
             _signinmanager = signinmanager;
+            _studentReadRepository = studentReadRepository;
+            _studentWriteRepository = studentWriteRepository;
+            _advisorReadRepository = advisorReadRepository;
+            _advisorWriteRepository = advisorWriteRepository;
+            _tokenHandler = tokenHandler;
         }
 
         public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
         {
-            Domain.Entities.Identity.AppUser user = await _usermanager.FindByNameAsync(request.UserName);
+            var user = await _usermanager.FindByNameAsync(request.UserName);
+
             if (user == null)
             {
-                throw new NotFoundUserException("Kullanıcı adı veya şifre hatalı");
+                if (await HandleAppUserCreateAndSignIn(request, cancellationToken))
+                {
+                    var token = _tokenHandler.CreateAccesstoken(5);
+                    return new LoginUserSuccessCommandResponse() { Token = token };
+                }
             }
-
-            SignInResult result = await _signinmanager.CheckPasswordSignInAsync(user, request.Password, false);
-            if (result.Succeeded)
+            else
             {
-                DTO.Token token = _tokenHandler.CreateAccesstoken(5);
-                return new LoginUserSuccessCommandResponse() { Token = token };
+                var result = await _usermanager.CheckPasswordAsync(user, request.Password);
+                if (result)
+                {
+                    await _signinmanager.SignInAsync(user, true);
+                    var token = _tokenHandler.CreateAccesstoken(5);
+                    return new LoginUserSuccessCommandResponse() { Token = token };
+                }
             }
 
-            //return new LoginUserErrorCommandResponse()
-            //{
-            //    Message = "Öğrenci no veya şifre hatalı"
-            //};
-            throw new AuthenticationErrorException();
+            return new LoginUserErrorCommandResponse() { Message = "Login Unsuccessful" };
+        }
+
+        private async Task<bool> HandleAppUserCreateAndSignIn(LoginUserCommandRequest request, CancellationToken cancellationToken)
+        {
+            if (IsEmail(request.UserName))
+            {
+                var advisor = await _advisorReadRepository.Table.FirstOrDefaultAsync(a => a.Email == request.UserName, cancellationToken: cancellationToken);
+
+                if (advisor != null && request.Password == advisor.TC_NO)
+                {
+                    await CreateAppUser(request, "Advisor");
+                    return true;
+                }
+                else
+                {
+                    throw new ApplicationException("Advisor not found or password is incorrect");
+                }
+            }
+            else if (request.UserName.Length == 11 && long.TryParse(request.UserName, out var x))
+            {
+                var student = await _studentReadRepository.Table.FirstOrDefaultAsync(s => s.StudentNo == request.UserName);
+
+                if (student != null && request.Password == student.TC_NO)
+                {
+                    await CreateAppUser(request, "Student");
+                    return true;
+                }
+                else
+                {
+                    throw new ApplicationException("Student not found or password is incorrect");
+                }
+            }
+            else
+            {
+                throw new ApplicationException("Username invalid");
+            }
+        }
+
+        private async Task CreateAppUser(LoginUserCommandRequest request, string roleType)
+        {
+            var result = await _usermanager.CreateAsync(new Domain.Entities.Identity.AppUser()
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserName = request.UserName,
+            }, request.Password);
+
+            var appUser = await _usermanager.FindByNameAsync(request.UserName);
+            try
+            {
+                await _usermanager.AddToRoleAsync(appUser, roleType);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            await _signinmanager.SignInAsync(appUser!, true);
+        }
+
+        private bool IsEmail(string email)
+        {
+            var emailPattern = @"^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+
+            Regex regex = new Regex(emailPattern);
+
+            return regex.IsMatch(email);
         }
     }
 }
