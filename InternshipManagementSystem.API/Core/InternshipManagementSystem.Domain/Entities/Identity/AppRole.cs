@@ -9,5 +9,6 @@ namespace InternshipManagementSystem.Domain.Entities.Identity
 {
     public class AppRole : IdentityRole<string>
     {
+        //todo acil 2
     }
 }

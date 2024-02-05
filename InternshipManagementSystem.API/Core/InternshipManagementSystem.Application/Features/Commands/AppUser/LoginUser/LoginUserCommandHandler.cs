@@ -13,25 +13,17 @@ namespace InternshipManagementSystem.Application.Features.Commands.AppUser.Login
 {
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, LoginUserCommandResponse>
     {
+        
+
         readonly ITokenHandler _tokenHandler;
-
-        public LoginUserCommandHandler(ITokenHandler tokenHandler)
-        {
-            _tokenHandler = tokenHandler;
-        }
-
         readonly UserManager<Domain.Entities.Identity.AppUser> _usermanager;
-
-        public LoginUserCommandHandler(UserManager<Domain.Entities.Identity.AppUser> usermanager)
+        readonly SignInManager<Domain.Entities.Identity.AppUser> _signinmanager;
+        public LoginUserCommandHandler(UserManager<Domain.Entities.Identity.AppUser> usermanager, SignInManager<Domain.Entities.Identity.AppUser> signinmanager, ITokenHandler tokenHandler)
         {
             _usermanager = usermanager;
-        }
-
-        readonly SignInManager<Domain.Entities.Identity.AppUser> _signinmanager;
-
-        public LoginUserCommandHandler(SignInManager<Domain.Entities.Identity.AppUser> signinmanager)
-        {
             _signinmanager = signinmanager;
+            _tokenHandler = tokenHandler;
+
         }
 
         public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
@@ -42,9 +34,13 @@ namespace InternshipManagementSystem.Application.Features.Commands.AppUser.Login
                 throw new NotFoundUserException("Kullanıcı adı veya şifre hatalı");
             }
 
-            SignInResult result = await _signinmanager.CheckPasswordSignInAsync(user, request.Password, false);
-            if (result.Succeeded)
+        //SignInResult result = await _signinmanager.CheckPasswordSignInAsync(user, request.Password, false);
+        
+        
+            var result = await _usermanager.CheckPasswordAsync(user, request.Password);
+            if (result)
             {
+                await _signinmanager.SignInAsync(user, true);
                 DTO.Token token = _tokenHandler.CreateAccesstoken(5);
                 return new LoginUserSuccessCommandResponse() { Token = token };
             }

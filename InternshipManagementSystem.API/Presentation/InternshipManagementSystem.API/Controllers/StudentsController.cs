@@ -38,11 +38,22 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(x);
         }
         [HttpGet("{id}")]
+
         public async Task<IActionResult> Get(string id)
         {
             var advisor = await _studentReadRepository.GetByIdAsync(id, false);
             return Ok(advisor);
         }
+
+        [HttpGet("[action]{id}")]
+
+        public async Task<IActionResult> GetInterships(string id)
+        {
+            var advisor = await _studentReadRepository.Table.Include(x=>x.Internships).Where(x=>x.ID==Guid.Parse(id)).ToListAsync();
+            return Ok(advisor);
+        }
+
+
         [HttpPost("[action]")]
         public async Task<IActionResult> AddToAdvisor(VM_Add_Student_to_Advisor model)
         {
