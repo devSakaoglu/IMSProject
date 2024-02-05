@@ -46,6 +46,12 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(advisor);
         }
 
+        [HttpGet("health")]
+        public async Task<IActionResult> Health()
+        {
+            return Ok();
+        }
+
         [HttpGet("[action]{id}")]
 
         public async Task<IActionResult> GetInterships(string id)
