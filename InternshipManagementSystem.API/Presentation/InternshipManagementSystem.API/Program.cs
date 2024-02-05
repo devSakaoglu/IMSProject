@@ -76,7 +76,10 @@ if (app.Environment.IsDevelopment()  || true)
 Console.WriteLine(app.Environment.IsDevelopment());
 app.UseStaticFiles();
 app.UseHttpsRedirection();
-app.UseCors();
+app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
