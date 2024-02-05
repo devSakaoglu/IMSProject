@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\InternshipManagementSystem.Application\InternshipManagementSystem.Application.csproj" />
+    <ProjectReference Include="..\InternshipManagementSystem.Infrastructure\InternshipManagementSystem.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
