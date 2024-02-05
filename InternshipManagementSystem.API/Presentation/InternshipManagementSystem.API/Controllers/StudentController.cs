@@ -4,6 +4,7 @@ using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Application.ViewModels.StudentViewModels;
 using InternshipManagementSystem.Application.ViewModels.StuentViewModels;
 using InternshipManagementSystem.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,9 +31,9 @@ namespace InternshipManagementSystem.API.Controllers
             _fileService = fileService;
         }
 
+        [Authorize(Roles = "ADVISOR")]
         [HttpGet]
         public async Task<IActionResult> Get()
-
         {
             var x = _studentReadRepository.GetAll();
             return Ok(x);

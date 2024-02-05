@@ -22,14 +22,10 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(response);
         }
         [HttpPost("[action]")]
-        public async Task<IActionResult> Login(LoginUserCommandRequest  loginUserCommandRequest)
+        public async Task<IActionResult> Login(LoginUserCommandRequest loginUserCommandRequest)
         {
-            var isSignedIn = HttpContext.User.Identity.IsAuthenticated;
             LoginUserCommandResponse response= await _mediator.Send(loginUserCommandRequest);
             return Ok(response);
         }
-        
-
-
     }
 }

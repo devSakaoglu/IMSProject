@@ -57,13 +57,18 @@ builder.Services.AddAuthorization();
 builder.Services.AddAuthenticationCore();
 builder.Services.AddIdentity<AppUser, AppRole>(options =>
 {
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
     // Disable email verification
     options.SignIn.RequireConfirmedEmail = false;
    
     // Disable lockout
     options.Lockout.AllowedForNewUsers = false;
-    options.Lockout.MaxFailedAccessAttempts = 10; // Set a reasonable number or leave it to zero to effectively disable lockout
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Set a reasonable time or leave it to zero to effectively disable lockout time
+    options.Lockout.MaxFailedAccessAttempts = 10;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
 })
     .AddEntityFrameworkStores<InternshipManagementSystemDbContext>()
     .AddDefaultTokenProviders();

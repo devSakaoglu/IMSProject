@@ -23,9 +23,53 @@ namespace InternshipManagementSystem.Persistence.Contexts
         DbSet<InternshipBook> InternshipBooks { get; set; }
         //DbSet<InternshipFiles> InternshipFiles { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<AppRole>()
+                .HasData(new List<AppRole>()
+                {
+                    new()
+                    {
+                        Id = "1",
+                        Name = "Student",
+                        NormalizedName = "STUDENT"
+                    },
+                    new()
+                    {
+                        Id = "2",
+                        Name = "Advisor",
+                        NormalizedName = "ADVISOR"
+                    },
+                    new()
+                    {
+                        Id = "3",
+                        Name = "Super",
+                        NormalizedName = "SUPER"
+                    }
+                });
 
-      
-      public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+            builder.Entity<Advisor>()
+                .HasData(new List<Advisor>()
+                {
+                    new()
+                    {
+                        ID = Guid.Parse("10000000-0000-0000-0000-000000000000"),
+                        Email = "mzahitgurbuz@dogus.edu.tr",
+                        TC_NO = "12345678910",
+                        AdvisorName = "M. Zahit ",
+                        AdviserSurname = "Gurbuz",
+                        DepartmentName = "Computer Science",
+                        ProgramName = "Computer Engineering",
+                        Address = "Istanbul",
+                        FacultyName = "Engineering"
+                    }
+                });
+            base.OnModelCreating(builder);
+
+        }
+
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             //ChangeTracker : track edilen verleri yakalar insert disinda track edilen verileri yakalar
             //update operasyonlarinda track edilen verileri yakalar
