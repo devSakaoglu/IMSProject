@@ -19,14 +19,9 @@ namespace InternshipManagementSystem.Persistence
                 .AddEntityFrameworkStores<InternshipManagementSystemDbContext>();
 
 
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
-            {
-                services.AddDbContext<InternshipManagementSystemDbContext>(options => options.UseSqlServer(Configuration.ConnectionString), ServiceLifetime.Singleton);
-            }
-            else
-            {
-                services.AddDbContext<InternshipManagementSystemDbContext>(options => options.UseNpgsql(Configuration.ConnectionString), ServiceLifetime.Singleton);
-            }
+
+            services.AddDbContext<InternshipManagementSystemDbContext>(options => options.UseNpgsql(Configuration.ConnectionString), ServiceLifetime.Singleton);
+
 
             services.AddScoped<IAdvisorReadRepository, AdvisorReadRepository>();
             services.AddScoped<IAdvisorWriteRepository, AdvisorWriteRepository>();
