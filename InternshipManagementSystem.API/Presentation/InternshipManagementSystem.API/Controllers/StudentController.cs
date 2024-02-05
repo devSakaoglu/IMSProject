@@ -1,4 +1,5 @@
-﻿using InternshipManagementSystem.Application.Repositories;
+﻿using InternshipManagementSystem.API.Constants;
+using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.Services;
 using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Application.ViewModels.StudentViewModels;
@@ -31,7 +32,7 @@ namespace InternshipManagementSystem.API.Controllers
             _fileService = fileService;
         }
 
-        [Authorize(Roles = "ADVISOR")]
+        [Authorize(Roles = UserType.Advisor)]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -39,6 +40,7 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(x);
         }
         [HttpGet("{id}")]
+        [Authorize(Roles = UserType.Advisor)]
 
         public async Task<IActionResult> Get(string id)
         {
@@ -62,6 +64,7 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(advisor);
         }
 
+        [Authorize(Roles = UserType.Advisor)]
 
         [HttpPost("[action]")]
         public async Task<IActionResult> AddToAdvisor(VM_Add_Student_to_Advisor model)
@@ -137,6 +140,7 @@ namespace InternshipManagementSystem.API.Controllers
             });
 
         }
+
         [HttpPost]
         public async Task<IActionResult> Post(VM_Create_Student model)
         {
