@@ -21,6 +21,14 @@ namespace InternshipManagementSystem.Persistence.Repositories
         }
         public DbSet<T> Table => _dbContext.Set<T>();
 
+        public Task<bool> AnyAsync(Expression<Func<T, bool>> method , bool tracking =true)
+        {
+            var query = Table.AsQueryable();
+            if (!tracking)
+                query = query.AsNoTracking();
+            return query.AnyAsync(method);  
+        }
+
         public IQueryable<T> GetAll(bool tracking = true)
         {
             var query = Table.AsQueryable();
