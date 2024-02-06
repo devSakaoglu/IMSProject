@@ -9,6 +9,7 @@ namespace InternshipManagementSystem.Persistence
     {
         public InternshipManagementSystemDbContext CreateDbContext(string[] args)
         {
+            //TODO: GetCurrentDirectory could throw exception in cloud
          ConfigurationManager configurationManager = new();
          configurationManager.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../Presentation/InternshipManagementSystem.API"));
          configurationManager.AddJsonFile("appsettings.json");
