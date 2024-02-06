@@ -51,7 +51,7 @@ namespace InternshipManagementSystem.API.Controllers
         {
             if (userName == null)
             {
-                return Ok("username is null")
+                return Ok("username is null");
             }
             var student = await _studentReadRepository.GetAll().ToListAsync();
          var data=   student.Select(x => x.StudentNo == userName);
