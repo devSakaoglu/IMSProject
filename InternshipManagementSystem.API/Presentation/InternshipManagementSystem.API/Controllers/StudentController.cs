@@ -1,4 +1,5 @@
-﻿using InternshipManagementSystem.Application.Repositories;
+﻿using InternshipManagementSystem.API.Constants;
+using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.Services;
 using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Application.ViewModels.StudentViewModels;
@@ -31,28 +32,40 @@ namespace InternshipManagementSystem.API.Controllers
             _fileService = fileService;
         }
 
-        [Authorize(Roles = "ADVISOR")]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             var x = _studentReadRepository.GetAll();
             return Ok(x);
         }
-        [HttpGet("{id}")]
 
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
             var advisor = await _studentReadRepository.GetByIdAsync(id, false);
             return Ok(advisor);
         }
 
-        [HttpGet("health")]
-        public async Task<IActionResult> Health()
+        [HttpGet("[action]/{userName}")]
+        public async Task<IActionResult> GetStudentByUsername(string userName)
         {
-            var envConnectionString = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DEFAULT");
+            var student = await _studentReadRepository.Table.FirstOrDefaultAsync(s => s.StudentNo == userName);
+            
+            if(student is not null)
+            {
+                return Ok(new ResponseModel()
+                {
+                    IsSuccess = true,
+                    Message = "Student found",
+                    Data = student,
+                    StatusCode = 200
 
-            return Ok($"Connection string health:{envConnectionString != null}, DB connection healthy:{_studentReadRepository != null}");
+                });
+            }
+
+            return NotFound();
         }
+
 
         [HttpGet("[action]{id}")]
 
@@ -137,6 +150,7 @@ namespace InternshipManagementSystem.API.Controllers
             });
 
         }
+
         [HttpPost]
         public async Task<IActionResult> Post(VM_Create_Student model)
         {

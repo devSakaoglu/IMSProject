@@ -1,7 +1,9 @@
-﻿using InternshipManagementSystem.Application.Repositories;
+﻿using InternshipManagementSystem.API.Constants;
+using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Application.ViewModels.AdvisorViewModels;
 using InternshipManagementSystem.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -59,6 +61,7 @@ namespace InternshipManagementSystem.API.Controllers
                                           new ResponseModel(true, "Successful", students, 200)
                                                                             );
         }
+
         [HttpPost]
         public async Task<IActionResult> Post(VM_Create_Advisor model)
         {
