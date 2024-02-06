@@ -45,8 +45,8 @@ namespace InternshipManagementSystem.API.Controllers
             var advisor = await _studentReadRepository.GetByIdAsync(id, false);
             return Ok(advisor);
         }
-
-        [HttpGet("[action]/{userName}")]
+        // degisti
+        [HttpGet("{userName}")]
         public async Task<IActionResult> GetStudentByUsername(string userName)
         {
             var student = await _studentReadRepository.Table.FirstOrDefaultAsync(s => s.StudentNo == userName);
