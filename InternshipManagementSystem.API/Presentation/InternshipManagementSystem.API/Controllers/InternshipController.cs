@@ -74,7 +74,7 @@ namespace InternshipManagementSystem.API.Controllers
             var data2 = await _advisorReadRepository.AnyAsync(x => x.ID == model.AdvisorID);
             if (data == null || data2 == null)
             {
-                return Ok(new ResponseModel()
+                return Ok(new ResponseModel()   
                 {
                     Data = null,
                     IsSuccess = false,

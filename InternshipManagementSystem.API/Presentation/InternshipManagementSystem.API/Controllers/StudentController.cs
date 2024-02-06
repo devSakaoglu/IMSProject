@@ -46,7 +46,7 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(advisor);
         }
         // degisti
-        [HttpGet("{userName}")]
+        [HttpGet("[action]/{userName}")]    
         public async Task<IActionResult> GetStudentByUsername(string userName)
         {
             var student = await _studentReadRepository.Table.FirstOrDefaultAsync(s => s.StudentNo == userName);
@@ -63,7 +63,7 @@ namespace InternshipManagementSystem.API.Controllers
                 });
             }
 
-            return NotFound();
+            return Ok("Not Found");
         }
 
 
