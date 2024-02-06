@@ -49,7 +49,12 @@ namespace InternshipManagementSystem.API.Controllers
         [HttpGet("[action]/{userName}")]    
         public async Task<IActionResult> GetStudentByUsername(string userName)
         {
-            var student = await _studentReadRepository.Table.FirstOrDefaultAsync(s => s.StudentNo == userName);
+            if (userName == null)
+            {
+                return Ok("username is null")
+            }
+            var student = await _studentReadRepository.GetAll().ToListAsync();
+         var data=   student.Select(x => x.StudentNo == userName);
             
             if(student is not null)
             {
@@ -57,7 +62,7 @@ namespace InternshipManagementSystem.API.Controllers
                 {
                     IsSuccess = true,
                     Message = "Student found",
-                    Data = student,
+                    Data = data,
                     StatusCode = 200
 
                 });
