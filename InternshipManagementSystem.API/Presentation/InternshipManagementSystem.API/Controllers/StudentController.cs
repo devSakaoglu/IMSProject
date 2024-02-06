@@ -32,7 +32,6 @@ namespace InternshipManagementSystem.API.Controllers
             _fileService = fileService;
         }
 
-        [Authorize(Roles = UserType.Advisor)]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -40,7 +39,6 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(x);
         }
         [HttpGet("{id}")]
-        [Authorize(Roles = UserType.Advisor)]
 
         public async Task<IActionResult> Get(string id)
         {
@@ -64,7 +62,6 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(advisor);
         }
 
-        [Authorize(Roles = UserType.Advisor)]
 
         [HttpPost("[action]")]
         public async Task<IActionResult> AddToAdvisor(VM_Add_Student_to_Advisor model)
