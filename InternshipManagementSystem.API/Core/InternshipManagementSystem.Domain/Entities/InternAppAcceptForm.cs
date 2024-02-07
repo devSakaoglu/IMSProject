@@ -3,6 +3,7 @@
 
    public class InternAppAcceptForm : BaseEntity
    {
+        //Todo document olacak entity olmuyacak
       public Guid? InternshipID { get; set; }
 
       public string StudentName { get; set; }
