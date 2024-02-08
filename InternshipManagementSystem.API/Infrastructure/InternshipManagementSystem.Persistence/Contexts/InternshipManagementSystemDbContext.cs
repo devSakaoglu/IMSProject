@@ -65,7 +65,7 @@ namespace InternshipManagementSystem.Persistence.Contexts
                         Email = "mzahitgurbuz@dogus.edu.tr",
                         TC_NO = "12345678910",
                         AdvisorName = "M. Zahit ",
-                        AdviserSurname = "Gurbuz",
+                        AdvisorSurname = "Gurbuz",
                         DepartmentName = "Computer Science",
                         ProgramName = "Computer Engineering",
                         Address = "Istanbul",

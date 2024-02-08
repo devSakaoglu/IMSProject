@@ -85,7 +85,7 @@ namespace InternshipManagementSystem.API.Controllers
                 Address = model.Address,
                 Email = model.Email,
                 AdvisorName = model.AdvisorName,
-                AdviserSurname = model.AdviserSurname,
+                AdvisorSurname = model.AdviserSurname,
                 TC_NO = model.TC_NO,
                 DepartmentName = model.DepartmentName,
                 ProgramName = model.ProgramName,
@@ -152,7 +152,7 @@ namespace InternshipManagementSystem.API.Controllers
             advisor.Email = model.Email;
             advisor.Address = model.Address;
             advisor.AdvisorName = model.AdvisorName;
-            advisor.AdviserSurname = model.AdviserSurname;
+            advisor.AdvisorSurname = model.AdviserSurname;
             advisor.DepartmentName = model.DepartmentName;
             advisor.FacultyName = model.FacultyName;
             advisor.ProgramName = model.ProgramName;
