@@ -25,6 +25,14 @@ namespace InternshipManagementSystem.Persistence.Contexts
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            // builder.Entity<Student>()
+            // .HasIndex(s => s.StudentNo)
+            // .IsUnique();
+            
+            // builder.Entity<Advisor>()
+            // .HasIndex(s => s.Email)
+            // .IsUnique();
+            
             builder.Entity<AppRole>()
                 .HasData(new List<AppRole>()
                 {

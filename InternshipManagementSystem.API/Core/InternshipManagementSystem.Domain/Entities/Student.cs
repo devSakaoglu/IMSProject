@@ -1,6 +1,6 @@
 ﻿namespace InternshipManagementSystem.Domain.Entities
 {
-    public class Student : BaseEntity
+    public class Student : BaseEntity, IAppUserCreatable
     {
         public Guid? AdvisorID { get; set; }
         public string StudentNo { get; set; }
@@ -16,7 +16,15 @@
         public string Email { get; set; }
         public ICollection<Internship>? Internships { get; set; }
 
+        public Guid GetGuidID()
+        {
+            return ID;
+        }
 
+        public string GetUniqueIdentifier()
+        {
+            return StudentNo;
+        }
     }
 
 }

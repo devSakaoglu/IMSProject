@@ -164,6 +164,8 @@ namespace InternshipManagementSystem.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
+            // var userId = HttpContext.User.Identity.Name; -- Student ise StudentNO, Advisor ise email
+
             if (await _advisorWriteRepository.RemoveAsync(id))
             {
                 await _advisorWriteRepository.SaveAsync();

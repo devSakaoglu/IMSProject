@@ -35,7 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Queries\" />
     <Folder Include="Validators\Internship\" />
     <Folder Include="Validators\Documents\" />
     <Folder Include="ViewModels\InternshipDocumentModels\" />

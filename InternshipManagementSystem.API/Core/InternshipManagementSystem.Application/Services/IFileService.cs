@@ -15,5 +15,13 @@ namespace InternshipManagementSystem.Application.Services
 
         Task<bool> DeleteFileAsync(string path);
 
+        Task<InternshipApplicationInfoForAdviserExcelDemo> CreateDemoExcel(string fileName);
+    }
+
+    public class InternshipApplicationInfoForAdviserExcelDemo
+    {
+        public Guid Id { get;set; }
+        public string FileName { get; set; }
+        public string Path { get;set; }
     }
 }

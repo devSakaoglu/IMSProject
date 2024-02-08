@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using InternshipManagementSystem.Application.Repositories;
 using Microsoft.EntityFrameworkCore;
+using InternshipManagementSystem.Domain.Entities;
 
 namespace InternshipManagementSystem.Application.Features.Commands.AppUser.LoginUser
 {
@@ -79,7 +80,7 @@ namespace InternshipManagementSystem.Application.Features.Commands.AppUser.Login
 
                 if (advisor != null && request.Password == advisor.TC_NO)
                 {
-                    await CreateAppUser(request, "Advisor");
+                    await CreateAppUser(advisor, request, "Advisor");
                     return true;
                 }
                 else
@@ -93,7 +94,7 @@ namespace InternshipManagementSystem.Application.Features.Commands.AppUser.Login
 
                 if (student != null && request.Password == student.TC_NO)
                 {
-                    await CreateAppUser(request, "Student");
+                    await CreateAppUser(student, request, "Student");
                     return true;
                 }
                 else
@@ -107,15 +108,15 @@ namespace InternshipManagementSystem.Application.Features.Commands.AppUser.Login
             }
         }
 
-        private async Task CreateAppUser(LoginUserCommandRequest request, string roleType)
+        private async Task CreateAppUser(IAppUserCreatable user, LoginUserCommandRequest loginRequest,  string roleType)
         {
             var result = await _usermanager.CreateAsync(new Domain.Entities.Identity.AppUser()
             {
-                Id = Guid.NewGuid().ToString(),
-                UserName = request.UserName,
-            }, request.Password);
+                Id = user.GetGuidID().ToString(),
+                UserName = user.GetUniqueIdentifier(),
+            }, loginRequest.Password);
 
-            var appUser = await _usermanager.FindByNameAsync(request.UserName);
+            var appUser = await _usermanager.FindByNameAsync(loginRequest.UserName);
             try
             {
                 await _usermanager.AddToRoleAsync(appUser, roleType);
