@@ -89,7 +89,7 @@ namespace InternshipManagementSystem.API.Controllers
                 {
                     AdvisorID = model.AdvisorID,
                     StudentID = adata.ID,
-                    InternshipStatus = InternshipStatus.ApplicationPending,
+                    InternshipStatus = InternshipStatus.Pending,
                     InternAppAcceptFormID = model.FormID,
                     InternshipApplicationInfoForAdviserExcelID = model.ExcelID,
                 };
