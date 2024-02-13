@@ -1,10 +1,12 @@
 ﻿using InternshipManagementSystem.API.Constants;
+using InternshipManagementSystem.Application.Features.Student.Queries.GetStudentById.cs;
 using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.Services;
 using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Application.ViewModels.StudentViewModels;
 using InternshipManagementSystem.Application.ViewModels.StuentViewModels;
 using InternshipManagementSystem.Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,8 +23,9 @@ namespace InternshipManagementSystem.API.Controllers
         private readonly IAdvisorWriteRepository _advisorWriteRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IFileService _fileService;
+        private readonly IMediator _mediator;
 
-        public StudentController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService)
+        public StudentController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService ,IMediator mediator)
         {
             _studentReadRepository = studentReadRepository;
             _studentWriteRepository = studentWriteRepository;
@@ -30,6 +33,7 @@ namespace InternshipManagementSystem.API.Controllers
             _advisorWriteRepository = advisorWriteRepository;
             _webHostEnvironment = webHostEnvironment;
             _fileService = fileService;
+            _mediator = mediator;
         }
 
         [HttpGet]
@@ -39,11 +43,18 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(x);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetStudentById([FromQuery]GetStudentByIdQueryRequest request)
         {
-            var advisor = await _studentReadRepository.GetByIdAsync(id, false);
-            return Ok(advisor);
+            GetStudentByIdQueryResponse response = await _mediator.Send(request);
+            return Ok(new ResponseModel()
+            {
+                Data = response.student,
+                IsSuccess = response.student == null ? false : true,
+                Message = response.student == null ? "Student not found" : "Student found",
+                StatusCode = response.student == null ? 400 : 200
+            });
+
         }
         // degisti
         [HttpGet("[action]/{userName}")]    

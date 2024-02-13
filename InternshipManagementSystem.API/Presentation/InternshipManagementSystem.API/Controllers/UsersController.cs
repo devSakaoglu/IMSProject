@@ -1,5 +1,5 @@
-﻿using InternshipManagementSystem.Application.Features.Commands.AppUser.CreateUser;
-using InternshipManagementSystem.Application.Features.Commands.AppUser.LoginUser;
+﻿using InternshipManagementSystem.Application.Features.AppUser.Commands.CreateUser;
+using InternshipManagementSystem.Application.Features.AppUser.Commands.LoginUser;
 using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.Services;
 using MediatR;
