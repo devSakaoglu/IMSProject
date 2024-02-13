@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InternshipManagementSystem.Application.Features.Queries.Student.GetStudentById.cs
+namespace InternshipManagementSystem.Application.Features.Student.Queries.GetStudentById.cs
 {
     public class GetStudentByIdQueryRequest : IRequest<GetStudentByIdQueryResponse>
     {
+        public Guid Id { get; set; }
     }
 }

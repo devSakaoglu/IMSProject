@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace InternshipManagementSystem.Application.Features.Commands.AppUser.CreateUser
+namespace InternshipManagementSystem.Application.Features.AppUser.Commands.CreateUser
 {
     public class CreateUserCommandRequestHandler : IRequestHandler<CreateUserCommandRequest, CreateUserCommandRequestResponse>
     {
@@ -13,22 +13,22 @@ namespace InternshipManagementSystem.Application.Features.Commands.AppUser.Creat
             _userManager = userManager;
         }
 
-         async Task<CreateUserCommandRequestResponse> IRequestHandler<CreateUserCommandRequest, CreateUserCommandRequestResponse>.Handle(
-            CreateUserCommandRequest request, CancellationToken cancellationToken)
+        async Task<CreateUserCommandRequestResponse> IRequestHandler<CreateUserCommandRequest, CreateUserCommandRequestResponse>.Handle(
+           CreateUserCommandRequest request, CancellationToken cancellationToken)
         {
-          IdentityResult result= await _userManager.CreateAsync(new()
+            IdentityResult result = await _userManager.CreateAsync(new()
             {
-                Id= Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid().ToString(),
                 UserName = request.Username,
                 Email = request.Email,
 
             }, request.Password);
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 return new() { Succeeded = true };
             }
-           throw new UserCreateFailedException();
+            throw new UserCreateFailedException();
 
-        } 
+        }
     }
 }

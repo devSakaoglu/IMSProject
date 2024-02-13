@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InternshipManagementSystem.Application.Features.Commands.AppUser.LoginUser
+namespace InternshipManagementSystem.Application.Features.AppUser.Commands.LoginUser
 {
     public class LoginUserCommandResponse
     {
@@ -15,7 +15,7 @@ namespace InternshipManagementSystem.Application.Features.Commands.AppUser.Login
         public DTO.Token Token { get; set; }
 
     }
-    public class LoginUserErrorCommandResponse : LoginUserCommandResponse 
+    public class LoginUserErrorCommandResponse : LoginUserCommandResponse
     {
         public string Message { get; set; }
 
