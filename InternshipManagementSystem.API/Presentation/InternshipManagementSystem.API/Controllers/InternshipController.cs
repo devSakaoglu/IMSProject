@@ -3,8 +3,10 @@ using InternshipManagementSystem.Application.Services;
 using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Application.ViewModels.InternshipViewModelss;
 using InternshipManagementSystem.Domain.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 
 namespace InternshipManagementSystem.API.Controllers
@@ -67,6 +69,35 @@ namespace InternshipManagementSystem.API.Controllers
             }
             );
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetByStudentId(string id) {
+
+            if(await _studentReadRepository.AnyAsync(x => x.ID == Guid.Parse(id)) == false)
+            {
+                return Ok(new ResponseModel()
+                {
+                    Data = null,
+                    IsSuccess = false,
+                    Message = "Student Not Found",
+                    StatusCode = 404
+                });
+            } else
+            {
+                var data = await _internshipReadRepository.GetWhere(x => x.StudentID == Guid.Parse(id), true).ToListAsync();
+
+                await Console.Out.WriteLineAsync(data.ToString());
+                return Ok(new ResponseModel()
+                {
+                    Data = data,
+                    IsSuccess = data.IsNullOrEmpty() ? false : true,
+                    Message = data.IsNullOrEmpty() ? "No Internship Found" : "Internships Found",
+                    StatusCode = data.IsNullOrEmpty() ? 404 : 200
+                });
+            }
+
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateInternship(InternshipCreateVM model)
         {
