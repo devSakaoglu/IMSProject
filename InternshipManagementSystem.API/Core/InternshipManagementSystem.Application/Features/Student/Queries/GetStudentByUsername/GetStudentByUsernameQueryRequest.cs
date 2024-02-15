@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace InternshipManagementSystem.Application.Features.Student
 {
-    public class GetStudentAllQueryRequest : IRequest<GetStudentAllQueryResponse>
+    public class GetStudentByUsernameQueryRequest : IRequest<GetStudentByUsernameQueryResponse>
     {
+        public string Username { get; set; }
     }
 }

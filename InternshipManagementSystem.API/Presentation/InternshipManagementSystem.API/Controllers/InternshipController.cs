@@ -1,13 +1,12 @@
-﻿using InternshipManagementSystem.Application.Repositories;
+﻿using InternshipManagementSystem.Application.Features.Internship.Queries.GetIntershipsByStudentId;
+using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.Services;
 using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Application.ViewModels.InternshipViewModelss;
 using InternshipManagementSystem.Domain.Entities;
-using Microsoft.AspNetCore.Http.HttpResults;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System;
 
 namespace InternshipManagementSystem.API.Controllers
 {
@@ -27,8 +26,8 @@ namespace InternshipManagementSystem.API.Controllers
         private readonly IInternshipDocumentWriteRepository _internshipDocumentWriteRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IFileService _fileService;
-
-        public InternshipController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IInternshipReadRepository internshipReadRepository, IInternshipWriteRepository internshipWriteRepository, IInternshipDocumentReadRepository internshipDocumentReadRepository, IInternshipDocumentWriteRepository internshipDocumentWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService)
+        private readonly IMediator _mediator;
+        public InternshipController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IInternshipReadRepository internshipReadRepository, IInternshipWriteRepository internshipWriteRepository, IInternshipDocumentReadRepository internshipDocumentReadRepository, IInternshipDocumentWriteRepository internshipDocumentWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IMediator mediator)
         {
             _studentReadRepository = studentReadRepository;
             _studentWriteRepository = studentWriteRepository;
@@ -40,6 +39,7 @@ namespace InternshipManagementSystem.API.Controllers
             _internshipDocumentWriteRepository = internshipDocumentWriteRepository;
             _webHostEnvironment = webHostEnvironment;
             _fileService = fileService;
+            _mediator = mediator;
         }
 
         [HttpGet("[action]")]
@@ -70,35 +70,16 @@ namespace InternshipManagementSystem.API.Controllers
             );
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> GetByStudentId(string id)
+
+
+        [HttpGet("[action]")]
+
+        public async Task<IActionResult> GetIntershipsByStudentId([FromQuery] GetInternshipsByStudentIdQueryRequest request)
         {
-
-            if (await _studentReadRepository.AnyAsync(x => x.ID == Guid.Parse(id)) == false)
-            {
-                return Ok(new ResponseModel()
-                {
-                    Data = null,
-                    IsSuccess = false,
-                    Message = "Student Not Found",
-                    StatusCode = 404
-                });
-            }
-            else
-            {
-                var data = await _internshipReadRepository.GetWhere(x => x.StudentID == Guid.Parse(id), true).ToListAsync();
-
-                await Console.Out.WriteLineAsync(data.ToString());
-                return Ok(new ResponseModel()
-                {
-                    Data = data,
-                    IsSuccess = data.IsNullOrEmpty() ? false : true,
-                    Message = data.IsNullOrEmpty() ? "No Internship Found" : "Internships Found",
-                    StatusCode = data.IsNullOrEmpty() ? 404 : 200
-                });
-            }
-
+            GetInternshipsByStudentIdQueryResponse response = await _mediator.Send(request);
+            return Ok(response.Response);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateInternship(InternshipCreateVM model)
@@ -118,16 +99,16 @@ namespace InternshipManagementSystem.API.Controllers
             try
             {
                 var internship = new Internship();
-                    internship = new Internship()
-                    {
-                        StudentNo = student.StudentNo,
-                        AdvisorID = model.AdvisorID,
-                        StudentID = student.ID,
-                        InternshipStatus = InternshipStatus.Pending,
-                        StudentName = student.StudentName,
-                        StudentSurname = student.StudentSurname,
-                    };
-               
+                internship = new Internship()
+                {
+                    StudentNo = student.StudentNo,
+                    AdvisorID = model.AdvisorID,
+                    StudentID = student.ID,
+                    InternshipStatus = InternshipStatus.Pending,
+                    StudentName = student.StudentName,
+                    StudentSurname = student.StudentSurname,
+                };
+
                 var st = await _internshipWriteRepository.AddAsync(internship);
                 student.Internships.Add(internship);
                 await _internshipWriteRepository.SaveAsync();

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InternshipManagementSystem.Application.Features.Student.Queries.GetStudentById.cs
+namespace InternshipManagementSystem.Application.Features.Student
 {
     public class GetStudentByIdQueryRequest : IRequest<GetStudentByIdQueryResponse>
     {

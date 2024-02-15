@@ -7,13 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InternshipManagementSystem.Application.Features.Student.Queries.GetStudentById.cs
+namespace InternshipManagementSystem.Application.Features.Student
 {
 using Student = InternshipManagementSystem.Domain.Entities.Student;
 
     public class GetStudentByIdQueryResponse : IRequest<GetStudentByIdQueryResponse>
     {
-        public Student student { get; set; }
+        public string Message { get; set; }
+        public ResponseModel Response { get; set; }
 
 
     }

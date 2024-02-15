@@ -1,5 +1,4 @@
-﻿using InternshipManagementSystem.API.Constants;
-using InternshipManagementSystem.Application.Features.Student.Queries.GetStudentById.cs;
+﻿using InternshipManagementSystem.Application.Features.Student;
 using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.Services;
 using InternshipManagementSystem.Application.ViewModels;
@@ -7,7 +6,6 @@ using InternshipManagementSystem.Application.ViewModels.StudentViewModels;
 using InternshipManagementSystem.Application.ViewModels.StuentViewModels;
 using InternshipManagementSystem.Domain.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +23,7 @@ namespace InternshipManagementSystem.API.Controllers
         private readonly IFileService _fileService;
         private readonly IMediator _mediator;
 
-        public StudentController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService ,IMediator mediator)
+        public StudentController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IMediator mediator)
         {
             _studentReadRepository = studentReadRepository;
             _studentWriteRepository = studentWriteRepository;
@@ -39,58 +37,28 @@ namespace InternshipManagementSystem.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var x = _studentReadRepository.GetAll();
-            return Ok(x);
+            GetStudentAllQueryResponse response = await _mediator.Send(new GetStudentAllQueryRequest());
+
+            return Ok(response.Response);
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetStudentById([FromQuery]GetStudentByIdQueryRequest request)
+        public async Task<IActionResult> GetStudentById([FromQuery] GetStudentByIdQueryRequest request)
         {
             GetStudentByIdQueryResponse response = await _mediator.Send(request);
-            return Ok(new ResponseModel()
-            {
-                Data = response.student,
-                IsSuccess = response.student == null ? false : true,
-                Message = response.student == null ? "Student not found" : "Student found",
-                StatusCode = response.student == null ? 400 : 200
-            });
+            return Ok(response.Response);
 
         }
-        // degisti
-        [HttpGet("[action]/{userName}")]    
-        public async Task<IActionResult> GetStudentByUsername(string userName)
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetStudentByUsername([FromQuery]GetStudentByUsernameQueryRequest request)
         {
-            if (userName == null)
-            {
-                return Ok("username is null");
-            }
-            var student = await _studentReadRepository.GetAll().ToListAsync();
-         var data=   student.Select(x => x.StudentNo == userName);
-            
-            if(student is not null)
-            {
-                return Ok(new ResponseModel()
-                {
-                    IsSuccess = true,
-                    Message = "Student found",
-                    Data = data,
-                    StatusCode = 200
-
-                });
-            }
-
-            return Ok("Not Found");
+            GetStudentByUsernameQueryResponse response = await _mediator.Send(request);
+            return Ok(response.Response);
+          
         }
 
 
-        [HttpGet("[action]{id}")]
-
-        public async Task<IActionResult> GetInterships(string id)
-        {
-            var advisor = await _studentReadRepository.Table.Include(x=>x.Internships).Where(x=>x.ID==Guid.Parse(id)).ToListAsync();
-            return Ok(advisor);
-        }
-
+        
 
         [HttpPost("[action]")]
         public async Task<IActionResult> AddToAdvisor(VM_Add_Student_to_Advisor model)
@@ -111,13 +79,13 @@ namespace InternshipManagementSystem.API.Controllers
 
 
 
-            var advisor = await _advisorReadRepository.GetAll().Include(a=>a.Students).FirstOrDefaultAsync(x => x.ID == model.AdvisorID);
+            var advisor = await _advisorReadRepository.GetAll().Include(a => a.Students).FirstOrDefaultAsync(x => x.ID == model.AdvisorID);
             var ifStudentExists = advisor.Students.Any(student => student.ID == model.StudentID);
             if (ifStudentExists)
             {
                 return Ok(new ResponseModel()
                 {
-                    IsSuccess =false,
+                    IsSuccess = false,
                     Message = "Student already exists",
                     Data = null,
                     StatusCode = 400
@@ -128,7 +96,7 @@ namespace InternshipManagementSystem.API.Controllers
             {
                 try
                 {
-                    student.AdvisorID = advisor.ID; 
+                    student.AdvisorID = advisor.ID;
 
                     var y = await _studentWriteRepository.SaveAsync();
                     var res = new ResponseModel()
