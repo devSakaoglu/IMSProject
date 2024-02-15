@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InternshipManagementSystem.Application.Features.Commands.AppUser.CreateUser
+namespace InternshipManagementSystem.Application.Features.AppUser.Commands.CreateUser
 {
     public class CreateUserCommandRequest : IRequest<CreateUserCommandRequestResponse>
     {

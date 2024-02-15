@@ -13,7 +13,7 @@ using InternshipManagementSystem.Application.Repositories;
 using Microsoft.EntityFrameworkCore;
 using InternshipManagementSystem.Domain.Entities;
 
-namespace InternshipManagementSystem.Application.Features.Commands.AppUser.LoginUser
+namespace InternshipManagementSystem.Application.Features.AppUser.Commands.LoginUser
 {
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, LoginUserCommandResponse>
     {
@@ -108,7 +108,7 @@ namespace InternshipManagementSystem.Application.Features.Commands.AppUser.Login
             }
         }
 
-        private async Task CreateAppUser(IAppUserCreatable user, LoginUserCommandRequest loginRequest,  string roleType)
+        private async Task CreateAppUser(IAppUserCreatable user, LoginUserCommandRequest loginRequest, string roleType)
         {
             var result = await _usermanager.CreateAsync(new Domain.Entities.Identity.AppUser()
             {

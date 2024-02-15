@@ -1,11 +1,12 @@
-﻿using InternshipManagementSystem.Application.Repositories;
+﻿using InternshipManagementSystem.Application.Features.Internship.Queries.GetIntershipsByStudentId;
+using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.Services;
 using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Application.ViewModels.InternshipViewModelss;
 using InternshipManagementSystem.Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace InternshipManagementSystem.API.Controllers
 {
@@ -25,8 +26,8 @@ namespace InternshipManagementSystem.API.Controllers
         private readonly IInternshipDocumentWriteRepository _internshipDocumentWriteRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IFileService _fileService;
-
-        public InternshipController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IInternshipReadRepository internshipReadRepository, IInternshipWriteRepository internshipWriteRepository, IInternshipDocumentReadRepository internshipDocumentReadRepository, IInternshipDocumentWriteRepository internshipDocumentWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService)
+        private readonly IMediator _mediator;
+        public InternshipController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IInternshipReadRepository internshipReadRepository, IInternshipWriteRepository internshipWriteRepository, IInternshipDocumentReadRepository internshipDocumentReadRepository, IInternshipDocumentWriteRepository internshipDocumentWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IMediator mediator)
         {
             _studentReadRepository = studentReadRepository;
             _studentWriteRepository = studentWriteRepository;
@@ -38,12 +39,13 @@ namespace InternshipManagementSystem.API.Controllers
             _internshipDocumentWriteRepository = internshipDocumentWriteRepository;
             _webHostEnvironment = webHostEnvironment;
             _fileService = fileService;
+            _mediator = mediator;
         }
 
-        [HttpGet]
-        public IActionResult GetInternships()
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAllInternships()
         {
-            var data = _internshipReadRepository.GetAll();
+            var data = await _internshipReadRepository.GetAll().ToListAsync();
             return Ok(new ResponseModel()
             {
                 Data = data,
@@ -67,14 +69,26 @@ namespace InternshipManagementSystem.API.Controllers
             }
             );
         }
+
+
+
+        [HttpGet("[action]")]
+
+        public async Task<IActionResult> GetIntershipsByStudentId([FromQuery] GetInternshipsByStudentIdQueryRequest request)
+        {
+            GetInternshipsByStudentIdQueryResponse response = await _mediator.Send(request);
+            return Ok(response.Response);
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> CreateInternship(InternshipCreateVM model)
         {
-            var data = await _studentReadRepository.AnyAsync(x => x.StudentNo == model.StudentNo);
-            var data2 = await _advisorReadRepository.AnyAsync(x => x.ID == model.AdvisorID);
-            if (data == null || data2 == null)
+            var student = _studentReadRepository.GetWhere(x => x.StudentNo == model.StudentNo).Include(x => x.Internships).FirstOrDefault();
+            var advisor = await _advisorReadRepository.GetSingleAsync(x => x.ID == model.AdvisorID);
+            if (student == null || advisor == null)
             {
-                return Ok(new ResponseModel()   
+                return Ok(new ResponseModel()
                 {
                     Data = null,
                     IsSuccess = false,
@@ -84,17 +98,20 @@ namespace InternshipManagementSystem.API.Controllers
             }
             try
             {
-                var adata = _studentReadRepository.GetWhere(x => x.StudentNo == model.StudentNo, true).FirstOrDefault();
-                var internship = new Internship()
+                var internship = new Internship();
+                internship = new Internship()
                 {
+                    StudentNo = student.StudentNo,
                     AdvisorID = model.AdvisorID,
-                    StudentID = adata.ID,
-                    InternshipStatus = InternshipStatus.ApplicationPending,
-                    InternAppAcceptFormID = model.FormID,
-                    InternshipApplicationInfoForAdviserExcelID = model.ExcelID,
+                    StudentID = student.ID,
+                    InternshipStatus = InternshipStatus.Pending,
+                    StudentName = student.StudentName,
+                    StudentSurname = student.StudentSurname,
                 };
-                await _internshipWriteRepository.AddAsync(internship);
-                _internshipWriteRepository.SaveAsync();
+
+                var st = await _internshipWriteRepository.AddAsync(internship);
+                student.Internships.Add(internship);
+                await _internshipWriteRepository.SaveAsync();
                 return Ok(new ResponseModel()
                 {
                     Data = internship,
@@ -126,7 +143,7 @@ namespace InternshipManagementSystem.API.Controllers
                 data = new Internship()
                 {
                     InternAppAcceptFormID = model.FormID,
-                    InternshipApplicationInfoForAdviserExcelID= model.ExcelID,
+                    InternshipApplicationInfoForAdviserExcelID = model.ExcelID,
                     InternshipBookID = model.InternshipBookID,
                     SPASID = model.SPASID,
                     AttendanceScheduleID = model.AttendanceScheduleID,
@@ -158,11 +175,45 @@ namespace InternshipManagementSystem.API.Controllers
 
             return Ok("Internship Updated");
         }
+
+        [HttpPut("[action]")]
+        public async Task<IActionResult> UpdateInternshipByInternshipStatus(Guid internshipId, InternshipStatus status)
+        {
+            try
+            {
+                var internship = await _internshipReadRepository.GetSingleAsync(x => x.ID == internshipId);
+                internship.InternshipStatus = status;
+                _internshipWriteRepository.Update(internship);
+                await _internshipWriteRepository.SaveAsync();
+                return Ok(new ResponseModel()
+                {
+                    Data = internship,
+                    IsSuccess = internship == null ? false : true,
+                    Message = internship == null ? "Internship Not Found" : "Internship Updated",
+                    StatusCode = internship == null ? 404 : 200
+                });
+
+            }
+            catch (Exception ex)
+            {
+
+                return Ok(new ResponseModel()
+                {
+                    Data = null,
+                    IsSuccess = false,
+                    Message = ex.Message,
+                    StatusCode = 500
+                });
+            }
+
+
+        }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInternship(Guid id)
         {
             //Todo test et
             var result = await _internshipWriteRepository.RemoveAsync(id.ToString());
+            await _internshipWriteRepository.SaveAsync();
             return Ok(new ResponseModel()
             {
                 Data = result,
@@ -173,12 +224,13 @@ namespace InternshipManagementSystem.API.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> UploadDocument([FromForm] IFormFileCollection file, string StudentID, string InternshipID)
+        public async Task<IActionResult> UploadDocument([FromForm] IFormFileCollection file, string StudentID, string InternshipID,Listr<int>)
         {
+
             var data = await _fileService.UploadAsync($"Students\\{StudentID}\\{InternshipID}", file, StudentID, InternshipID);
             return Ok(new ResponseModel()
             {
-                Data = data.ToDictionary(),
+                Data = data.ToDictionary(),//null check ok check
                 IsSuccess = data == null ? false : true,
                 Message = data == null ? "Some Problems" : "Successful",
                 StatusCode = data == null ? 404 : 200
@@ -189,13 +241,13 @@ namespace InternshipManagementSystem.API.Controllers
         public async Task<IActionResult> DownloadFile(string internShipDocumentId)
         {
             var data = await _internshipDocumentReadRepository.GetByIdAsync(internShipDocumentId);
-                return Ok(new ResponseModel()
-                {
-                    Data = data == null ? null : data.FilePath,
-                    IsSuccess =data == null ? false : true,
-                    Message = data == null ? "File Not Found" : "File Found",
-                    StatusCode = data == null ? 404 : 200
-                });
+            return Ok(new ResponseModel()
+            {
+                Data = data == null ? null : data.FilePath,
+                IsSuccess = data == null ? false : true,
+                Message = data == null ? "File Not Found" : "File Found",
+                StatusCode = data == null ? 404 : 200
+            });
 
 
 
@@ -203,7 +255,7 @@ namespace InternshipManagementSystem.API.Controllers
         [HttpGet("[action]/{internshipId}")]
         public async Task<IActionResult> GetAllDocuments(string internshipId)
         {
-            var data =  _internshipReadRepository.GetAll().Where(x => x.ID == Guid.Parse(internshipId)).Select(x => x.InternsipDocuments).ToList();   
+            var data = _internshipReadRepository.GetAll().Where(x => x.ID == Guid.Parse(internshipId)).Select(x => x.InternsipDocuments).ToList();
             return Ok(new ResponseModel()
             {
                 Data = data,
@@ -228,7 +280,7 @@ namespace InternshipManagementSystem.API.Controllers
             }
             else
             {
-             
+
                 if (await _fileService.DeleteFileAsync(data.Result.FilePath) == false)
                 {
                     return Ok(new ResponseModel()
@@ -238,7 +290,8 @@ namespace InternshipManagementSystem.API.Controllers
                         Message = "File Not Deleted",
                         StatusCode = 404
                     });
-                }else
+                }
+                else
                 {
 
                     _internshipDocumentWriteRepository.RemoveAsync(id);
