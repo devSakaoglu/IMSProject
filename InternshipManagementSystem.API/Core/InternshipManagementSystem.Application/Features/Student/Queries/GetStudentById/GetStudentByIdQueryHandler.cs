@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InternshipManagementSystem.Application.Features.Student.Queries.GetStudentById.cs
+namespace InternshipManagementSystem.Application.Features.Student
 {
     public class GetStudentByIdQueryHandler : IRequestHandler<GetStudentByIdQueryRequest, GetStudentByIdQueryResponse>
     {
@@ -24,8 +24,28 @@ namespace InternshipManagementSystem.Application.Features.Student.Queries.GetStu
         public async Task<GetStudentByIdQueryResponse> Handle(GetStudentByIdQueryRequest request, CancellationToken cancellationToken )
         {
             var student=  await _studentReadRepository.Table.FirstOrDefaultAsync(x => x.ID == request.Id); 
-
-           return new GetStudentByIdQueryResponse { student = student };
+            if (student == null)
+            {
+                return new GetStudentByIdQueryResponse { Response=new()
+                {
+                    Data = null,
+                    Message = "Student not found",
+                    IsSuccess = false,
+                    StatusCode = 404
+                }
+                };
+            }
+            else
+            {
+                return new GetStudentByIdQueryResponse {Message="OK", Response = new()
+                {
+                    Data = student,
+                    Message = "Student found",
+                    IsSuccess = true,
+                    StatusCode = 200
+                }
+                };
+            }
 
 
         }
