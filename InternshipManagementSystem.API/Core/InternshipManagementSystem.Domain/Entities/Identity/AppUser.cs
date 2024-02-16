@@ -9,7 +9,5 @@ namespace InternshipManagementSystem.Domain.Entities.Identity
 {
     public class AppUser : IdentityUser<string>
     {
-        //todo  acil 1
-            
     }
 }
