@@ -3,23 +3,21 @@ using MediatR;
 
 namespace InternshipManagementSystem.Application.Features.Internship
 {
-    public class GetInternshipsByStudentIdHandler : IRequestHandler<GetInternshipsByStudentIdQueryRequest, GetInternshipsByStudentIdQueryResponse>
+    public class GetInternshipsByAdvisorIdQueryHandler : IRequestHandler<GetInternshipsByAdvisorIdQueryRequest, GetInternshipsByAdvisorIdQueryResponse>
     {
         IInternshipReadRepository _internshipReadRepository;
 
-        public GetInternshipsByStudentIdHandler(IInternshipReadRepository internshipReadRepository)
+        public GetInternshipsByAdvisorIdQueryHandler(IInternshipReadRepository internshipReadRepository)
         {
             _internshipReadRepository = internshipReadRepository;
         }
 
-
-
-        public Task<GetInternshipsByStudentIdQueryResponse> Handle(GetInternshipsByStudentIdQueryRequest request, CancellationToken cancellationToken)
+        public Task<GetInternshipsByAdvisorIdQueryResponse> Handle(GetInternshipsByAdvisorIdQueryRequest request, CancellationToken cancellationToken)
         {
-            var interships = _internshipReadRepository.GetWhere(i => i.StudentID == request.StudentId).ToList();
+            var interships = _internshipReadRepository.GetWhere(i => i.AdvisorID == request.AdvisorId).ToList();
             if (interships == null || interships.Count == 0)
             {
-                return Task.FromResult(new GetInternshipsByStudentIdQueryResponse
+                return Task.FromResult(new GetInternshipsByAdvisorIdQueryResponse
                 {
                     Response = new()
                     {
@@ -32,7 +30,7 @@ namespace InternshipManagementSystem.Application.Features.Internship
             }
             else
             {
-                return Task.FromResult(new GetInternshipsByStudentIdQueryResponse
+                return Task.FromResult(new GetInternshipsByAdvisorIdQueryResponse
                 {
                     Response = new()
                     {
@@ -45,5 +43,7 @@ namespace InternshipManagementSystem.Application.Features.Internship
 
             }
         }
+
+
     }
 }

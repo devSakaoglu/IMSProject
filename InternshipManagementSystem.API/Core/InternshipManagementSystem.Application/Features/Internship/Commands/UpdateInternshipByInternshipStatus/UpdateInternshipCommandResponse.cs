@@ -1,12 +1,10 @@
 ﻿using InternshipManagementSystem.Application.ViewModels;
 
-namespace InternshipManagementSystem.Application.Features.Internship
+namespace InternshipManagementSystem.Application.Features.Internship.Commands
 {
-    public class GetInternshipsByStudentIdQueryResponse
+    public class UpdateInternshipByInternshipStatusCommandResponse
     {
         public string Message;
-
         public ResponseModel Response { get; set; }
-
     }
 }

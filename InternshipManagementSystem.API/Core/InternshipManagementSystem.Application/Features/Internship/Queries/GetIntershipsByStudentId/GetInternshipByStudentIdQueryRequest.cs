@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace InternshipManagementSystem.Application.Features.Internship.Queries.GetIntershipsByStudentId
+namespace InternshipManagementSystem.Application.Features.Internship
 {
     public class GetInternshipsByStudentIdQueryRequest : IRequest<GetInternshipsByStudentIdQueryResponse>
     {
