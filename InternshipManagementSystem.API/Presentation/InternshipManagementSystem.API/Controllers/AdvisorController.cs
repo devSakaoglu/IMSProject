@@ -23,7 +23,7 @@ namespace InternshipManagementSystem.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        public async Task<IActionResult> Get(Guid id)
         {
             var advisor = await _advisorReadRepository.GetByIdAsync(id, false);
             return Ok(
@@ -134,7 +134,7 @@ namespace InternshipManagementSystem.API.Controllers
         public async Task<IActionResult> Update(VM_Update_Advisor model)
         {
 
-            var advisor = await _advisorReadRepository.GetByIdAsync(model.AdvisorID.ToString());
+            var advisor = await _advisorReadRepository.GetByIdAsync(model.AdvisorID);
 
             if (advisor is null)
             {
@@ -162,7 +162,7 @@ namespace InternshipManagementSystem.API.Controllers
                );
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             // var userId = HttpContext.User.Identity.Name; -- Student ise StudentNO, Advisor ise email
 

@@ -36,9 +36,9 @@ namespace InternshipManagementSystem.Persistence.Repositories
             return entityEntry.State == EntityState.Deleted;
         }
 
-        public async Task<bool> RemoveAsync(string id)
+        public async Task<bool> RemoveAsync(Guid id)
         {
-            T model = await Table.FirstOrDefaultAsync(e => e.ID == Guid.Parse(id));
+            T model = await Table.FirstOrDefaultAsync(e => e.ID == id);
             return Remove(model);
         }
 

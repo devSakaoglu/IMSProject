@@ -37,12 +37,12 @@ namespace InternshipManagementSystem.Persistence.Repositories
             return query;
         }
 
-        public async Task<T> GetByIdAsync(string id, bool tracking = true)
+        public async Task<T> GetByIdAsync(Guid id, bool tracking = true)
         {
                var query = Table.AsQueryable();
             if (!tracking)
                 query = query.AsNoTracking();            
-            return await query.FirstOrDefaultAsync(e => e.ID == Guid.Parse(id));
+            return await query.FirstOrDefaultAsync(e => e.ID ==id);
         }
         public T GetFirst(Expression<Func<T, bool>> method, bool tracking = true)
         {
