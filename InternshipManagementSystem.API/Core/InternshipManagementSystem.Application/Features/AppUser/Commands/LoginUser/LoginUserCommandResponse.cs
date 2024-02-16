@@ -12,7 +12,8 @@ namespace InternshipManagementSystem.Application.Features.AppUser.Commands.Login
     }
     public class LoginUserSuccessCommandResponse : LoginUserCommandResponse
     {
-        public DTO.Token Token { get; set; }
+        public Guid UserID { get; set; }
+        public  string? UserTypeName { get; set; }
 
     }
     public class LoginUserErrorCommandResponse : LoginUserCommandResponse

@@ -1,11 +1,11 @@
 ﻿using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.Token;
 using InternshipManagementSystem.Domain.Entities.Identity;
+using InternshipManagementSystem.Infrastructure.Services.Token;
 using InternshipManagementSystem.Persistence.Contexts;
 using InternshipManagementSystem.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using InternshipManagementSystem.Infrastructure.Services.Token;
 
 namespace InternshipManagementSystem.Persistence
 {
@@ -34,8 +34,8 @@ namespace InternshipManagementSystem.Persistence
             services.AddScoped<IInternshipDocumentWriteRepository, InternshipDocumentWriteRepository>();
             services.AddScoped<IInternshipApplicationFormWriteRepository, InternshipApplicationFormWriteRepository>();
             services.AddScoped<IInternshipApplicationFormReadRepository, InternshipApplicationFormReadRepository>();
-            services.AddScoped<IInternshipBookReadRepository , InternshipBookReadRepository>();
-            services.AddScoped<IInternshipBookWriteRepository , InternshipBookWriteRepository>();
+            services.AddScoped<IInternshipBookReadRepository, InternshipBookReadRepository>();
+            services.AddScoped<IInternshipBookWriteRepository, InternshipBookWriteRepository>();
 
         }
     }

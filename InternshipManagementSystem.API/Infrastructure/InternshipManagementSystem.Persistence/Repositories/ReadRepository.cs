@@ -44,6 +44,9 @@ namespace InternshipManagementSystem.Persistence.Repositories
                 query = query.AsNoTracking();            
             return await query.FirstOrDefaultAsync(e => e.ID ==id);
         }
+
+    
+
         public T GetFirst(Expression<Func<T, bool>> method, bool tracking = true)
         {
             var query = Table.AsQueryable();
