@@ -224,7 +224,7 @@ namespace InternshipManagementSystem.API.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> UploadDocument([FromForm] IFormFileCollection file, string StudentID, string InternshipID,Listr<int>)
+        public async Task<IActionResult> UploadDocument([FromForm] IFormFileCollection file, string StudentID, string InternshipID)
         {
 
             var data = await _fileService.UploadAsync($"Students\\{StudentID}\\{InternshipID}", file, StudentID, InternshipID);
