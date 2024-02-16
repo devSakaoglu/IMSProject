@@ -180,22 +180,5 @@ namespace InternshipManagementSystem.Infrastructure.Services
             }
         }
 
-        public async Task<InternshipApplicationInfoForAdviserExcelDemo> CreateDemoExcel(string fileName)
-        {
-            // islemleri yapicaz
-            var demoExcel = new InternshipApplicationInfoForAdviserExcelDemo
-            {
-                FileName = fileName,
-                Path = "Path bilmem ne"
-            };
-
-            // var result = await _excelWriteRepository.Create(demoExcel);
-            // await _excelWriteRepository.SaveChangesAsync(); -- await _dbContext.SaveChangesAsync();
-            // var createdExcelEntity = await _excelReadRepository.GetByName("name"); -- return createdExcelEntity
-
-            await Task.CompletedTask;
-
-            return demoExcel;
-        }
     }
 }
