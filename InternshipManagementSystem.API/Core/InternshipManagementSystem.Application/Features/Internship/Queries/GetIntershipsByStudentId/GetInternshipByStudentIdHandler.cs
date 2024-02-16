@@ -22,8 +22,8 @@ namespace InternshipManagementSystem.Application.Features.Internship.Queries.Get
 
         public Task<GetInternshipsByStudentIdQueryResponse> Handle(GetInternshipsByStudentIdQueryRequest request, CancellationToken cancellationToken)
         {
-            var interships = _internshipReadRepository.GetWhere(i=>i.StudentID==request.StudentId);
-            if (interships == null)
+            var interships = _internshipReadRepository.GetWhere(i=>i.StudentID==request.StudentId).ToList();
+            if (interships == null ||  interships.Count==0)
             {
                 return Task.FromResult(new GetInternshipsByStudentIdQueryResponse
                 {
