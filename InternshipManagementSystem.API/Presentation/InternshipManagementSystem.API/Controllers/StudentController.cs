@@ -57,9 +57,6 @@ namespace InternshipManagementSystem.API.Controllers
           
         }
 
-
-        
-
         [HttpPost("[action]")]
         public async Task<IActionResult> AddToAdvisor(VM_Add_Student_to_Advisor model)
         {
@@ -192,7 +189,7 @@ namespace InternshipManagementSystem.API.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(VM_Update_Student model)
         {
-            var student = await _studentReadRepository.GetByIdAsync(model.StudentID.ToString());
+            var student = await _studentReadRepository.GetByIdAsync(model.StudentID);
 
             if (student is null)
             {
@@ -222,7 +219,7 @@ namespace InternshipManagementSystem.API.Controllers
                );
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             await _studentWriteRepository.RemoveAsync(id);
             await _studentWriteRepository.SaveAsync();
@@ -235,21 +232,6 @@ namespace InternshipManagementSystem.API.Controllers
         }
 
 
-        //[HttpPost("[action]")]
-
-        //public async Task<IActionResult> Upload([FromForm] IFormFileCollection file, string StudentID , string InternshipID)
-        //{
-        //    var data = await _fileService.UploadAsync($"Students\\{StudentID}\\{InternshipID}\\", file , StudentID , InternshipID);
-        //    return Ok(new ResponseModel()
-        //    {
-        //        Data = data.ToDictionary(),
-        //        IsSuccess = data == null ? false : true,    
-        //        Message = data== null ? "Some Problems" : "Successful", 
-        //        StatusCode = data == null ? 400 : 200
-        //    });
-
-        //    return Ok("Some Problems");
-
-        //}
+      
     }
 }

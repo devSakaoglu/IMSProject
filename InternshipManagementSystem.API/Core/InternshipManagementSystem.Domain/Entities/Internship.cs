@@ -26,8 +26,11 @@ namespace InternshipManagementSystem.Domain.Entities
         public Guid? InternshipApplicationInfoForAdviserExcelID { get; set; }
         public Guid? InternshipBookID { get; set; }
         public Guid? SPASID { get; set; }
-        public Guid? AttendanceScheduleID { get; set; }
-        public Guid? WeeklyWorkPlanID { get; set; }
+      
+
+      
+
+
     }
 
 

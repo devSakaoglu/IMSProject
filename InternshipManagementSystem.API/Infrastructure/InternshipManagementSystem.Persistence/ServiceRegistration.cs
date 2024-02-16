@@ -21,6 +21,7 @@ namespace InternshipManagementSystem.Persistence
 
 
             services.AddDbContext<InternshipManagementSystemDbContext>(options => options.UseNpgsql(Configuration.ConnectionString), ServiceLifetime.Singleton);
+            services.AddSingleton<ITokenHandler, TokenHandler>();
 
 
             services.AddScoped<IAdvisorReadRepository, AdvisorReadRepository>();
@@ -29,12 +30,13 @@ namespace InternshipManagementSystem.Persistence
             services.AddScoped<IInternshipWriteRepository, InternshipWriteRepository>();
             services.AddScoped<IStudentReadRepository, StudentReadRepository>();
             services.AddScoped<IStudentWriteRepository, StudentWriteRepository>();
-            services.AddSingleton<ITokenHandler, TokenHandler>();
-                              
-            services.AddSingleton<ITokenHandler, TokenHandler>();
-              
             services.AddScoped<IInternshipDocumentReadRepository, InternshipDocumentReadRepository>();
             services.AddScoped<IInternshipDocumentWriteRepository, InternshipDocumentWriteRepository>();
+            services.AddScoped<IInternshipApplicationFormWriteRepository, InternshipApplicationFormWriteRepository>();
+            services.AddScoped<IInternshipApplicationFormReadRepository, InternshipApplicationFormReadRepository>();
+            services.AddScoped<IInternshipBookReadRepository , InternshipBookReadRepository>();
+            services.AddScoped<IInternshipBookWriteRepository , InternshipBookWriteRepository>();
+
         }
     }
 }

@@ -2,12 +2,14 @@
 using InternshipManagementSystem.Domain.Entities;
 using InternshipManagementSystem.Persistence.Contexts;
 
+
 namespace InternshipManagementSystem.Persistence.Repositories
 {
-    public class InternshipDocumentReadRepository : ReadRepository<InternshipDocument>, IInternshipDocumentReadRepository
+    public class InternshipBookWriteRepository : WriteRepository<InternshipBook>, IInternshipBookWriteRepository
     {
-        public InternshipDocumentReadRepository(InternshipManagementSystemDbContext dbContext) : base(dbContext)
+        public InternshipBookWriteRepository(InternshipManagementSystemDbContext dbContext) : base(dbContext)
         {
         }
     }
+    
 }
