@@ -39,7 +39,6 @@
 
   <ItemGroup>
     <Folder Include="Features\Internship\Queries\NewFolder\" />
-    <Folder Include="Features\Student\Commands\" />
     <Folder Include="Features\Student\Queries\NewFolder\" />
     <Folder Include="Validators\Internship\" />
     <Folder Include="Validators\Documents\" />

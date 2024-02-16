@@ -50,15 +50,16 @@ namespace InternshipManagementSystem.API.Controllers
 
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetStudentByUsername([FromQuery]GetStudentByUsernameQueryRequest request)
+        public async Task<IActionResult> GetStudentByUsername([FromQuery] GetStudentByUsernameQueryRequest request)
         {
             GetStudentByUsernameQueryResponse response = await _mediator.Send(request);
             return Ok(response.Response);
-          
+
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> AddToAdvisor(VM_Add_Student_to_Advisor model)
+        public async Task<IActionResult> AddToAdvisor(VM_Add_Student_to_Advisor
+            model)
         {
             Student student = await _studentReadRepository.GetSingleAsync(s => s.ID == model.StudentID, true);
             if (student is null)
@@ -187,51 +188,29 @@ namespace InternshipManagementSystem.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(VM_Update_Student model)
+        public async Task<IActionResult> Update(UpdateStudentCommandRequest request)
         {
-            var student = await _studentReadRepository.GetByIdAsync(model.StudentID);
+           var student=await _studentReadRepository.GetByIdAsync(request.StudentID);    
 
-            if (student is null)
+            if (student is not null)
             {
-                return Ok(new ResponseModel()
-                {
-                    IsSuccess = false,
-                    Message = "Student not found",
-                    Data = null,
-                    StatusCode = 400
-
-                });
+                UpdateStudentCommandResponse response = await _mediator.Send(request);
             }
 
-            student.TC_NO = model.TC_NO;
-            student.Email = model.Email;
-            student.Address = model.Address;
-            student.StudentName = model.StudentName;
-            student.StudentSurname = model.StudentSurname;
-            student.StudentNo = model.StudentNo;
-            student.StudentGSMNumber = model.StudentGSMNumber;
-            student.GPA = model.GPA;
-            student.DepartmentName = model.DepartmentName;
-            student.ProgramName = model.ProgramName;
+      
             await _studentWriteRepository.SaveAsync();
             return Ok(
                new ResponseModel(true, "Succesful", student, 200)
                );
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(DeleteStudentByIdCommandRequest request)
         {
-            await _studentWriteRepository.RemoveAsync(id);
-            await _studentWriteRepository.SaveAsync();
-            return Ok(
-                new
-                {
-                    Deletion_Process = "Successful",
-                    StatusCode = 200
-                });
+            DeleteStudentByIdCommandResponse response = await _mediator.Send(request);
+            return Ok(response.Response);
         }
 
 
-      
+
     }
 }
