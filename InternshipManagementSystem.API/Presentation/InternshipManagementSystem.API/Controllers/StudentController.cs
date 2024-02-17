@@ -192,7 +192,7 @@ namespace InternshipManagementSystem.API.Controllers
 
 
         }
-
+        //
         [HttpPut]
         public async Task<IActionResult> Update(UpdateStudentCommandRequest request)
         {
