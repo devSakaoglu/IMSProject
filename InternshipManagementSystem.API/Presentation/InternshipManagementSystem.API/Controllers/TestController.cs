@@ -1,6 +1,7 @@
 ﻿using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.Services;
 using InternshipManagementSystem.Application.ViewModels;
+using InternshipManagementSystem.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 namespace InternshipManagementSystem.API.Controllers
@@ -68,6 +69,33 @@ namespace InternshipManagementSystem.API.Controllers
 
             return Ok($"Connection string health:{envConnectionString != null}, DB connection healthy:{_studentReadRepository != null} Logged in username is:{user} " +
                 $"Directory : {currentDirectory}");
+        }
+
+
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult>DownloadBook(Guid InternshipId)
+        {
+            var x = await _internshipReadRepository.GetByIdAsync(InternshipId);
+            if (x == null)
+            {
+                return NotFound();
+            }
+
+            var filename=  await _internshipDocumentReadRepository.GetByIdAsync(Guid.Parse(x.InternshipBookID.ToString())); 
+            string directoryPath = await _fileService.GetPath(InternshipId);
+            string filePath = Path.Combine(directoryPath, filename.FileName);
+
+            if (System.IO.File.Exists(filePath))
+            {
+                var fileBytes = System.IO.File.ReadAllBytes(filePath);
+                return File(fileBytes, "application/octet-stream", filename.FileName);
+            }
+            else
+            {
+
+                return Ok(filePath);
+            }
         }
 
         //[HttpPost("[action]")]

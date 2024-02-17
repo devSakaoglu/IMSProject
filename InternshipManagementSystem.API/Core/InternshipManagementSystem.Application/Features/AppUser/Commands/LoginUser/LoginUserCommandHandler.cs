@@ -49,8 +49,10 @@ namespace InternshipManagementSystem.Application.Features.AppUser.Commands.Login
                 {
                     try
                     {
+                        var token = _tokenHandler.CreateAccesstoken(5);
                         return new LoginUserSuccessCommandResponse()
                         {
+                            Token = token,
                             UserID = Guid.Parse(user.Id),
                             UserTypeName = (await _usermanager.GetRolesAsync(user)).First()
                         };
@@ -70,8 +72,10 @@ namespace InternshipManagementSystem.Application.Features.AppUser.Commands.Login
                 {
                     try
                     {
+                        var token = _tokenHandler.CreateAccesstoken(5);
                         return new LoginUserSuccessCommandResponse()
                         {
+                            Token = token,
                             UserID = Guid.Parse(user.Id),
                             UserTypeName = (await _usermanager.GetRolesAsync(user)).First()
                         };
