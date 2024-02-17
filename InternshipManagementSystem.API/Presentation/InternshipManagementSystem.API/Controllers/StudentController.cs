@@ -3,11 +3,11 @@ using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.Services;
 using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Application.ViewModels.StudentViewModels;
-using InternshipManagementSystem.Application.ViewModels.StuentViewModels;
 using InternshipManagementSystem.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using InternshipManagementSystem.Application.Features;
 
 namespace InternshipManagementSystem.API.Controllers
 {
@@ -19,8 +19,6 @@ namespace InternshipManagementSystem.API.Controllers
         private readonly IStudentWriteRepository _studentWriteRepository;
         private readonly IAdvisorReadRepository _advisorReadRepository;
         private readonly IAdvisorWriteRepository _advisorWriteRepository;
-        private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly IFileService _fileService;
         private readonly IMediator _mediator;
 
         public StudentController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IMediator mediator)
@@ -29,8 +27,6 @@ namespace InternshipManagementSystem.API.Controllers
             _studentWriteRepository = studentWriteRepository;
             _advisorReadRepository = advisorReadRepository;
             _advisorWriteRepository = advisorWriteRepository;
-            _webHostEnvironment = webHostEnvironment;
-            _fileService = fileService;
             _mediator = mediator;
         }
 
@@ -57,6 +53,15 @@ namespace InternshipManagementSystem.API.Controllers
 
         }
 
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetStudentByAdvisorId([FromQuery] GetStudentByAdvisorIdQueryRequest request)
+        {
+            GetStudentByAdvisorIdQueryResponse response = await _mediator.Send(request);
+            return Ok(response.Response);
+        }
+
+
+        //
         [HttpPost("[action]")]
         public async Task<IActionResult> AddToAdvisor(VM_Add_Student_to_Advisor
             model)
@@ -133,6 +138,7 @@ namespace InternshipManagementSystem.API.Controllers
 
         }
 
+        //
         [HttpPost]
         public async Task<IActionResult> Post(VM_Create_Student model)
         {
@@ -190,14 +196,14 @@ namespace InternshipManagementSystem.API.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(UpdateStudentCommandRequest request)
         {
-           var student=await _studentReadRepository.GetByIdAsync(request.StudentID);    
+            var student = await _studentReadRepository.GetByIdAsync(request.StudentID);
 
             if (student is not null)
             {
                 UpdateStudentCommandResponse response = await _mediator.Send(request);
             }
 
-      
+
             await _studentWriteRepository.SaveAsync();
             return Ok(
                new ResponseModel(true, "Succesful", student, 200)

@@ -29,7 +29,7 @@ namespace InternshipManagementSystem.Application.Features.Student
           }
           else
             {
-              return new GetStudentAllQueryResponse {  Message = "OK", Response = new()
+              return new GetStudentAllQueryResponse {   Response = new()
               {
                   Data = students,
                   Message = "Students found",

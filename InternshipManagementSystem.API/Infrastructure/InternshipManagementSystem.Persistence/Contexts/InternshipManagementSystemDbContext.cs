@@ -21,13 +21,13 @@ namespace InternshipManagementSystem.Persistence.Contexts
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            // builder.Entity<Student>()
-            // .HasIndex(s => s.StudentNo)
-            // .IsUnique();
+            builder.Entity<Student>()
+            .HasIndex(s => s.StudentNo)
+            .IsUnique();
 
-            // builder.Entity<Advisor>()
-            // .HasIndex(s => s.Email)
-            // .IsUnique();
+            builder.Entity<Advisor>()
+            .HasIndex(s => s.Email)
+            .IsUnique();
 
             builder.Entity<AppRole>()
                 .HasData(new List<AppRole>()
@@ -60,7 +60,7 @@ namespace InternshipManagementSystem.Persistence.Contexts
                         ID = Guid.Parse("10000000-0000-0000-0000-000000000000"),
                         Email = "mzahitgurbuz@dogus.edu.tr",
                         TC_NO = "12345678910",
-                        AdvisorName = "M. Zahit ",
+                        AdvisorName = "M.Zahid ",
                         AdvisorSurname = "Gurbuz",
                         DepartmentName = "Computer Science",
                         ProgramName = "Computer Engineering",

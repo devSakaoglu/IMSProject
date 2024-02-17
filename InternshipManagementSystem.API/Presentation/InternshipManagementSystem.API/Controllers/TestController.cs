@@ -53,60 +53,60 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok("Test");
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> UploadBook([FromForm] IFormFileCollection files, Guid internshipId)
-        {
-            var file = files.FirstOrDefault();
-            var data = await _fileService.UploadAync(internshipId, file, filetypes.InternshipBook);
+        //[HttpPost("[action]")]
+        //public async Task<IActionResult> UploadBook([FromForm] IFormFileCollection files, Guid internshipId)
+        //{
+        //    var file = files.FirstOrDefault();
+        //    var data = await _fileService.UploadAync(internshipId, file, filetypes.InternshipBook);
 
-            return Ok(new ResponseModel()
-            {
-                Message = data ? "Successful" : "Unsuccessful",
-                Data = data,
-                IsSuccess = data ? true : false,
-                StatusCode = data ? 200 : 400
-            });
-        }
-        [HttpPost("[action]")]
-        public async Task<IActionResult> UploadApplicationForm([FromForm] IFormFileCollection files, Guid internshipId)
-        {
-            var file = files.FirstOrDefault();
-            var data = await _fileService.UploadAync(internshipId, file, filetypes.InternshipApplicationForm);
+        //    return Ok(new ResponseModel()
+        //    {
+        //        Message = data ? "Successful" : "Unsuccessful",
+        //        Data = data,
+        //        IsSuccess = data ? true : false,
+        //        StatusCode = data ? 200 : 400
+        //    });
+        //}
+        //[HttpPost("[action]")]
+        //public async Task<IActionResult> UploadApplicationForm([FromForm] IFormFileCollection files, Guid internshipId)
+        //{
+        //    var file = files.FirstOrDefault();
+        //    var data = await _fileService.UploadAync(internshipId, file, filetypes.InternshipApplicationForm);
 
-            return Ok(new ResponseModel()
-            {
-                Message = data ? "Successful" : "Unsuccessful",
-                Data = data,
-                IsSuccess = data ? true : false,
-                StatusCode = data ? 200 : 400
-            });
-        }
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetBookByInternshipId(Guid internshipId)
-        {
-            var internship = await _internshipReadRepository.GetByIdAsync(internshipId);
-            var data = _internshipDocumentReadRepository.GetFirst(x => x.ID == internship.InternshipBookID, false);
+        //    return Ok(new ResponseModel()
+        //    {
+        //        Message = data ? "Successful" : "Unsuccessful",
+        //        Data = data,
+        //        IsSuccess = data ? true : false,
+        //        StatusCode = data ? 200 : 400
+        //    });
+        //}
+        //[HttpGet("[action]")]
+        //public async Task<IActionResult> GetBookByInternshipId(Guid internshipId)
+        //{
+        //    var internship = await _internshipReadRepository.GetByIdAsync(internshipId);
+        //    var data = _internshipDocumentReadRepository.GetFirst(x => x.ID == internship.InternshipBookID, false);
 
-            return Ok(new ResponseModel()
-            {
-                IsSuccess = true,
-                Data = data,
-                StatusCode = 200
-            });
-        }
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetApplicationFormByInternshipId(Guid internshipId)
-        {
-            var internship = await _internshipReadRepository.GetByIdAsync(internshipId);
-            var data = _internshipApplicationFormReadRepository.GetFirst(x => x.ID == internship.InternAppAcceptFormID, false);
+        //    return Ok(new ResponseModel()
+        //    {
+        //        IsSuccess = true,
+        //        Data = data,
+        //        StatusCode = 200
+        //    });
+        //}
+        //[HttpGet("[action]")]
+        //public async Task<IActionResult> GetApplicationFormByInternshipId(Guid internshipId)
+        //{
+        //    var internship = await _internshipReadRepository.GetByIdAsync(internshipId);
+        //    var data = _internshipApplicationFormReadRepository.GetFirst(x => x.ID == internship.InternAppAcceptFormID, false);
 
-            return Ok(new ResponseModel()
-            {
-                IsSuccess = true,
-                Data = data,
-                StatusCode = 200
-            });
-        }
+        //    return Ok(new ResponseModel()
+        //    {
+        //        IsSuccess = true,
+        //        Data = data,
+        //        StatusCode = 200
+        //    });
+        //}
 
 
 

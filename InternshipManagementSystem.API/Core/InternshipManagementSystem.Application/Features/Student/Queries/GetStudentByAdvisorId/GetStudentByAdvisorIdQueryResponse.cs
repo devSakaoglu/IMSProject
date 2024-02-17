@@ -2,7 +2,7 @@
 
 namespace InternshipManagementSystem.Application.Features.Student
 {
-    public class GetStudentAllQueryResponse
+    public class GetStudentByAdvisorIdQueryResponse
     {
         public ResponseModel Response { get; set; }
     }
