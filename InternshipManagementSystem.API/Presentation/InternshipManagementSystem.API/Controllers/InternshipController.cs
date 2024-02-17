@@ -53,20 +53,14 @@ namespace InternshipManagementSystem.API.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAllInternships()
+        public async Task<IActionResult> GetAllInternships( )
         {
-            var data = await _internshipReadRepository.GetAll().ToListAsync();
-            return Ok(new ResponseModel()
-            {
-                Data = data,
-                IsSuccess = data == null ? false : true,
-                Message = data == null ? "No Internship Found" : "Internships Found",
-                StatusCode = data == null ? 404 : 200
-
-            });
+            GetAllInternshipsQuery query = new GetAllInternshipsQuery();
+            GetAllInternshipsQueryResponse response = await _mediator.Send(query);
+            return Ok(response.Response);
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetInternship(Guid id)
+        public async Task<IActionResult> GetInternshipByInternshipId(Guid id)
         {
             var data = await _internshipReadRepository.GetByIdAsync(id);
 
@@ -305,6 +299,10 @@ namespace InternshipManagementSystem.API.Controllers
 
             }
         }
+
+
+
+
 
         [HttpPost("[action]")]
         public async Task<IActionResult> UploadBook([FromForm] IFormFileCollection files, Guid internshipId)
