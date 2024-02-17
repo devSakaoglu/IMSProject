@@ -35,7 +35,7 @@ namespace InternshipManagementSystem.Infrastructure.Services
             _internshipBookWriteRepository = internshipBookWriteRepository;
 
         }
-
+        private readonly string azureWwwRootPath = "C:\\home\\site\\wwwroot";
         public async Task<bool> CopyFileAsync(string sourcePath, IFormFile formFile)
         {
             try
@@ -168,6 +168,9 @@ namespace InternshipManagementSystem.Infrastructure.Services
             }
             return null;
         }
+
+
+
         public async Task<bool> UploadAync(Guid internShipId, IFormFile file, filetypes @enum)
         {
             if (file == null)
@@ -268,7 +271,16 @@ namespace InternshipManagementSystem.Infrastructure.Services
             {
                 return null;
             }
-            var path = Path.Combine(_webHostEnvironment.WebRootPath, $"Students\\{check.StudentID.ToString()}\\{check.ID.ToString()}");
+            string basePath = "";
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                basePath = _webHostEnvironment.WebRootPath;
+            }
+            else { 
+            basePath = azureWwwRootPath;
+            
+            }
+            var path = Path.Combine(basePath, $"Students\\{check.StudentID.ToString()}\\{check.ID.ToString()}");
 
             return path;
         }
