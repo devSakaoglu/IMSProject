@@ -10,9 +10,8 @@ namespace InternshipManagementSystem.Domain.Entities
         public Guid AdvisorID { get; set; }
         public Guid StudentID { get; set; } 
         public string StudentNo { get; set; }
-
-        public string StudentName { get; set; }
-        public string StudentSurname { get; set; }
+        public string? StudentName { get; set; }
+        public string? StudentSurname { get; set; }
         
        //todo extra bilgiler
 

@@ -1,4 +1,5 @@
 ﻿using InternshipManagementSystem.Application.ViewModels;
+using InternshipManagementSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Ex
     public class ExcelFormCommandResponse
     {
         public ResponseModel Response { get; set; }
+
 
     }
 }

@@ -337,11 +337,14 @@ namespace InternshipManagementSystem.API.Controllers
                 return Ok(filePath);
             }
         }
+
+
         [HttpPost("[action]")]
-        public async Task<IActionResult> ExcelForm(ExcelFormCommandRequest request)
+
+        public async Task<ExcelFormCommandResponse> ExcelForm(ExcelFormCommandRequest request)
         {
             ExcelFormCommandResponse response = await _mediator.Send(request);
-            return Ok(response.Response);
+            return response;
         }
 
 

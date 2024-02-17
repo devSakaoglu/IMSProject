@@ -402,3 +402,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/InternshipManagementSystem.API/Presentation/InternshipManagementSystem.API/wwwroot/Students/*
