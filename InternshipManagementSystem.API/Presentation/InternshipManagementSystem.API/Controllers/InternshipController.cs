@@ -201,19 +201,19 @@ namespace InternshipManagementSystem.API.Controllers
             });
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> UploadDocument([FromForm] IFormFileCollection file, string StudentID, string InternshipID)
-        {
+        //[HttpPost("[action]")]
+        //public async Task<IActionResult> UploadDocument([FromForm] IFormFileCollection file, string StudentID, string InternshipID)
+        //{
 
-            var data = await _fileService.UploadAsync($"Students\\{StudentID}\\{InternshipID}", file, StudentID, InternshipID);
-            return Ok(new ResponseModel()
-            {
-                Data = data.ToDictionary(),//null check ok check
-                IsSuccess = data == null ? false : true,
-                Message = data == null ? "Some Problems" : "Successful",
-                StatusCode = data == null ? 404 : 200
-            });
-        }
+        //    var data = await _fileService.UploadAsync($"Students\\{StudentID}\\{InternshipID}", file, StudentID, InternshipID);
+        //    return Ok(new ResponseModel()
+        //    {
+        //        Data = data.ToDictionary(),//null check ok check
+        //        IsSuccess = data == null ? false : true,
+        //        Message = data == null ? "Some Problems" : "Successful",
+        //        StatusCode = data == null ? 404 : 200
+        //    });
+        //}
 
         [HttpGet("[action]")]
         public async Task<IActionResult> DownloadBookFile(Guid bookId)
@@ -307,7 +307,7 @@ namespace InternshipManagementSystem.API.Controllers
         public async Task<IActionResult> UploadBook([FromForm] IFormFileCollection files, Guid internshipId)
         {
             var file = files.FirstOrDefault();
-            var data = await _fileService.UploadAync(internshipId, file, filetypes.InternshipBook);
+            var data = await _fileService.UploadAsync(internshipId, file, filetypes.InternshipBook);
 
             return Ok(new ResponseModel()
             {
@@ -321,7 +321,7 @@ namespace InternshipManagementSystem.API.Controllers
         public async Task<IActionResult> UploadApplicationForm([FromForm] IFormFileCollection files, Guid internshipId)
         {
             var file = files.FirstOrDefault();
-            var data = await _fileService.UploadAync(internshipId, file, filetypes.InternshipApplicationForm);
+            var data = await _fileService.UploadAsync(internshipId, file, filetypes.InternshipApplicationForm);
 
             return Ok(new ResponseModel()
             {

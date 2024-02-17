@@ -171,7 +171,7 @@ namespace InternshipManagementSystem.Infrastructure.Services
 
 
 
-        public async Task<bool> UploadAync(Guid internShipId, IFormFile file, filetypes @enum)
+        public async Task<bool> UploadAsync(Guid internShipId, IFormFile file, filetypes @enum)
         {
             if (file == null)
             {
