@@ -47,14 +47,12 @@ namespace InternshipManagementSystem.Application.Features.AppUser.Commands.Login
             {
                 if (await HandleAppUserCreateAndSignIn(request, cancellationToken))
                 {
-                    var token = _tokenHandler.CreateAccesstoken(5);
                     try
                     {
                         return new LoginUserSuccessCommandResponse()
                         {
-                            //Token = token,
                             UserID = Guid.Parse(user.Id),
-                            UserTypeName = (await _usermanager.GetRolesAsync(user)).First()
+                            UserTypeName = (await _usermanager.GetRolesAsync(user)).First(),
                         };
 
                     }
@@ -70,16 +68,12 @@ namespace InternshipManagementSystem.Application.Features.AppUser.Commands.Login
                 var result = await _usermanager.CheckPasswordAsync(user, request.Password);
                 if (result)
                 {
-
-                    await _signinmanager.SignInAsync(user, true);
-                    var token = _tokenHandler.CreateAccesstoken(5);
                     try
                     {
                         return new LoginUserSuccessCommandResponse()
                         {
-                            //Token = token,
                             UserID = Guid.Parse(user.Id),
-                            UserTypeName = (await _usermanager.GetRolesAsync(user)).First()
+                            UserTypeName = (await _usermanager.GetRolesAsync(user)).First(),
                         };
                     }
                     catch (Exception ex)
