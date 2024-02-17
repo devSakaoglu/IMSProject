@@ -53,6 +53,23 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok("Test");
         }
 
+        [HttpGet("health")]
+        public async Task<IActionResult> Health()
+        {
+            string user = "Anonymous";
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                user = HttpContext.User.Identity.Name;
+            }
+            var envConnectionString = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DEFAULT");
+            string currentDirectory = Directory.GetCurrentDirectory();
+
+
+
+            return Ok($"Connection string health:{envConnectionString != null}, DB connection healthy:{_studentReadRepository != null} Logged in username is:{user} " +
+                $"Directory : {currentDirectory}");
+        }
+
         //[HttpPost("[action]")]
         //public async Task<IActionResult> UploadBook([FromForm] IFormFileCollection files, Guid internshipId)
         //{

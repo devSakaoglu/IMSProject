@@ -53,17 +53,6 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("health")]
-        public async Task<IActionResult> Health()
-        {
-            string user = "Anonymous";
-            if (HttpContext.User.Identity.IsAuthenticated)
-            {
-                user = HttpContext.User.Identity.Name;
-            }
-            var envConnectionString = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DEFAULT");
-
-            return Ok($"Connection string health:{envConnectionString != null}, DB connection healthy:{_studentReadRepository != null} Logged in username is:{user}");
-        }
+       
     }
 }
