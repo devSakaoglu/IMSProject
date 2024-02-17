@@ -35,7 +35,7 @@ namespace InternshipManagementSystem.Infrastructure.Services
             _internshipBookWriteRepository = internshipBookWriteRepository;
 
         }
-
+        private readonly string azureWwwRootPath = "C:\\home\\site\\wwwroot";
         public async Task<bool> CopyFileAsync(string sourcePath, IFormFile formFile)
         {
             try
@@ -118,56 +118,59 @@ namespace InternshipManagementSystem.Infrastructure.Services
 
         }
 
-        public async Task<List<(string fileName, string path)>> UploadAsync(string path, IFormFileCollection files, string StudentID, string InternshipID)
-        {
-            var intern = _internshipReadRepository.GetSingleAsync(e => e.ID == Guid.Parse(InternshipID));
-            if (intern == null)
-            {
-                return null;
-            }
+        //public async Task<List<(string fileName, string path)>> UploadAsync(string path, IFormFileCollection files, string StudentID, string InternshipID)
+        //{
+        //    var intern = _internshipReadRepository.GetSingleAsync(e => e.ID == Guid.Parse(InternshipID));
+        //    if (intern == null)
+        //    {
+        //        return null;
+        //    }
 
-            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, path);
-            if (!Directory.Exists(uploadPath))
-                Directory.CreateDirectory(uploadPath);
+        //    string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, path);
+        //    if (!Directory.Exists(uploadPath))
+        //        Directory.CreateDirectory(uploadPath);
 
-            List<(string fileName, string path)> datas = new();
-            List<bool> results = new();
+        //    List<(string fileName, string path)> datas = new();
+        //    List<bool> results = new();
 
-            foreach (IFormFile file in files)
-            {
-                var fileNewName = await FileRenameAsync(uploadPath, file.FileName);
-                var filePath = $"{uploadPath}\\{fileNewName}";
+        //    foreach (IFormFile file in files)
+        //    {
+        //        var fileNewName = await FileRenameAsync(uploadPath, file.FileName);
+        //        var filePath = $"{uploadPath}\\{fileNewName}";
 
-                bool result = await CopyFileAsync(filePath, file);
-                datas.Add((fileNewName, $"{uploadPath}\\{fileNewName}"));
-                results.Add(result);
+        //        bool result = await CopyFileAsync(filePath, file);
+        //        datas.Add((fileNewName, $"{uploadPath}\\{fileNewName}"));
+        //        results.Add(result);
 
-            }
-            if (results.TrueForAll(r => r.Equals(true)))
-            {
-                foreach (var data in datas)
-                {
-                    Task.Run(() =>
-                    {
-                        InternshipDocument internshipDocument = new()
-                        {
-                            InternshipID = Guid.Parse(InternshipID),
-                            FileName = data.fileName,
-                            FilePath = data.path,
-                            FileType = Path.GetExtension(data.fileName)
-                        };
-                        //todo sabah devam et
-                        var sonucWrite = _internshipDocumentWriteRepository.AddAsync(internshipDocument).Result;
+        //    }
+        //    if (results.TrueForAll(r => r.Equals(true)))
+        //    {
+        //        foreach (var data in datas)
+        //        {
+        //            Task.Run(() =>
+        //            {
+        //                InternshipDocument internshipDocument = new()
+        //                {
+        //                    InternshipID = Guid.Parse(InternshipID),
+        //                    FileName = data.fileName,
+        //                    FilePath = data.path,
+        //                    FileType = Path.GetExtension(data.fileName)
+        //                };
+        //                //todo sabah devam et
+        //                var sonucWrite = _internshipDocumentWriteRepository.AddAsync(internshipDocument).Result;
 
-                    });
+        //            });
 
 
-                }
-                var result = await _internshipDocumentWriteRepository.SaveAsync();
-                return datas;
-            }
-            return null;
-        }
+        //        }
+        //        var result = await _internshipDocumentWriteRepository.SaveAsync();
+        //        return datas;
+        //    }
+        //    return null;
+        //}
+
+
+
         public async Task<bool> UploadAync(Guid internShipId, IFormFile file, filetypes @enum)
         {
             if (file == null)
@@ -268,7 +271,16 @@ namespace InternshipManagementSystem.Infrastructure.Services
             {
                 return null;
             }
-            var path = Path.Combine(_webHostEnvironment.WebRootPath, $"Students\\{check.StudentID.ToString()}\\{check.ID.ToString()}");
+            string basePath = "";
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                basePath = _webHostEnvironment.WebRootPath;
+            }
+            else { 
+            basePath = azureWwwRootPath;
+            
+            }
+            var path = Path.Combine(basePath, $"Students\\{check.StudentID.ToString()}\\{check.ID.ToString()}");
 
             return path;
         }

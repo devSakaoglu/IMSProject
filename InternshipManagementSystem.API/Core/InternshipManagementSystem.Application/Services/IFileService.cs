@@ -10,7 +10,7 @@ namespace InternshipManagementSystem.Application.Services
 {
     public interface IFileService
     {
-        Task<List<(string fileName, string path)>> UploadAsync(string path, IFormFileCollection files, string StudentID, string InternshipID);
+        //Task<List<(string fileName, string path)>> UploadAsync(string path, IFormFileCollection files, string StudentID, string InternshipID);
 
         Task<bool> UploadAync(Guid internShipId, IFormFile file, filetypes @enum);
 
