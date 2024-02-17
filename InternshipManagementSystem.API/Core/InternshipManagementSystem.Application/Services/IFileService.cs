@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using InternshipManagementSystem.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,19 +10,21 @@ namespace InternshipManagementSystem.Application.Services
 {
     public interface IFileService
     {
-        Task<List<(string fileName, string path)>> UploadAsync(string path, IFormFileCollection files , string StudentID, string InternshipID);
+        Task<List<(string fileName, string path)>> UploadAsync(string path, IFormFileCollection files, string StudentID, string InternshipID);
+
+        Task<bool> UploadAync(Guid internShipId, IFormFile file, filetypes @enum);
 
         Task<bool> CopyFileAsync(string sourcePath, IFormFile formFile);
 
         Task<bool> DeleteFileAsync(string path);
 
-        Task<InternshipApplicationInfoForAdviserExcelDemo> CreateDemoExcel(string fileName);
+        Task<string> GetPath(Guid id);
+    }
+    public enum filetypes
+    {
+        InternshipApplicationForm = 1,
+        InternshipBook = 2
     }
 
-    public class InternshipApplicationInfoForAdviserExcelDemo
-    {
-        public Guid Id { get;set; }
-        public string FileName { get; set; }
-        public string Path { get;set; }
-    }
+
 }

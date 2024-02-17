@@ -1,14 +1,10 @@
 ﻿using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Persistence.Contexts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using InternshipManagementSystem.Domain.Entities;
 
 namespace InternshipManagementSystem.Persistence.Repositories
 {
-    public class InternshipDocumentWriteRepository : WriteRepository<Domain.Entities.InternshipDocument>, IInternshipDocumentWriteRepository
+    public class InternshipDocumentWriteRepository : WriteRepository<InternshipDocument>, IInternshipDocumentWriteRepository
     {
         public InternshipDocumentWriteRepository(InternshipManagementSystemDbContext dbContext) : base(dbContext)
         {

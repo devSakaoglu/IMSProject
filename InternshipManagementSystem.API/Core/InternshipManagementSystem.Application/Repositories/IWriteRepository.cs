@@ -9,7 +9,7 @@ namespace InternshipManagementSystem.Application.Repositories
         bool Remove(T entities);
         bool RemoveRange(List<T> datas);
         Task<bool> RemoveRangeAsync(List<T> datas);
-        Task<bool> RemoveAsync(string id);
+        Task<bool> RemoveAsync(Guid id);
         bool  Update(T entity);
 
         Task<int> SaveAsync();

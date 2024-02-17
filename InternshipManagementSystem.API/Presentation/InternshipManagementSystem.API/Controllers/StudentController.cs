@@ -1,13 +1,13 @@
-﻿using InternshipManagementSystem.API.Constants;
+﻿using InternshipManagementSystem.Application.Features.Student;
 using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.Services;
 using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Application.ViewModels.StudentViewModels;
-using InternshipManagementSystem.Application.ViewModels.StuentViewModels;
 using InternshipManagementSystem.Domain.Entities;
-using Microsoft.AspNetCore.Authorization;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using InternshipManagementSystem.Application.Features;
 
 namespace InternshipManagementSystem.API.Controllers
 {
@@ -19,70 +19,52 @@ namespace InternshipManagementSystem.API.Controllers
         private readonly IStudentWriteRepository _studentWriteRepository;
         private readonly IAdvisorReadRepository _advisorReadRepository;
         private readonly IAdvisorWriteRepository _advisorWriteRepository;
-        private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly IFileService _fileService;
+        private readonly IMediator _mediator;
 
-        public StudentController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService)
+        public StudentController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IMediator mediator)
         {
             _studentReadRepository = studentReadRepository;
             _studentWriteRepository = studentWriteRepository;
             _advisorReadRepository = advisorReadRepository;
             _advisorWriteRepository = advisorWriteRepository;
-            _webHostEnvironment = webHostEnvironment;
-            _fileService = fileService;
+            _mediator = mediator;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var x = _studentReadRepository.GetAll();
-            return Ok(x);
+            GetStudentAllQueryResponse response = await _mediator.Send(new GetStudentAllQueryRequest());
+
+            return Ok(response.Response);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetStudentById([FromQuery] GetStudentByIdQueryRequest request)
         {
-            var advisor = await _studentReadRepository.GetByIdAsync(id, false);
-            return Ok(advisor);
+            GetStudentByIdQueryResponse response = await _mediator.Send(request);
+            return Ok(response.Response);
+
         }
-        // degisti
-        [HttpGet("[action]/{userName}")]    
-        public async Task<IActionResult> GetStudentByUsername(string userName)
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetStudentByUsername([FromQuery] GetStudentByUsernameQueryRequest request)
         {
-            if (userName == null)
-            {
-                return Ok("username is null");
-            }
-            var student = await _studentReadRepository.GetAll().ToListAsync();
-         var data=   student.Select(x => x.StudentNo == userName);
-            
-            if(student is not null)
-            {
-                return Ok(new ResponseModel()
-                {
-                    IsSuccess = true,
-                    Message = "Student found",
-                    Data = data,
-                    StatusCode = 200
+            GetStudentByUsernameQueryResponse response = await _mediator.Send(request);
+            return Ok(response.Response);
 
-                });
-            }
-
-            return Ok("Not Found");
         }
 
-
-        [HttpGet("[action]{id}")]
-
-        public async Task<IActionResult> GetInterships(string id)
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetStudentByAdvisorId([FromQuery] GetStudentByAdvisorIdQueryRequest request)
         {
-            var advisor = await _studentReadRepository.Table.Include(x=>x.Internships).Where(x=>x.ID==Guid.Parse(id)).ToListAsync();
-            return Ok(advisor);
+            GetStudentByAdvisorIdQueryResponse response = await _mediator.Send(request);
+            return Ok(response.Response);
         }
 
 
+        //
         [HttpPost("[action]")]
-        public async Task<IActionResult> AddToAdvisor(VM_Add_Student_to_Advisor model)
+        public async Task<IActionResult> AddToAdvisor(VM_Add_Student_to_Advisor
+            model)
         {
             Student student = await _studentReadRepository.GetSingleAsync(s => s.ID == model.StudentID, true);
             if (student is null)
@@ -100,13 +82,13 @@ namespace InternshipManagementSystem.API.Controllers
 
 
 
-            var advisor = await _advisorReadRepository.GetAll().Include(a=>a.Students).FirstOrDefaultAsync(x => x.ID == model.AdvisorID);
+            var advisor = await _advisorReadRepository.GetAll().Include(a => a.Students).FirstOrDefaultAsync(x => x.ID == model.AdvisorID);
             var ifStudentExists = advisor.Students.Any(student => student.ID == model.StudentID);
             if (ifStudentExists)
             {
                 return Ok(new ResponseModel()
                 {
-                    IsSuccess =false,
+                    IsSuccess = false,
                     Message = "Student already exists",
                     Data = null,
                     StatusCode = 400
@@ -117,7 +99,7 @@ namespace InternshipManagementSystem.API.Controllers
             {
                 try
                 {
-                    student.AdvisorID = advisor.ID; 
+                    student.AdvisorID = advisor.ID;
 
                     var y = await _studentWriteRepository.SaveAsync();
                     var res = new ResponseModel()
@@ -156,6 +138,7 @@ namespace InternshipManagementSystem.API.Controllers
 
         }
 
+        //
         [HttpPost]
         public async Task<IActionResult> Post(VM_Create_Student model)
         {
@@ -211,66 +194,29 @@ namespace InternshipManagementSystem.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(VM_Update_Student model)
+        public async Task<IActionResult> Update(UpdateStudentCommandRequest request)
         {
-            var student = await _studentReadRepository.GetByIdAsync(model.StudentID.ToString());
+            var student = await _studentReadRepository.GetByIdAsync(request.StudentID);
 
-            if (student is null)
+            if (student is not null)
             {
-                return Ok(new ResponseModel()
-                {
-                    IsSuccess = false,
-                    Message = "Student not found",
-                    Data = null,
-                    StatusCode = 400
-
-                });
+                UpdateStudentCommandResponse response = await _mediator.Send(request);
             }
 
-            student.TC_NO = model.TC_NO;
-            student.Email = model.Email;
-            student.Address = model.Address;
-            student.StudentName = model.StudentName;
-            student.StudentSurname = model.StudentSurname;
-            student.StudentNo = model.StudentNo;
-            student.StudentGSMNumber = model.StudentGSMNumber;
-            student.GPA = model.GPA;
-            student.DepartmentName = model.DepartmentName;
-            student.ProgramName = model.ProgramName;
+
             await _studentWriteRepository.SaveAsync();
             return Ok(
                new ResponseModel(true, "Succesful", student, 200)
                );
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(DeleteStudentByIdCommandRequest request)
         {
-            await _studentWriteRepository.RemoveAsync(id);
-            await _studentWriteRepository.SaveAsync();
-            return Ok(
-                new
-                {
-                    Deletion_Process = "Successful",
-                    StatusCode = 200
-                });
+            DeleteStudentByIdCommandResponse response = await _mediator.Send(request);
+            return Ok(response.Response);
         }
 
 
-        //[HttpPost("[action]")]
 
-        //public async Task<IActionResult> Upload([FromForm] IFormFileCollection file, string StudentID , string InternshipID)
-        //{
-        //    var data = await _fileService.UploadAsync($"Students\\{StudentID}\\{InternshipID}\\", file , StudentID , InternshipID);
-        //    return Ok(new ResponseModel()
-        //    {
-        //        Data = data.ToDictionary(),
-        //        IsSuccess = data == null ? false : true,    
-        //        Message = data== null ? "Some Problems" : "Successful", 
-        //        StatusCode = data == null ? 400 : 200
-        //    });
-
-        //    return Ok("Some Problems");
-
-        //}
     }
 }

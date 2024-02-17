@@ -6,6 +6,7 @@ using InternshipManagementSystem.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.Intrinsics.Arm;
 
 namespace InternshipManagementSystem.API.Controllers
 {
@@ -15,15 +16,19 @@ namespace InternshipManagementSystem.API.Controllers
     {
         readonly private IAdvisorReadRepository _advisorReadRepository;
         readonly private IAdvisorWriteRepository _advisorWriteRepository;
+        readonly private IStudentReadRepository _studentReadRepository;
+        readonly private IStudentWriteRepository _studentWriteRepository;
 
-        public AdvisorController(IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository)
+        public AdvisorController(IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository)
         {
             _advisorReadRepository = advisorReadRepository;
             _advisorWriteRepository = advisorWriteRepository;
+            _studentReadRepository = studentReadRepository;
+            _studentWriteRepository = studentWriteRepository;
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        public async Task<IActionResult> Get(Guid id)
         {
             var advisor = await _advisorReadRepository.GetByIdAsync(id, false);
             return Ok(
@@ -55,7 +60,7 @@ namespace InternshipManagementSystem.API.Controllers
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> GetStudentsOfAdvisor(string id)
         {
-            var data = await _advisorReadRepository.Table.Include(x=>x.Students).FirstOrDefaultAsync(x=>x.ID==Guid.Parse(id));
+            var data = await _advisorReadRepository.Table.Include(x => x.Students).FirstOrDefaultAsync(x => x.ID == Guid.Parse(id));
             var students = data.Students;
             return Ok(
                                           new ResponseModel(true, "Successful", students, 200)
@@ -134,7 +139,7 @@ namespace InternshipManagementSystem.API.Controllers
         public async Task<IActionResult> Update(VM_Update_Advisor model)
         {
 
-            var advisor = await _advisorReadRepository.GetByIdAsync(model.AdvisorID.ToString());
+            var advisor = await _advisorReadRepository.GetByIdAsync(model.AdvisorID);
 
             if (advisor is null)
             {
@@ -162,20 +167,32 @@ namespace InternshipManagementSystem.API.Controllers
                );
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            // var userId = HttpContext.User.Identity.Name; -- Student ise StudentNO, Advisor ise email
+            var advisor = _advisorReadRepository.GetSingleAsync(x => x.ID == id);
+
+            if (advisor is null)
+            {
+                return Ok(new ResponseModel(false, "Advisor not found", null, 400));
+            }
+            else
+            {
+                advisor.Result.Students.Clear();
+            }
 
             if (await _advisorWriteRepository.RemoveAsync(id))
             {
                 await _advisorWriteRepository.SaveAsync();
 
                 return Ok(
-                  new ResponseModel(true,
-                                    "Successful",
-                                    null,
-                                    200)
-                   );
+                    new ResponseModel()
+                    {
+                        IsSuccess = true,
+                        Message = "Successfuly advisor deleted",
+                        Data = null,
+                        StatusCode = 200
+                    }
+                    );
             }
             else
             {

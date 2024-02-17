@@ -8,8 +8,14 @@
 
   <ItemGroup>
     <Compile Remove="Abstractions\**" />
+    <Compile Remove="Features\Commands\**" />
+    <Compile Remove="ViewModels\InternshipDocumentModels\**" />
     <EmbeddedResource Remove="Abstractions\**" />
+    <EmbeddedResource Remove="Features\Commands\**" />
+    <EmbeddedResource Remove="ViewModels\InternshipDocumentModels\**" />
     <None Remove="Abstractions\**" />
+    <None Remove="Features\Commands\**" />
+    <None Remove="ViewModels\InternshipDocumentModels\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,9 +41,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Student\Queries\NewFolder\" />
     <Folder Include="Validators\Internship\" />
     <Folder Include="Validators\Documents\" />
-    <Folder Include="ViewModels\InternshipDocumentModels\" />
   </ItemGroup>
 
 </Project>

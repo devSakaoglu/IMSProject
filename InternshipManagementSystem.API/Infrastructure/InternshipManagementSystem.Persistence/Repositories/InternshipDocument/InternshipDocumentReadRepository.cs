@@ -4,7 +4,7 @@ using InternshipManagementSystem.Persistence.Contexts;
 
 namespace InternshipManagementSystem.Persistence.Repositories
 {
-    public class InternshipDocumentReadRepository : ReadRepository<Domain.Entities.InternshipDocument>, IInternshipDocumentReadRepository
+    public class InternshipDocumentReadRepository : ReadRepository<InternshipDocument>, IInternshipDocumentReadRepository
     {
         public InternshipDocumentReadRepository(InternshipManagementSystemDbContext dbContext) : base(dbContext)
         {

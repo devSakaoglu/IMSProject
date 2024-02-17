@@ -15,7 +15,7 @@ namespace InternshipManagementSystem.Application.ViewModels.StudentViewModels
         public string FacultyName { get; set; }
         public string DepartmentName { get; set; }
         public string ProgramName { get; set; }
-        public float GPA { get; set; }
+        public float  GPA { get; set; }
         public string StudentGSMNumber { get; set; }
         public string Address { get; set; }
         public string Email { get; set; }

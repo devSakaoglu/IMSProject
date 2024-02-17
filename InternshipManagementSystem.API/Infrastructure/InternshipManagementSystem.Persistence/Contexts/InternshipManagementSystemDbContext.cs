@@ -9,30 +9,26 @@ namespace InternshipManagementSystem.Persistence.Contexts
     {
         public InternshipManagementSystemDbContext(DbContextOptions<InternshipManagementSystemDbContext> options) : base(options)
         {
-            
         }
         DbSet<Advisor> Advisors { get; set; }
         DbSet<Student> Students { get; set; }
         DbSet<Internship> Internships { get; set; }
         DbSet<InternshipDocument> InternshipDocuments { get; set; }
-        DbSet<InternshipApplicationInfoForAdviserExcel> InternshipApplicationInfoForAdviserExcels { get; set; }
-        DbSet<InternAppAcceptForm> InternAppAcceptForms { get; set; }
+        DbSet<InternshipApplicationExelForm> InternshipApplicationInfoForAdviserExcels { get; set; }
+        DbSet<InternshipApplicationForm> InternshipApplicationForms { get; set; }
         DbSet<SPAS> SPASs { get; set; }
-        DbSet<AttendanceSchedule> AttendanceSchedules { get; set; }
-        DbSet<WeeklyWorkPlan> WeeklyWorkPlans { get; set; }
         DbSet<InternshipBook> InternshipBooks { get; set; }
-        //DbSet<InternshipFiles> InternshipFiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            // builder.Entity<Student>()
-            // .HasIndex(s => s.StudentNo)
-            // .IsUnique();
-            
-            // builder.Entity<Advisor>()
-            // .HasIndex(s => s.Email)
-            // .IsUnique();
-            
+            builder.Entity<Student>()
+            .HasIndex(s => s.StudentNo)
+            .IsUnique();
+
+            builder.Entity<Advisor>()
+            .HasIndex(s => s.Email)
+            .IsUnique();
+
             builder.Entity<AppRole>()
                 .HasData(new List<AppRole>()
                 {
@@ -64,7 +60,7 @@ namespace InternshipManagementSystem.Persistence.Contexts
                         ID = Guid.Parse("10000000-0000-0000-0000-000000000000"),
                         Email = "mzahitgurbuz@dogus.edu.tr",
                         TC_NO = "12345678910",
-                        AdvisorName = "M. Zahit ",
+                        AdvisorName = "M.Zahid ",
                         AdvisorSurname = "Gurbuz",
                         DepartmentName = "Computer Science",
                         ProgramName = "Computer Engineering",
@@ -82,7 +78,7 @@ namespace InternshipManagementSystem.Persistence.Contexts
             //ChangeTracker : track edilen verleri yakalar insert disinda track edilen verileri yakalar
             //update operasyonlarinda track edilen verileri yakalar
             var datas = ChangeTracker
-                .Entries<BaseEntity>();   
+                .Entries<BaseEntity>();
 
             foreach (var data in datas)
             {
@@ -97,7 +93,7 @@ namespace InternshipManagementSystem.Persistence.Contexts
                         break;
 
                     case EntityState.Unchanged:
-                        return base.SaveChangesAsync(cancellationToken);                    
+                        return base.SaveChangesAsync(cancellationToken);
                         break;
 
                     //case EntityState.Detached:
@@ -119,7 +115,7 @@ namespace InternshipManagementSystem.Persistence.Contexts
 
 
         }
-    
+
 
 
 
