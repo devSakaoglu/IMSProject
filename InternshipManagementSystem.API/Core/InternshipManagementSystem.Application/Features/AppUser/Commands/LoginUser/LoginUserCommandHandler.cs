@@ -52,7 +52,7 @@ namespace InternshipManagementSystem.Application.Features.AppUser.Commands.Login
                         return new LoginUserSuccessCommandResponse()
                         {
                             UserID = Guid.Parse(user.Id),
-                            UserTypeName = (await _usermanager.GetRolesAsync(user)).First()
+                            UserTypeName = (await _usermanager.GetRolesAsync(user)).First(),
                         };
 
                     }
@@ -73,7 +73,7 @@ namespace InternshipManagementSystem.Application.Features.AppUser.Commands.Login
                         return new LoginUserSuccessCommandResponse()
                         {
                             UserID = Guid.Parse(user.Id),
-                            UserTypeName = (await _usermanager.GetRolesAsync(user)).First()
+                            UserTypeName = (await _usermanager.GetRolesAsync(user)).First(),
                         };
                     }
                     catch (Exception ex)
