@@ -18,42 +18,32 @@ namespace InternshipManagementSystem.API.Controllers
     {
 
         private readonly IStudentReadRepository _studentReadRepository;
-        private readonly IStudentWriteRepository _studentWriteRepository;
         private readonly IAdvisorReadRepository _advisorReadRepository;
-        private readonly IAdvisorWriteRepository _advisorWriteRepository;
         private readonly IInternshipReadRepository _internshipReadRepository;
         private readonly IInternshipWriteRepository _internshipWriteRepository;
         private readonly IInternshipDocumentReadRepository _internshipDocumentReadRepository;
         private readonly IInternshipDocumentWriteRepository _internshipDocumentWriteRepository;
-        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IFileService _fileService;
         private readonly IMediator _mediator;
         private readonly IInternshipApplicationFormReadRepository _internshipApplicationFormReadRepository;
-        private readonly IInternshipApplicationFormWriteRepository _internshipApplicationFormWriteRepository;
         private readonly IInternshipBookReadRepository _internshipBookReadRepository;
-        private readonly IInternshipBookWriteRepository _internshipBookWriteRepository;
-        public InternshipController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IInternshipReadRepository internshipReadRepository, IInternshipWriteRepository internshipWriteRepository, IInternshipDocumentReadRepository internshipDocumentReadRepository, IInternshipDocumentWriteRepository internshipDocumentWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IMediator mediator
-, IInternshipApplicationFormReadRepository internshipApplicationFormReadRepository, IInternshipApplicationFormWriteRepository internshipApplicationFormWriteRepository, IInternshipBookReadRepository internshipBookReadRepository, IInternshipBookWriteRepository internshipBookWriteRepository)
+        public InternshipController(IStudentReadRepository studentReadRepository, IAdvisorReadRepository advisorReadRepository, IInternshipReadRepository internshipReadRepository, IInternshipWriteRepository internshipWriteRepository, IInternshipDocumentReadRepository internshipDocumentReadRepository, IInternshipDocumentWriteRepository internshipDocumentWriteRepository, IFileService fileService, IMediator mediator
+, IInternshipApplicationFormReadRepository internshipApplicationFormReadRepository, IInternshipBookReadRepository internshipBookReadRepository)
         {
             _studentReadRepository = studentReadRepository;
-            _studentWriteRepository = studentWriteRepository;
             _advisorReadRepository = advisorReadRepository;
-            _advisorWriteRepository = advisorWriteRepository;
             _internshipReadRepository = internshipReadRepository;
             _internshipWriteRepository = internshipWriteRepository;
             _internshipDocumentReadRepository = internshipDocumentReadRepository;
             _internshipDocumentWriteRepository = internshipDocumentWriteRepository;
-            _webHostEnvironment = webHostEnvironment;
             _fileService = fileService;
             _mediator = mediator;
             _internshipApplicationFormReadRepository = internshipApplicationFormReadRepository;
-            _internshipApplicationFormWriteRepository = internshipApplicationFormWriteRepository;
             _internshipBookReadRepository = internshipBookReadRepository;
-            _internshipBookWriteRepository = internshipBookWriteRepository;
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAllInternships( )
+        public async Task<IActionResult> GetAllInternships()
         {
             GetAllInternshipsQuery query = new GetAllInternshipsQuery();
             GetAllInternshipsQueryResponse response = await _mediator.Send(query);
