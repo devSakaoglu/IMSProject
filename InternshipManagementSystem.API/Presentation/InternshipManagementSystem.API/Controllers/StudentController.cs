@@ -19,6 +19,8 @@ namespace InternshipManagementSystem.API.Controllers
     {
         private readonly IStudentReadRepository _studentReadRepository;
         private readonly IStudentWriteRepository _studentWriteRepository;
+        private readonly IAdvisorReadRepository _advisorReadRepository;
+        private readonly IAdvisorWriteRepository _advisorWriteRepository;
         private readonly IMediator _mediator;
 
         public StudentController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IMediator mediator)

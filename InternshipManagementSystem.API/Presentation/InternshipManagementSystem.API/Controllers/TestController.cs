@@ -67,7 +67,7 @@ namespace InternshipManagementSystem.API.Controllers
 
 
 
-            return Ok($"Connection string health:{envConnectionString != null}, DB connection healthy:{_studentReadRepository != null} Logged in username is:{user} " +
+            return Ok($"Connection string health:{envConnectionString != null}, DB connection healthy:{_studentReadRepository != null} Logged in username is:{user} " + 
                 $"Directory : {currentDirectory}");
         }
 

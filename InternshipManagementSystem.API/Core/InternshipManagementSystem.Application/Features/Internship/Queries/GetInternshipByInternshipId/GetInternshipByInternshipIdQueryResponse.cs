@@ -2,7 +2,7 @@
 
 namespace InternshipManagementSystem.Application.Features.Internship.Queries.GetInternshipByInternshipId
 {
-    internal class GetInternshipByInternshipIdQueryResponse
+    public class GetInternshipByInternshipIdQueryResponse
     {
         public string Message;
 

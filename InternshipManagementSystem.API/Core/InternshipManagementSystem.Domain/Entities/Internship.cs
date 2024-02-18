@@ -15,7 +15,7 @@ namespace InternshipManagementSystem.Domain.Entities
         
        //todo extra bilgiler
 
-        public List<InternshipDocument>?  InternsipDocuments { get; set; }
+        //public List<InternshipDocument>?  InternsipDocuments { get; set; }
 
         public List<string>? StudentNotifications { get; set; }
         public List<string>? AdvisorNotifications { get; set; }

@@ -69,8 +69,15 @@ builder.Services.AddIdentity<AppUser, AppRole>(options =>
 })
     .AddEntityFrameworkStores<InternshipManagementSystemDbContext>()
     .AddDefaultTokenProviders();
-var app = builder.Build();
 
+
+var app = builder.Build();
+app.UseCookiePolicy(new CookiePolicyOptions
+{
+    Secure = CookieSecurePolicy.None, // Set to None for non-HTTPS requests
+    HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.None
+    // Other cookie policy options...
+}) ;
 if (app.Environment.IsDevelopment() || true)
 {
     app.UseSwagger();
