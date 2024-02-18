@@ -7,6 +7,7 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Cr
 {
     public class CreateInternshipCommandRequest : IRequest<CreateInternshipCommandResponse>
     {
+        [Required]
         public Guid AdvisorID { get; set; }
 
         public Guid StudentID { get; set; }
@@ -47,8 +48,10 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Cr
 
         public bool ReceivesHealthInsurance { get; set; }
 
+        [Required]
         public DateOnly BirthDate { get; set; }//
 
+        [Required]
         public string EmailSendingDate { get; set; }
 
         public InternshipLevel Level { get; set; }
