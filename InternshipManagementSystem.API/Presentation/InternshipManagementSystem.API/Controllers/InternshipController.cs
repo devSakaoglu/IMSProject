@@ -76,9 +76,9 @@ namespace InternshipManagementSystem.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateInternship(CreateInternshipCommandRequest createInternshipCommandRequest)
+        public async Task<IActionResult> CreateInternship(CreateInternshipCommandRequest request)
         {
-            CreateInternshipCommandResponse response = await _mediator.Send(createInternshipCommandRequest);
+            CreateInternshipCommandResponse response = await _mediator.Send(request);
             return Ok(response.Response);
 
 
@@ -98,9 +98,8 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(response.Response);
         }
 
-
-
-
+        //
+        //
         [HttpDelete("[action]")]
         public async Task<IActionResult> DeleteInternship(DeleteInternshipCommandRequest request)
         {
@@ -164,19 +163,13 @@ namespace InternshipManagementSystem.API.Controllers
 
             }
         }
+        //
+        //
 
-
-
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetInternshipExcelForm([FromQuery] GetInternshipExcelFormQueryRequest request)
-        {
-          GetInternshipExcelFormQueryResponse response = await _mediator.Send(request);
-            return Ok(response.Response);
-
-        }
+      
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> InternshipBook([FromForm] IFormFileCollection files, [FromForm] Guid internshipId)
+        public async Task<IActionResult> UploadInternshipBook([FromForm] IFormFileCollection files, [FromForm] Guid internshipId)
         {
             var fileTest = HttpContext.Request.Form.Files.First();
             //var file = files.FirstOrDefault();
@@ -264,7 +257,13 @@ namespace InternshipManagementSystem.API.Controllers
                 return Ok(filePath);
             }
         }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetInternshipExcelForm([FromQuery] GetInternshipExcelFormQueryRequest request)
+        {
+            GetInternshipExcelFormQueryResponse response = await _mediator.Send(request);
+            return Ok(response.Response);
 
+        }
     }
 
 }
