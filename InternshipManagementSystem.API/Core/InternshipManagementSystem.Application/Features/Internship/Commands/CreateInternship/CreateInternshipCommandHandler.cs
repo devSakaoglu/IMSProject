@@ -63,18 +63,18 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Cr
                 };
 
                 var result = await _internshipWriteRepository.AddAsync(internship);
-                await _internshipWriteRepository.SaveAsync();
+                //await _internshipWriteRepository.SaveAsync();
 
 
-                var excel = new InternshipApplicationExelForm
+                var excel = new InternshipApplicationExcelForm
                 {
+                    InternshipID = internship.ID,
                     StudentNo = request.StudentNo,
                     FullName = request.FullName,
                     TC_NO = request.TC_NO,
                     InternshipStartDate = request.InternshipStartDate,
                     InternshipEndDate = request.InternshipEndDate,
                     Department = request.Department,
-                    InternshipType = request.InternshipType,
                     StudentGSMNumber = request.StudentGSMNumber,
                     CompanyName = request.CompanyName,
                     NumberOfEmployees = request.NumberOfEmployees,
@@ -86,22 +86,23 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Cr
                     Gender = request.Gender,
                     Age = request.Age,
                     ReceivesHealthInsurance = request.ReceivesHealthInsurance,
-                    BirthDateDay = request.BirthDateDay,
-                    BirthDateMonth = request.BirthDateMonth,
                     EmailSendingDate = request.EmailSendingDate,
                     Level = request.Level,
-                    Description = request.Description
-                };
+                    BirthDate = request.BirthDate
+                   
 
+                };
+                excel.InternshipID = internship.ID;
                 var resultExcel = await _internshipApplicationExcelFormWriteRepository.AddAsync(excel);
-                await _internshipApplicationExcelFormWriteRepository.SaveAsync();
-                internship.InternshipApplicationInfoForAdviserExcelID = excel.ID;
-                await _internshipWriteRepository.SaveAsync();
+
+                //await _internshipApplicationExcelFormWriteRepository.SaveAsync();
+                internship.InternshipApplicationExelFormID = excel.ID;
+                //await _internshipWriteRepository.SaveAsync();
 
                 //
                 bool fileResult = await _fileService.UploadAsync(internship.ID, request.formFile, filetypes.InternshipApplicationForm);
-                await _internshipWriteRepository.SaveAsync();
                 await _internshipApplicationExcelFormWriteRepository.SaveAsync();
+                await _internshipWriteRepository.SaveAsync();
 
 
                 return new CreateInternshipCommandResponse()

@@ -1,14 +1,14 @@
 ﻿using InternshipManagementSystem.Application.Repositories;
 using MediatR;
 
-namespace InternshipManagementSystem.Application.Features.Internship.Commands.UpdateInternship
+namespace InternshipManagementSystem.Application.Features.Internship.Commands
 {
-    public class UpdateInternshipCommandHandler : IRequestHandler<UpdateInternshipByInternshipStatusCommandRequest, UpdateInternshipByInternshipStatusCommandResponse>
+    public class UpdateInternshipByInternshipStatus : IRequestHandler<UpdateInternshipByInternshipStatusCommandRequest, UpdateInternshipByInternshipStatusCommandResponse>
     {
         private readonly IInternshipReadRepository _internshipReadRepository;
         private readonly IInternshipWriteRepository _internshipWriteRepository;
 
-        public UpdateInternshipCommandHandler(IInternshipReadRepository internshipReadRepository, IInternshipWriteRepository internshipWriteRepository)
+        public UpdateInternshipByInternshipStatus(IInternshipReadRepository internshipReadRepository, IInternshipWriteRepository internshipWriteRepository)
         {
             _internshipReadRepository = internshipReadRepository;
             _internshipWriteRepository = internshipWriteRepository;

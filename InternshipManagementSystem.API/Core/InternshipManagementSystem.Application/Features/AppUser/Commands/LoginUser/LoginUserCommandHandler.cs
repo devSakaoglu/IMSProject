@@ -42,7 +42,6 @@ namespace InternshipManagementSystem.Application.Features.AppUser.Commands.Login
         public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
         {
             var user = await _usermanager.FindByNameAsync(request.UserName);
-
             if (user == null)
             {
                 if (await HandleAppUserCreateAndSignIn(request, cancellationToken))
@@ -72,6 +71,7 @@ namespace InternshipManagementSystem.Application.Features.AppUser.Commands.Login
                 {
                     try
                     {
+                        await _signinmanager.SignInAsync(user,true);
                         var token = _tokenHandler.CreateAccesstoken(5);
                         return new LoginUserSuccessCommandResponse()
                         {

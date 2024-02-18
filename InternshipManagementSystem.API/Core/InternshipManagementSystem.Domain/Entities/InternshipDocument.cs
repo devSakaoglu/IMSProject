@@ -8,5 +8,16 @@
         public string FilePath { get; set; }
         public bool IsDeleted { get; set; }
     }
+    public class SPAS : InternshipDocument
+    {
+    }
+
+    public class InternshipApplicationForm : InternshipDocument
+    {
+    }
+    public class InternshipBook : InternshipDocument
+    {
+
+    }
 }
 

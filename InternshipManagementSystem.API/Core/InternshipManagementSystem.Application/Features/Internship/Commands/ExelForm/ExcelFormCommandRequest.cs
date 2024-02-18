@@ -25,7 +25,7 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Ex
         public double RequestedGovernmentAidAmount { get; set; }
         public bool ReceivesSalary { get; set; }
         public bool DoesNotReceiveSalary { get; set; }
-        public bool Gender { get; set; }
+        public Gender Gender { get; set; }
         public int Age { get; set; }
         public bool ReceivesHealthInsurance { get; set; }
         public int BirthDateDay { get; set; }

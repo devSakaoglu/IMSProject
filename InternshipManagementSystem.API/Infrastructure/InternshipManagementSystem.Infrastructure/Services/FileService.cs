@@ -176,7 +176,7 @@ namespace InternshipManagementSystem.Infrastructure.Services
                        var  sonucWrite = await _internshipApplicationFormWriteRepository.AddAsync(document);
                         await _internshipApplicationFormWriteRepository.SaveAsync();
                         var intern = await _internshipReadRepository.GetSingleAsync(e => e.ID == internShipId);
-                        intern.InternAppAcceptFormID = document.ID;
+                        intern.InternshipApplicationFormID = document.ID;
                         await _internshipWriteRepository.SaveAsync();
                     }
                 }
@@ -215,6 +215,7 @@ namespace InternshipManagementSystem.Infrastructure.Services
 
         public async Task<string> GetPath(Guid internShipId)
         {
+            await _internshipBookWriteRepository.SaveAsync();
             var check = await _internshipReadRepository.GetSingleAsync(e => e.ID == internShipId);
             if (check == null)
             {

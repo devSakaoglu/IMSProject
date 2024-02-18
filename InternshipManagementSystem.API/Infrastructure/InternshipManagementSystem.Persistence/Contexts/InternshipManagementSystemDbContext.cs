@@ -2,6 +2,7 @@
 using InternshipManagementSystem.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace InternshipManagementSystem.Persistence.Contexts
 {
@@ -14,7 +15,7 @@ namespace InternshipManagementSystem.Persistence.Contexts
         DbSet<Student> Students { get; set; }
         DbSet<Internship> Internships { get; set; }
         DbSet<InternshipDocument> InternshipDocuments { get; set; }
-        DbSet<InternshipApplicationExelForm> InternshipApplicationInfoForAdviserExcels { get; set; }
+        DbSet<InternshipApplicationExcelForm> InternshipApplicationExelForms { get; set; }
         DbSet<InternshipApplicationForm> InternshipApplicationForms { get; set; }
         DbSet<SPAS> SPASs { get; set; }
         DbSet<InternshipBook> InternshipBooks { get; set; }
@@ -28,6 +29,9 @@ namespace InternshipManagementSystem.Persistence.Contexts
             builder.Entity<Advisor>()
             .HasIndex(s => s.Email)
             .IsUnique();
+
+        
+      
 
             builder.Entity<AppRole>()
                 .HasData(new List<AppRole>()
@@ -66,6 +70,37 @@ namespace InternshipManagementSystem.Persistence.Contexts
                         ProgramName = "Computer Engineering",
                         Address = "Istanbul",
                         FacultyName = "Engineering"
+                    }
+                });
+            builder.Entity<Student>()
+                .HasData(new List<Student>()
+                {
+                    new()
+                    {
+                        ID = Guid.Parse("20000000-0000-0000-0000-000000000000"),
+                        AdvisorID = Guid.Parse("10000000-0000-0000-0000-000000000000"),
+                        Email = "",
+                        StudentNo = "20190301056",
+                        StudentName = "talha",
+                        StudentSurname = "sakaoglu",
+                        TC_NO = "10163999974",
+                        FacultyName = "Engineering",
+                        DepartmentName = "Computer Science",
+                        ProgramName = "Computer Engineering",
+                        GPA = 2.5f,
+                        StudentGSMNumber = "12345678910",
+                        Address = "Istanbul"
+                    }
+                });
+            builder.Entity<Internship>()
+                .HasData(new List<Internship>()
+                {
+                    new()
+                    {
+                        StudentNo = "20190301057",
+                        ID = Guid.Parse("30000000-0000-0000-0000-000000000000"),
+                        StudentID = Guid.Parse("20000000-0000-0000-0000-000000000000"),
+                        AdvisorID = Guid.Parse("10000000-0000-0000-0000-000000000000"),
                     }
                 });
             base.OnModelCreating(builder);

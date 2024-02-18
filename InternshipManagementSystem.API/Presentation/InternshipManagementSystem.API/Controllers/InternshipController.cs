@@ -1,7 +1,8 @@
 ﻿using InternshipManagementSystem.Application.Features.Internship;
 using InternshipManagementSystem.Application.Features.Internship.Commands;
 using InternshipManagementSystem.Application.Features.Internship.Commands.CreateInternship;
-using InternshipManagementSystem.Application.Features.Internship.Commands.ExelForm;
+using InternshipManagementSystem.Application.Features.Internship.Commands.DeleteInternship;
+using InternshipManagementSystem.Application.Features.Internship.Queries.GetInternshipByInternshipId;
 using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.Services;
 using InternshipManagementSystem.Application.ViewModels;
@@ -9,7 +10,6 @@ using InternshipManagementSystem.Application.ViewModels.InternshipViewModelss;
 using InternshipManagementSystem.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace InternshipManagementSystem.API.Controllers
 {
@@ -54,19 +54,13 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(response.Response);
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetInternshipByInternshipId(Guid id)
+        public async Task<IActionResult> GetInternshipByInternshipId([FromQuery] GetInternshipByInternshipIdQueryRequest request)
         {
-            var data = await _internshipReadRepository.GetByIdAsync(id);
+            GetInternshipByInternshipIdQueryResponse response = await _mediator.Send(request);
+            return Ok();
 
-            return Ok(new ResponseModel()
-            {
-                Data = data,
-                IsSuccess = data == null ? false : true,
-                Message = data == null ? "No Internship Found" : "Internship Found",
-                StatusCode = data == null ? 404 : 200
-            }
-            );
         }
+
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetIntershipsByStudentId([FromQuery] GetInternshipsByStudentIdQueryRequest request)
@@ -81,56 +75,20 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(response.Response);
         }
 
-
-
-        [HttpPost]
-        public async Task<IActionResult> CreateInternship(CreateInternshipCommandRequest createInternshipCommandRequest)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateInternship([FromForm]CreateInternshipCommandRequest request)
         {
-            CreateInternshipCommandResponse response = await _mediator.Send(createInternshipCommandRequest);
+            CreateInternshipCommandResponse response = await _mediator.Send(request);
             return Ok(response.Response);
 
 
         }
         [HttpPut("[action]")]
-        public async Task<IActionResult> UpdateInternship(InternshipUpdateVM model)
+        public async Task<IActionResult> UpdateInternship(UpdateInternshipCommandRequest request)
         {
-            //Todo test et
-            var data = await _internshipReadRepository.GetByIdAsync(model.InternshipID);
-            if (data is not null)
-            {
-                data = new Internship()
-                {
-                    InternAppAcceptFormID = model.FormID,
-                    InternshipApplicationInfoForAdviserExcelID = model.ExcelID,
-                    InternshipBookID = model.InternshipBookID,
-                    SPASID = model.SPASID,
-
-                };
-                await _internshipWriteRepository.SaveAsync(); return Ok(new ResponseModel()
-                {
-                    Data = data,
-                    IsSuccess = true,
-                    Message = "Internship Updated",
-                    StatusCode = 200
-
-                });
-            }
-            else
-            {
-
-                return Ok(new ResponseModel()
-                {
-                    Data = null,
-                    IsSuccess = false,
-                    Message = "Internship Not Found",
-                    StatusCode = 404
-                });
-
-            }
-
-
-
-            return Ok("Internship Updated");
+            UpdateInternshipCommandResponse response = await _mediator.Send(request);
+            return Ok(response.Response);
+         
         }
 
         [HttpPut("[action]")]
@@ -140,68 +98,16 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(response.Response);
         }
 
-
-
-
-
-
-
+        //
+        //
         [HttpDelete("[action]")]
-        public async Task<IActionResult> DeleteInternship(Guid id)
+        public async Task<IActionResult> DeleteInternship(DeleteInternshipCommandRequest request)
         {
-            //Todo test et
-            var result = await _internshipWriteRepository.RemoveAsync(id);
-            await _internshipWriteRepository.SaveAsync();
-            return Ok(new ResponseModel()
-            {
-                Data = result,
-                IsSuccess = result == true ? true : false,
-                Message = result == true ? "Internship Deleted" : "Internship Not Found",
-                StatusCode = result == true ? 200 : 404
-            });
+            DeleteInternshipCommandResponse response = await _mediator.Send(request);
+            return Ok(response.Response);
         }
 
-        //[HttpPost("[action]")]
-        //public async Task<IActionResult> UploadDocument([FromForm] IFormFileCollection file, string StudentID, string InternshipID)
-        //{
-
-        //    var data = await _fileService.UploadAsync($"Students\\{StudentID}\\{InternshipID}", file, StudentID, InternshipID);
-        //    return Ok(new ResponseModel()
-        //    {
-        //        Data = data.ToDictionary(),//null check ok check
-        //        IsSuccess = data == null ? false : true,
-        //        Message = data == null ? "Some Problems" : "Successful",
-        //        StatusCode = data == null ? 404 : 200
-        //    });
-        //}
-
-        [HttpGet("[action]")]
-        public async Task<IActionResult> DownloadBookFile(Guid bookId)
-        {
-            var data = await _internshipBookReadRepository.GetByIdAsync(bookId);
-            if (data == null)
-            {
-                return Ok(new ResponseModel()
-                {
-                    Data = null,
-                    IsSuccess = false,
-                    Message = "File Not Found",
-                    StatusCode = 404
-                });
-            }
-            else
-            {
-                var path = data.FilePath;
-                return Ok(new ResponseModel()
-                {
-                    Data = path,
-                    IsSuccess = path == null ? false : true,
-                    Message = path == null ? "File Not Found" : "File Found",
-                    StatusCode = path == null ? 404 : 200
-                });
-            }
-
-        }
+     
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllDocuments(Guid internshipId)
         {
@@ -214,7 +120,6 @@ namespace InternshipManagementSystem.API.Controllers
                 StatusCode = data == null ? 404 : 200
             });
         }
-
 
         [HttpDelete("[action]")]
         public async Task<IActionResult> DeleteFile(Guid id)
@@ -258,58 +163,18 @@ namespace InternshipManagementSystem.API.Controllers
 
             }
         }
+        //
+        //
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetInternshipExcelForm([FromQuery]Guid internshipId)
-        {
-            var internship = await _internshipReadRepository.GetByIdAsync(internshipId);
-            if (internship == null)
-            {
-                return BadRequest(
-                 new ResponseModel()
-                 {
-                     Data = null,
-                     IsSuccess = false,
-                     Message = "Internship Not Found",
-                     StatusCode = 404
-                 }
-                 );
-            }
-            try
-            {
-                var excelForm = await _internshipApplicationExcelFormReadRepository.GetByIdAsync(internshipId);
-                return Ok(new ResponseModel()
-                {
-                    Data = excelForm,
-                    IsSuccess = excelForm == null ? false : true,
-                    Message = excelForm == null ? "Excel Form Not Found" : "Excel Form Found",
-                    StatusCode = excelForm == null ? 404 : 200
-                });
+      
 
-
-
-            }
-            catch (Exception exexption)
-            {
-
-                return BadRequest(new ResponseModel()
-                {
-                    Data = null,
-                    IsSuccess = false,
-                    Message = exexption.Message,
-                    StatusCode = 400
-                });
-            }
-
-        }
-
-
-
+       
         [HttpPost("[action]")]
-        public async Task<IActionResult> UploadBook([FromForm] IFormFileCollection files, Guid internshipId)
+        public async Task<IActionResult> UploadInternshipBook([FromForm] IFormFileCollection files, [FromForm] Guid internshipId)
         {
-            var file = files.FirstOrDefault();
-            var data = await _fileService.UploadAsync(internshipId, file, filetypes.InternshipBook);
+            var fileTest = HttpContext.Request.Form.Files.First();
+            //var file = files.FirstOrDefault();
+            var data = await _fileService.UploadAsync(internshipId, fileTest, filetypes.InternshipBook);
 
             return Ok(new ResponseModel()
             {
@@ -334,22 +199,58 @@ namespace InternshipManagementSystem.API.Controllers
             });
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetBookByInternshipId(Guid internshipId)
+        public async Task<IActionResult> GetInternshipBookByInternshipId(Guid internshipId)
         {
-            var x = await _internshipReadRepository.GetByIdAsync(internshipId);
-            if (x == null)
+            var internship = await _internshipReadRepository.GetByIdAsync(internshipId);
+            if (internship == null)
             {
                 return NotFound();
             }
 
-            var filename = await _internshipDocumentReadRepository.GetByIdAsync(internshipId);
+            var file = await _internshipBookReadRepository.GetByIdAsync(Guid.Parse(internship.InternshipBookID.ToString()));
+            if (file is null)
+            {
+                return NotFound(
+                    new ResponseModel()
+                    {
+                        Data = string.Empty,
+                        IsSuccess = false,
+                        Message = "File is not found",
+                        StatusCode = 400
+                    }
+                    );
+            }
             string directoryPath = await _fileService.GetPath(internshipId);
-            string filePath = Path.Combine(directoryPath, filename.FileName);
+
+            string filePath = Path.Combine(directoryPath, file.FileName);
 
             if (System.IO.File.Exists(filePath))
             {
                 var fileBytes = System.IO.File.ReadAllBytes(filePath);
-                return File(fileBytes, "application/octet-stream", filename.FileName);
+                return File(fileBytes, "application/octet-stream", file.FileName);
+            }
+            else
+            {
+                return Ok(filePath);
+            }
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetApplicationFormByInternshipId(Guid internshipId)
+        {
+            var internship = await _internshipReadRepository.GetByIdAsync(internshipId);
+            if (internship == null)
+            {
+                return NotFound();
+            }
+
+            var file = await _internshipApplicationFormReadRepository.GetByIdAsync(Guid.Parse(internship.InternshipApplicationFormID.ToString()));
+            string directoryPath = await _fileService.GetPath(internshipId);
+            string filePath = Path.Combine(directoryPath, file.FileName);
+
+            if (System.IO.File.Exists(filePath))
+            {
+                var fileBytes = System.IO.File.ReadAllBytes(filePath);
+                return File(fileBytes, "application/octet-stream", file.FileName);
             }
             else
             {
@@ -358,39 +259,12 @@ namespace InternshipManagementSystem.API.Controllers
             }
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetApplicationFormByInternshipId(Guid internshipId)
+        public async Task<IActionResult> GetInternshipExcelForm([FromQuery] GetInternshipExcelFormQueryRequest request)
         {
-            var x = await _internshipReadRepository.GetByIdAsync(internshipId);
-            if (x == null)
-            {
-                return NotFound();
-            }
+            GetInternshipExcelFormQueryResponse response = await _mediator.Send(request);
+            return Ok(response.Response);
 
-            var filename = await _internshipDocumentReadRepository.GetByIdAsync(internshipId);
-            string directoryPath = await _fileService.GetPath(internshipId);
-            string filePath = Path.Combine(directoryPath, filename.FileName);
-
-            if (System.IO.File.Exists(filePath))
-            {
-                var fileBytes = System.IO.File.ReadAllBytes(filePath);
-                return File(fileBytes, "application/octet-stream", filename.FileName);
-            }
-            else
-            {
-
-                return Ok(filePath);
-            }
         }
-
     }
-
-    //[HttpPost("[action]")]
-
-    //public async Task<ExcelFormCommandResponse> ExcelForm(ExcelFormCommandRequest request)
-    //{
-    //    ExcelFormCommandResponse response = await _mediator.Send(request);
-    //    return response;
-    //}
-
 
 }

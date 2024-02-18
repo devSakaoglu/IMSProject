@@ -5,7 +5,7 @@ using InternshipManagementSystem.Persistence.Contexts;
 
 namespace InternshipManagementSystem.Persistence.Repositories
 {
-    public class InternshipApplicationExcelFormWriteRepository : WriteRepository<InternshipApplicationExelForm>, IInternshipApplicationExcelFormWriteRepository
+    public class InternshipApplicationExcelFormWriteRepository : WriteRepository<InternshipApplicationExcelForm>, IInternshipApplicationExcelFormWriteRepository
     {
         public InternshipApplicationExcelFormWriteRepository(InternshipManagementSystemDbContext dbContext) : base(dbContext)
         { 
