@@ -1,7 +1,7 @@
 ﻿
 namespace InternshipManagementSystem.Domain.Entities
 {
-   public class InternshipApplicationExelForm : BaseEntity
+   public class InternshipApplicationExcelForm : BaseEntity
    {
       public Guid InternshipID { get; set; }
 

@@ -66,7 +66,7 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Cr
                 await _internshipWriteRepository.SaveAsync();
 
 
-                var excel = new InternshipApplicationExelForm
+                var excel = new InternshipApplicationExcelForm
                 {
                     InternshipID = internship.ID,
                     StudentNo = request.StudentNo,
