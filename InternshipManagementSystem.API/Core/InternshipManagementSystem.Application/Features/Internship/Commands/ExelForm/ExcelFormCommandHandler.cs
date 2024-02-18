@@ -26,23 +26,18 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Ex
                     InternshipStartDate = request.InternshipStartDate,
                     InternshipEndDate = request.InternshipEndDate,
                     Department = request.Department,
-                    InternshipType = request.InternshipType,
                     StudentGSMNumber = request.StudentGSMNumber,
                     CompanyName = request.CompanyName,
                     NumberOfEmployees = request.NumberOfEmployees,
                     CompanyPhone = request.CompanyPhone,
                     CompanyAddress = request.CompanyAddress,
                     RequestedGovernmentAidAmount = request.RequestedGovernmentAidAmount,
-                    ReceivesSalary = request.ReceivesSalary,
                     DoesNotReceiveSalary = request.DoesNotReceiveSalary,
                     Gender = request.Gender,
                     Age = request.Age,
                     ReceivesHealthInsurance = request.ReceivesHealthInsurance,
-                    BirthDateDay = request.BirthDateDay,
-                    BirthDateMonth = request.BirthDateMonth,
                     EmailSendingDate = request.EmailSendingDate,
                     Level = request.Level,
-                    Description = request.Description,
 
                 };
                 await _internshipApplicationExcelFormWriteRepository.AddAsync(ExcelForm);

@@ -75,7 +75,6 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Cr
                     InternshipStartDate = request.InternshipStartDate,
                     InternshipEndDate = request.InternshipEndDate,
                     Department = request.Department,
-                    InternshipType = request.InternshipType,
                     StudentGSMNumber = request.StudentGSMNumber,
                     CompanyName = request.CompanyName,
                     NumberOfEmployees = request.NumberOfEmployees,
@@ -87,11 +86,11 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Cr
                     Gender = request.Gender,
                     Age = request.Age,
                     ReceivesHealthInsurance = request.ReceivesHealthInsurance,
-                    BirthDateDay = request.BirthDateDay,
-                    BirthDateMonth = request.BirthDateMonth,
                     EmailSendingDate = request.EmailSendingDate,
                     Level = request.Level,
-                    Description = request.Description
+                    BirthDate = request.BirthDate
+                   
+
                 };
                 excel.InternshipID = internship.ID;
                 var resultExcel = await _internshipApplicationExcelFormWriteRepository.AddAsync(excel);
