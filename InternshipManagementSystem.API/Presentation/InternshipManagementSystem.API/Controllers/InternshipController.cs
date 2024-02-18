@@ -100,8 +100,8 @@ namespace InternshipManagementSystem.API.Controllers
             {
                 data = new Internship()
                 {
-                    InternAppAcceptFormID = model.FormID,
-                    InternshipApplicationInfoForAdviserExcelID = model.ExcelID,
+                    InternshipApplicationFormID = model.FormID,
+                    InternshipApplicationExelFormID = model.ExcelID,
                     InternshipBookID = model.InternshipBookID,
                     SPASID = model.SPASID,
 
@@ -277,7 +277,7 @@ namespace InternshipManagementSystem.API.Controllers
             }
             try
             {
-                var excelForm = await _internshipApplicationExcelFormReadRepository.GetByIdAsync(internshipId);
+                var excelForm =internship.InternshipApplicationExelFormID == null ? null : await _internshipApplicationExcelFormReadRepository.GetByIdAsync(internship.InternshipApplicationExelFormID.Value);
                 return Ok(new ResponseModel()
                 {
                     Data = excelForm,
@@ -306,7 +306,7 @@ namespace InternshipManagementSystem.API.Controllers
 
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> UploadBook([FromForm] IFormFileCollection files, Guid internshipId)
+        public async Task<IActionResult> InternshipBook([FromForm] IFormFileCollection files, Guid internshipId)
         {
             var file = files.FirstOrDefault();
             var data = await _fileService.UploadAsync(internshipId, file, filetypes.InternshipBook);
@@ -334,46 +334,57 @@ namespace InternshipManagementSystem.API.Controllers
             });
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetBookByInternshipId(Guid internshipId)
+        public async Task<IActionResult> GetInternshipBookByInternshipId(Guid internshipId)
         {
-            var x = await _internshipReadRepository.GetByIdAsync(internshipId);
-            if (x == null)
+            var internship = await _internshipReadRepository.GetByIdAsync(internshipId);
+            if (internship == null)
             {
                 return NotFound();
             }
 
-            var filename = await _internshipDocumentReadRepository.GetByIdAsync(internshipId);
-            string directoryPath = await _fileService.GetPath(internshipId);
-            string filePath = Path.Combine(directoryPath, filename.FileName);
+            var file = await _internshipBookReadRepository.GetByIdAsync(Guid.Parse(internship.InternshipBookID.ToString()));
+            if (file is null)
+            {
+                return NotFound(
+                    new ResponseModel()
+                    {
+                        Data = string.Empty,
+                        IsSuccess= false,
+                        Message="File is not found",
+                        StatusCode=400
+                    }
+                    );
+            }
+
+            string filePath = Path.Combine(file.FilePath);
 
             if (System.IO.File.Exists(filePath))
             {
                 var fileBytes = System.IO.File.ReadAllBytes(filePath);
-                return File(fileBytes, "application/octet-stream", filename.FileName);
+                return File(fileBytes, "application/octet-stream", file.FileName);
             }
             else
             {
-
                 return Ok(filePath);
             }
         }
         [HttpGet("[action]")]
         public async Task<IActionResult> GetApplicationFormByInternshipId(Guid internshipId)
         {
-            var x = await _internshipReadRepository.GetByIdAsync(internshipId);
-            if (x == null)
+            var internship = await _internshipReadRepository.GetByIdAsync(internshipId);
+            if (internship == null)
             {
                 return NotFound();
             }
 
-            var filename = await _internshipDocumentReadRepository.GetByIdAsync(internshipId);
-            string directoryPath = await _fileService.GetPath(internshipId);
-            string filePath = Path.Combine(directoryPath, filename.FileName);
+            var file = await _internshipApplicationFormReadRepository.GetByIdAsync(Guid.Parse(internship.InternshipApplicationFormID.ToString()));
+            //string directoryPath = await _fileService.GetPath(internshipId);
+            string filePath = Path.Combine(file.FilePath);
 
             if (System.IO.File.Exists(filePath))
             {
                 var fileBytes = System.IO.File.ReadAllBytes(filePath);
-                return File(fileBytes, "application/octet-stream", filename.FileName);
+                return File(fileBytes, "application/octet-stream", file.FileName);
             }
             else
             {

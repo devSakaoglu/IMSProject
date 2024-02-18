@@ -68,6 +68,7 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Cr
 
                 var excel = new InternshipApplicationExelForm
                 {
+                    InternshipID = internship.ID,
                     StudentNo = request.StudentNo,
                     FullName = request.FullName,
                     TC_NO = request.TC_NO,
@@ -92,10 +93,11 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Cr
                     Level = request.Level,
                     Description = request.Description
                 };
-
+                excel.InternshipID = internship.ID;
                 var resultExcel = await _internshipApplicationExcelFormWriteRepository.AddAsync(excel);
+
                 await _internshipApplicationExcelFormWriteRepository.SaveAsync();
-                internship.InternshipApplicationInfoForAdviserExcelID = excel.ID;
+                internship.InternshipApplicationExelFormID = excel.ID;
                 await _internshipWriteRepository.SaveAsync();
 
                 //

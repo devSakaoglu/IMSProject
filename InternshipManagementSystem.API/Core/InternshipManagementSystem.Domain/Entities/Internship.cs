@@ -21,8 +21,8 @@ namespace InternshipManagementSystem.Domain.Entities
         public List<string>? AdvisorNotifications { get; set; }
         //todo nullabe 
         public InternshipStatus InternshipStatus { get; set; }
-        public Guid? InternAppAcceptFormID { get; set; }
-        public Guid? InternshipApplicationInfoForAdviserExcelID { get; set; }
+        public Guid? InternshipApplicationFormID { get; set; }
+        public Guid? InternshipApplicationExelFormID { get; set; }
         public Guid? InternshipBookID { get; set; }
         public Guid? SPASID { get; set; }
       
