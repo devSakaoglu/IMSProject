@@ -78,6 +78,7 @@ namespace InternshipManagementSystem.Persistence.Contexts
                     new()
                     {
                         ID = Guid.Parse("20000000-0000-0000-0000-000000000000"),
+                        AdvisorID = Guid.Parse("10000000-0000-0000-0000-000000000000"),
                         Email = "",
                         StudentNo = "20190301056",
                         StudentName = "talha",
@@ -89,6 +90,17 @@ namespace InternshipManagementSystem.Persistence.Contexts
                         GPA = 2.5f,
                         StudentGSMNumber = "12345678910",
                         Address = "Istanbul"
+                    }
+                });
+            builder.Entity<Internship>()
+                .HasData(new List<Internship>()
+                {
+                    new()
+                    {
+                        StudentNo = "20190301057",
+                        ID = Guid.Parse("30000000-0000-0000-0000-000000000000"),
+                        StudentID = Guid.Parse("20000000-0000-0000-0000-000000000000"),
+                        AdvisorID = Guid.Parse("10000000-0000-0000-0000-000000000000"),
                     }
                 });
             base.OnModelCreating(builder);
