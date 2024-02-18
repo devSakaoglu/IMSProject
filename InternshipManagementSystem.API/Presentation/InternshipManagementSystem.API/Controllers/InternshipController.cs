@@ -29,8 +29,9 @@ namespace InternshipManagementSystem.API.Controllers
         private readonly IMediator _mediator;
         private readonly IInternshipApplicationFormReadRepository _internshipApplicationFormReadRepository;
         private readonly IInternshipBookReadRepository _internshipBookReadRepository;
+        private readonly IInternshipApplicationExcelFormReadRepository _internshipApplicationExcelFormReadRepository;
         public InternshipController(IStudentReadRepository studentReadRepository, IAdvisorReadRepository advisorReadRepository, IInternshipReadRepository internshipReadRepository, IInternshipWriteRepository internshipWriteRepository, IInternshipDocumentReadRepository internshipDocumentReadRepository, IInternshipDocumentWriteRepository internshipDocumentWriteRepository, IFileService fileService, IMediator mediator
-, IInternshipApplicationFormReadRepository internshipApplicationFormReadRepository, IInternshipBookReadRepository internshipBookReadRepository)
+, IInternshipApplicationFormReadRepository internshipApplicationFormReadRepository, IInternshipBookReadRepository internshipBookReadRepository, IInternshipApplicationExcelFormReadRepository internshipApplicationExcelFormReadRepository)
         {
             _studentReadRepository = studentReadRepository;
             _advisorReadRepository = advisorReadRepository;
@@ -42,6 +43,7 @@ namespace InternshipManagementSystem.API.Controllers
             _mediator = mediator;
             _internshipApplicationFormReadRepository = internshipApplicationFormReadRepository;
             _internshipBookReadRepository = internshipBookReadRepository;
+            _internshipApplicationExcelFormReadRepository = internshipApplicationExcelFormReadRepository;
         }
 
         [HttpGet("[action]")]
@@ -86,7 +88,7 @@ namespace InternshipManagementSystem.API.Controllers
         {
             CreateInternshipCommandResponse response = await _mediator.Send(createInternshipCommandRequest);
             return Ok(response.Response);
-            
+
 
         }
         [HttpPut("[action]")]
@@ -257,7 +259,49 @@ namespace InternshipManagementSystem.API.Controllers
             }
         }
 
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetInternshipExcelForm([FromQuery]Guid internshipId)
+        {
+            var internship = await _internshipReadRepository.GetByIdAsync(internshipId);
+            if (internship == null)
+            {
+                return BadRequest(
+                 new ResponseModel()
+                 {
+                     Data = null,
+                     IsSuccess = false,
+                     Message = "Internship Not Found",
+                     StatusCode = 404
+                 }
+                 );
+            }
+            try
+            {
+                var excelForm = await _internshipApplicationExcelFormReadRepository.GetByIdAsync(internshipId);
+                return Ok(new ResponseModel()
+                {
+                    Data = excelForm,
+                    IsSuccess = excelForm == null ? false : true,
+                    Message = excelForm == null ? "Excel Form Not Found" : "Excel Form Found",
+                    StatusCode = excelForm == null ? 404 : 200
+                });
 
+
+
+            }
+            catch (Exception exexption)
+            {
+
+                return BadRequest(new ResponseModel()
+                {
+                    Data = null,
+                    IsSuccess = false,
+                    Message = exexption.Message,
+                    StatusCode = 400
+                });
+            }
+
+        }
 
 
 
@@ -298,7 +342,7 @@ namespace InternshipManagementSystem.API.Controllers
                 return NotFound();
             }
 
-            var filename = await _internshipDocumentReadRepository.GetByIdAsync(Guid.Parse(x.InternshipBookID.ToString()));
+            var filename = await _internshipDocumentReadRepository.GetByIdAsync(internshipId);
             string directoryPath = await _fileService.GetPath(internshipId);
             string filePath = Path.Combine(directoryPath, filename.FileName);
 
@@ -322,7 +366,7 @@ namespace InternshipManagementSystem.API.Controllers
                 return NotFound();
             }
 
-            var filename = await _internshipDocumentReadRepository.GetByIdAsync(Guid.Parse(x.InternAppAcceptFormID.ToString()));
+            var filename = await _internshipDocumentReadRepository.GetByIdAsync(internshipId);
             string directoryPath = await _fileService.GetPath(internshipId);
             string filePath = Path.Combine(directoryPath, filename.FileName);
 
@@ -338,15 +382,15 @@ namespace InternshipManagementSystem.API.Controllers
             }
         }
 
-
-        [HttpPost("[action]")]
-
-        public async Task<ExcelFormCommandResponse> ExcelForm(ExcelFormCommandRequest request)
-        {
-            ExcelFormCommandResponse response = await _mediator.Send(request);
-            return response;
-        }
-
-
     }
+
+    //[HttpPost("[action]")]
+
+    //public async Task<ExcelFormCommandResponse> ExcelForm(ExcelFormCommandRequest request)
+    //{
+    //    ExcelFormCommandResponse response = await _mediator.Send(request);
+    //    return response;
+    //}
+
+
 }
