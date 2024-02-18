@@ -18,7 +18,7 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Ex
         {
             try
             {
-                var ExcelForm = new InternshipApplicationExelForm()
+                var ExcelForm = new InternshipApplicationExcelForm()
                 {
                     StudentNo = request.StudentNo,
                     FullName = request.FullName,

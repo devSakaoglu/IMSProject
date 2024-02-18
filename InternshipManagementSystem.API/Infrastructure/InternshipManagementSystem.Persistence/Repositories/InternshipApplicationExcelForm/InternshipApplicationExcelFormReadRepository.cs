@@ -4,7 +4,7 @@ using InternshipManagementSystem.Persistence.Contexts;
 
 namespace InternshipManagementSystem.Persistence.Repositories
 {
-    public class InternshipApplicationExcelFormReadRepository : ReadRepository<InternshipApplicationExelForm>, IInternshipApplicationExcelFormReadRepository
+    public class InternshipApplicationExcelFormReadRepository : ReadRepository<InternshipApplicationExcelForm>, IInternshipApplicationExcelFormReadRepository
     {
         public InternshipApplicationExcelFormReadRepository(InternshipManagementSystemDbContext dbContext) : base(dbContext)
         {

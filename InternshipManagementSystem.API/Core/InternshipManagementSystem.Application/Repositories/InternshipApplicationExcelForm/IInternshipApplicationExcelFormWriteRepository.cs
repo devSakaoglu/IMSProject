@@ -2,7 +2,7 @@
 
 namespace InternshipManagementSystem.Application.Repositories
 {
-    public interface IInternshipApplicationExcelFormWriteRepository : IWriteRepository<InternshipApplicationExelForm>
+    public interface IInternshipApplicationExcelFormWriteRepository : IWriteRepository<InternshipApplicationExcelForm>
     {
     }
 }

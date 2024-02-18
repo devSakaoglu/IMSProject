@@ -215,6 +215,7 @@ namespace InternshipManagementSystem.Infrastructure.Services
 
         public async Task<string> GetPath(Guid internShipId)
         {
+            await _internshipBookWriteRepository.SaveAsync();
             var check = await _internshipReadRepository.GetSingleAsync(e => e.ID == internShipId);
             if (check == null)
             {
