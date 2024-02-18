@@ -75,8 +75,8 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(response.Response);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateInternship(CreateInternshipCommandRequest request)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateInternship([FromForm]CreateInternshipCommandRequest request)
         {
             CreateInternshipCommandResponse response = await _mediator.Send(request);
             return Ok(response.Response);
@@ -84,9 +84,9 @@ namespace InternshipManagementSystem.API.Controllers
 
         }
         [HttpPut("[action]")]
-        public async Task<IActionResult> UpdateInternship(UpdateInternshipByInternshipStatusCommandRequest request)
+        public async Task<IActionResult> UpdateInternship(UpdateInternshipCommandRequest request)
         {
-            UpdateInternshipByInternshipStatusCommandResponse response = await _mediator.Send(request);
+            UpdateInternshipCommandResponse response = await _mediator.Send(request);
             return Ok(response.Response);
          
         }
@@ -168,6 +168,7 @@ namespace InternshipManagementSystem.API.Controllers
 
       
 
+       
         [HttpPost("[action]")]
         public async Task<IActionResult> UploadInternshipBook([FromForm] IFormFileCollection files, [FromForm] Guid internshipId)
         {
