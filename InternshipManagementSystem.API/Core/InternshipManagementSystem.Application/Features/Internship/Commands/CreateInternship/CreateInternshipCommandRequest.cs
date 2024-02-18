@@ -7,6 +7,7 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Cr
 {
     public class CreateInternshipCommandRequest : IRequest<CreateInternshipCommandResponse>
     {
+        [Required]
         public Guid AdvisorID { get; set; }
 
         public Guid StudentID { get; set; }
