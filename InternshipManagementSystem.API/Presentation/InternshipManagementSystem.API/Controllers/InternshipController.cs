@@ -165,10 +165,9 @@ namespace InternshipManagementSystem.API.Controllers
             }
         }
 
+
+
         [HttpGet("[action]")]
-
-
-
         public async Task<IActionResult> GetInternshipExcelForm([FromQuery] Guid internshipId)
         {
             var internship = await _internshipReadRepository.GetByIdAsync(internshipId);
