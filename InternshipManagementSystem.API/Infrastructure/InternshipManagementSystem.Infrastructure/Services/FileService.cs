@@ -47,7 +47,6 @@ namespace InternshipManagementSystem.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                //TODO: Log
                 throw ex;
             }
         }
@@ -118,56 +117,7 @@ namespace InternshipManagementSystem.Infrastructure.Services
 
         }
 
-        //public async Task<List<(string fileName, string path)>> UploadAsync(string path, IFormFileCollection files, string StudentID, string InternshipID)
-        //{
-        //    var intern = _internshipReadRepository.GetSingleAsync(e => e.ID == Guid.Parse(InternshipID));
-        //    if (intern == null)
-        //    {
-        //        return null;
-        //    }
-
-        //    string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, path);
-        //    if (!Directory.Exists(uploadPath))
-        //        Directory.CreateDirectory(uploadPath);
-
-        //    List<(string fileName, string path)> datas = new();
-        //    List<bool> results = new();
-
-        //    foreach (IFormFile file in files)
-        //    {
-        //        var fileNewName = await FileRenameAsync(uploadPath, file.FileName);
-        //        var filePath = $"{uploadPath}\\{fileNewName}";
-
-        //        bool result = await CopyFileAsync(filePath, file);
-        //        datas.Add((fileNewName, $"{uploadPath}\\{fileNewName}"));
-        //        results.Add(result);
-
-        //    }
-        //    if (results.TrueForAll(r => r.Equals(true)))
-        //    {
-        //        foreach (var data in datas)
-        //        {
-        //            Task.Run(() =>
-        //            {
-        //                InternshipDocument internshipDocument = new()
-        //                {
-        //                    InternshipID = Guid.Parse(InternshipID),
-        //                    FileName = data.fileName,
-        //                    FilePath = data.path,
-        //                    FileType = Path.GetExtension(data.fileName)
-        //                };
-        //                //todo sabah devam et
-        //                var sonucWrite = _internshipDocumentWriteRepository.AddAsync(internshipDocument).Result;
-
-        //            });
-
-
-        //        }
-        //        var result = await _internshipDocumentWriteRepository.SaveAsync();
-        //        return datas;
-        //    }
-        //    return null;
-        //}
+       
 
 
 
@@ -177,7 +127,6 @@ namespace InternshipManagementSystem.Infrastructure.Services
             {
                 return false;
             }
-
             var path = GetPath(internShipId).Result;
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);

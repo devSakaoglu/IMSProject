@@ -1,5 +1,7 @@
 ﻿using InternshipManagementSystem.Application.Features.Internship;
 using InternshipManagementSystem.Application.Features.Internship.Commands;
+using InternshipManagementSystem.Application.Features.Internship.Commands.CreateInternship;
+using InternshipManagementSystem.Application.Features.Internship.Commands.ExelForm;
 using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.Services;
 using InternshipManagementSystem.Application.ViewModels;
@@ -80,55 +82,11 @@ namespace InternshipManagementSystem.API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateInternship(InternshipCreateVM model)
+        public async Task<IActionResult> CreateInternship(CreateInternshipCommandRequest createInternshipCommandRequest)
         {
-            var student = _studentReadRepository.GetWhere(x => x.StudentNo == model.StudentNo).Include(x => x.Internships).FirstOrDefault();
-            var advisor = await _advisorReadRepository.GetSingleAsync(x => x.ID == model.AdvisorID);
-            if (student == null || advisor == null)
-            {
-                return Ok(new ResponseModel()
-                {
-                    Data = null,
-                    IsSuccess = false,
-                    Message = "Student or Advisor Not Found",
-                    StatusCode = 404
-                });
-            }
-            try
-            {
-                var internship = new Internship();
-                internship = new Internship()
-                {
-                    StudentNo = student.StudentNo,
-                    AdvisorID = model.AdvisorID,
-                    StudentID = student.ID,
-                    InternshipStatus = InternshipStatus.Pending,
-                    StudentName = student.StudentName,
-                    StudentSurname = student.StudentSurname,
-                };
-
-                var st = await _internshipWriteRepository.AddAsync(internship);
-                student.Internships.Add(internship);
-                await _internshipWriteRepository.SaveAsync();
-                return Ok(new ResponseModel()
-                {
-                    Data = internship,
-                    IsSuccess = true,
-                    Message = "Internship Created",
-                    StatusCode = 200
-                });
-            }
-            catch (Exception ex)
-            {
-                return Ok(new ResponseModel()
-                {
-                    Data = null,
-                    IsSuccess = false,
-                    Message = ex.Message,
-                    StatusCode = 500
-                });
-
-            }
+            CreateInternshipCommandResponse response = await _mediator.Send(createInternshipCommandRequest);
+            return Ok(response.Response);
+            
 
         }
         [HttpPut("[action]")]
@@ -381,6 +339,13 @@ namespace InternshipManagementSystem.API.Controllers
         }
 
 
+        [HttpPost("[action]")]
+
+        public async Task<ExcelFormCommandResponse> ExcelForm(ExcelFormCommandRequest request)
+        {
+            ExcelFormCommandResponse response = await _mediator.Send(request);
+            return response;
+        }
 
 
     }

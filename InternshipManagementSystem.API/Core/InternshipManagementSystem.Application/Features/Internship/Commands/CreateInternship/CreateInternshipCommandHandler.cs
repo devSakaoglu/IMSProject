@@ -1,13 +1,8 @@
 ﻿using InternshipManagementSystem.Application.Repositories;
+using InternshipManagementSystem.Application.Services;
 using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InternshipManagementSystem.Application.Features.Internship.Commands.CreateInternship
 {
@@ -16,65 +11,122 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Cr
         readonly IStudentReadRepository _studentReadRepository;
         readonly IAdvisorReadRepository _advisorReadRepository;
         readonly IInternshipWriteRepository _internshipWriteRepository;
+        readonly IInternshipReadRepository _internshipReadRepository;
+        readonly IInternshipApplicationExcelFormReadRepository _internshipApplicationExcelFormReadRepository;
+        readonly IInternshipApplicationFormReadRepository _internshipApplicationFormReadRepository;
+        readonly IInternshipApplicationFormReadRepository _internshipApplicationFormWriteRepository;
+        readonly IInternshipApplicationExcelFormWriteRepository _internshipApplicationExcelFormWriteRepository;
+        readonly IMediator _mediator;
+        readonly IFileService _fileService;
+
+
+        public CreateInternshipCommandHandler(IStudentReadRepository studentReadRepository, IAdvisorReadRepository advisorReadRepository, IInternshipWriteRepository internshipWriteRepository, IInternshipApplicationExcelFormReadRepository internshipApplicationExcelFormReadRepository, IInternshipApplicationFormReadRepository internshipApplicationFormReadRepository, IInternshipApplicationFormReadRepository internshipApplicationFormWriteRepository, IInternshipApplicationExcelFormWriteRepository internshipApplicationExcelFormWriteRepository, IMediator mediator, IInternshipReadRepository internshipReadRepository, IFileService fileService)
+        {
+            _studentReadRepository = studentReadRepository;
+            _advisorReadRepository = advisorReadRepository;
+            _internshipWriteRepository = internshipWriteRepository;
+            _internshipApplicationExcelFormReadRepository = internshipApplicationExcelFormReadRepository;
+            _internshipApplicationFormReadRepository = internshipApplicationFormReadRepository;
+            _internshipApplicationFormWriteRepository = internshipApplicationFormWriteRepository;
+            _internshipApplicationExcelFormWriteRepository = internshipApplicationExcelFormWriteRepository;
+            _mediator = mediator;
+            _internshipReadRepository = internshipReadRepository;
+            _fileService = fileService;
+        }
+
         public async Task<CreateInternshipCommandResponse> Handle(CreateInternshipCommandRequest request, CancellationToken cancellationToken)
         {
-            
-            var student = _studentReadRepository.GetWhere(x => x.StudentNo == request.StudentNo).Include(x => x.Internships).FirstOrDefault();
-            var advisor = await _advisorReadRepository.GetSingleAsync(x => x.ID == request.AdvisorID);
-            if (student == null || advisor == null)
+
+            if (await _studentReadRepository.AnyAsync(x => x.StudentNo == request.StudentNo))
             {
-                return (new CreateInternshipCommandResponse
+            }
+            else
+            {
+                return new CreateInternshipCommandResponse
                 {
-                    Response = new()
+
+                    Response = new ResponseModel
                     {
-                        Data = null,
-                        IsSuccess = false,
-                        Message = "Student or Advisor Not Found",
+                        Message = "Student not found",
                         StatusCode = 404
                     }
-                   
-                });
+                };
+
             }
             try
             {
-                var internship = new InternshipManagementSystem.Domain.Entities.Internship()
+                var internship = new Domain.Entities.Internship
                 {
-                    StudentNo = student.StudentNo,
                     AdvisorID = request.AdvisorID,
-                    StudentID = student.ID,  
-                    InternshipStatus = InternshipStatus.Pending,
-                    StudentName = student.StudentName,
-                    StudentSurname = student.StudentSurname,
+                    StudentID = request.StudentID,
+                    StudentNo = request.StudentNo
                 };
 
-                var st = await _internshipWriteRepository.AddAsync(internship);
-                student.Internships.Add(internship);
+                var result = await _internshipWriteRepository.AddAsync(internship);
                 await _internshipWriteRepository.SaveAsync();
-                return (new CreateInternshipCommandResponse
+
+
+                var excel = new InternshipApplicationExelForm
                 {
-                    Response = new()
+                    StudentNo = request.StudentNo,
+                    FullName = request.FullName,
+                    TC_NO = request.TC_NO,
+                    InternshipStartDate = request.InternshipStartDate,
+                    InternshipEndDate = request.InternshipEndDate,
+                    Department = request.Department,
+                    InternshipType = request.InternshipType,
+                    StudentGSMNumber = request.StudentGSMNumber,
+                    CompanyName = request.CompanyName,
+                    NumberOfEmployees = request.NumberOfEmployees,
+                    CompanyPhone = request.CompanyPhone,
+                    CompanyAddress = request.CompanyAddress,
+                    RequestedGovernmentAidAmount = request.RequestedGovernmentAidAmount,
+                    ReceivesSalary = request.ReceivesSalary,
+                    DoesNotReceiveSalary = request.DoesNotReceiveSalary,
+                    Gender = request.Gender,
+                    Age = request.Age,
+                    ReceivesHealthInsurance = request.ReceivesHealthInsurance,
+                    BirthDateDay = request.BirthDateDay,
+                    BirthDateMonth = request.BirthDateMonth,
+                    EmailSendingDate = request.EmailSendingDate,
+                    Level = request.Level,
+                    Description = request.Description
+                };
+
+                var resultExcel = await _internshipApplicationExcelFormWriteRepository.AddAsync(excel);
+                await _internshipApplicationExcelFormWriteRepository.SaveAsync();
+                internship.InternshipApplicationInfoForAdviserExcelID = excel.ID;
+                await _internshipWriteRepository.SaveAsync();
+
+                //
+                bool fileResult = await _fileService.UploadAsync(internship.ID, request.formFile, filetypes.InternshipApplicationForm);
+                await _internshipWriteRepository.SaveAsync();
+                await _internshipApplicationExcelFormWriteRepository.SaveAsync();
+
+
+                return new CreateInternshipCommandResponse()
+                {
+                    Response = new ResponseModel
                     {
                         Data = internship,
-                        IsSuccess = true,
-                        Message = "Internship Created",
+                        Message = "Internship created",
                         StatusCode = 200
                     }
-                   
-                });
+
+
+                };
             }
             catch (Exception ex)
             {
-                return (new CreateInternshipCommandResponse
-                {
-                    Response = new() {
-                        Data = null,
-                        IsSuccess = false,
-                        Message = ex.Message,
-                        StatusCode = 500
-                    }
-                    
-                });
 
+                return new CreateInternshipCommandResponse
+                {
+                    Response = new ResponseModel
+                    {
+                        Message = ex.Message,
+                        StatusCode = 400
+                    }
+                };
             }
 
         }
