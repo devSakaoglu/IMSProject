@@ -165,50 +165,13 @@ namespace InternshipManagementSystem.API.Controllers
             }
         }
 
+
+
         [HttpGet("[action]")]
-
-
-
-        public async Task<IActionResult> GetInternshipExcelForm([FromQuery] Guid internshipId)
+        public async Task<IActionResult> GetInternshipExcelForm([FromQuery] GetInternshipExcelFormQueryRequest request)
         {
-            var internship = await _internshipReadRepository.GetByIdAsync(internshipId);
-            if (internship == null)
-            {
-                return BadRequest(
-                 new ResponseModel()
-                 {
-                     Data = null,
-                     IsSuccess = false,
-                     Message = "Internship Not Found",
-                     StatusCode = 404
-                 }
-                 );
-            }
-            try
-            {
-                var excelForm = internship.InternshipApplicationExelFormID == null ? null : await _internshipApplicationExcelFormReadRepository.GetByIdAsync(internship.InternshipApplicationExelFormID.Value);
-                return Ok(new ResponseModel()
-                {
-                    Data = excelForm,
-                    IsSuccess = excelForm == null ? false : true,
-                    Message = excelForm == null ? "Excel Form Not Found" : "Excel Form Found",
-                    StatusCode = excelForm == null ? 404 : 200
-                });
-
-
-
-            }
-            catch (Exception exexption)
-            {
-
-                return BadRequest(new ResponseModel()
-                {
-                    Data = null,
-                    IsSuccess = false,
-                    Message = exexption.Message,
-                    StatusCode = 400
-                });
-            }
+          GetInternshipExcelFormQueryResponse response = await _mediator.Send(request);
+            return Ok(response.Response);
 
         }
 
