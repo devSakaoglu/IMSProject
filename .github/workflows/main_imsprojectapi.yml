@@ -44,7 +44,7 @@ jobs:
 
 
       - name: Copy Angular build to ASP.NET Core project
-        run: cp -r angular-app/output/browser/* backend-app/InternshipManagementSystem.API/wwwroot
+        run: cp -r angular-app/output/browser backend-app/InternshipManagementSystem.API/wwwroot
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
