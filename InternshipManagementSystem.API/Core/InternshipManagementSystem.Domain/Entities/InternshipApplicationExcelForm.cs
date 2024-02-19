@@ -16,7 +16,7 @@ namespace InternshipManagementSystem.Domain.Entities
       public int NumberOfEmployees { get; set; }
       public string CompanyPhone { get; set; }
       public string CompanyAddress { get; set; }
-      public bool RequestedGovernmentAidAmount { get; set; }
+      public double RequestedGovernmentAidAmount { get; set; }
       public bool ReceivesSalary { get; set; }
       public bool DoesNotReceiveSalary { get; set; }
       public Gender Gender { get; set; }
