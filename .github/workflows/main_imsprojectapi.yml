@@ -42,8 +42,6 @@ jobs:
           repository: devSakaoglu/IMSProject
           path: backend-app  # Specify the path where the ASP.NET Core code will be cloned
 
-      - name: Clean destination directory
-        run: rm -r backend-app/InternshipManagementSystem.API/wwwroot/*
 
       - name: Copy Angular build to ASP.NET Core project
         run: cp -r angular-app/output/browser/* backend-app/InternshipManagementSystem.API/wwwroot
