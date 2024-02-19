@@ -14,7 +14,7 @@ namespace InternshipManagementSystem.Persistence.Contexts
         DbSet<Advisor> Advisors { get; set; }
         DbSet<Student> Students { get; set; }
         DbSet<Internship> Internships { get; set; }
-        DbSet<InternshipDocument> InternshipDocuments { get; set; }
+        //DbSet<InternshipDocument> InternshipDocuments { get; set; }
         DbSet<InternshipApplicationExcelForm> InternshipApplicationExelForms { get; set; }
         DbSet<InternshipApplicationForm> InternshipApplicationForms { get; set; }
         DbSet<SPAS> SPASs { get; set; }

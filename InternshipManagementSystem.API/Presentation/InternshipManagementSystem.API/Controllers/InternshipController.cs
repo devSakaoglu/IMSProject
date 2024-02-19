@@ -10,6 +10,7 @@ using InternshipManagementSystem.Application.ViewModels;
 using InternshipManagementSystem.Application.ViewModels.InternshipViewModelss;
 using InternshipManagementSystem.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InternshipManagementSystem.API.Controllers
@@ -27,8 +28,10 @@ namespace InternshipManagementSystem.API.Controllers
         private readonly IMediator _mediator;
         private readonly IInternshipApplicationFormReadRepository _internshipApplicationFormReadRepository;
         private readonly IInternshipBookReadRepository _internshipBookReadRepository;
+        private readonly IInternshipBookWriteRepository _internshipBookWriteRepository;
+        private readonly IInternshipBookWriteRepository _internshipApplicationFormWriteRepository;
 
-        public InternshipController(IInternshipReadRepository internshipReadRepository, IInternshipDocumentReadRepository internshipDocumentReadRepository, IInternshipDocumentWriteRepository internshipDocumentWriteRepository, IFileService fileService, IMediator mediator, IInternshipApplicationFormReadRepository internshipApplicationFormReadRepository, IInternshipBookReadRepository internshipBookReadRepository)
+        public InternshipController(IInternshipReadRepository internshipReadRepository, IInternshipDocumentReadRepository internshipDocumentReadRepository, IInternshipDocumentWriteRepository internshipDocumentWriteRepository, IFileService fileService, IMediator mediator, IInternshipApplicationFormReadRepository internshipApplicationFormReadRepository, IInternshipBookReadRepository internshipBookReadRepository, IInternshipBookWriteRepository internshipBookWriteRepository, IInternshipBookWriteRepository internshipApplicationFormWriteRepository)
         {
             _internshipReadRepository = internshipReadRepository;
             _internshipDocumentReadRepository = internshipDocumentReadRepository;
@@ -37,6 +40,8 @@ namespace InternshipManagementSystem.API.Controllers
             _mediator = mediator;
             _internshipApplicationFormReadRepository = internshipApplicationFormReadRepository;
             _internshipBookReadRepository = internshipBookReadRepository;
+            _internshipBookWriteRepository = internshipBookWriteRepository;
+            _internshipApplicationFormWriteRepository = internshipApplicationFormWriteRepository;
         }
 
         [HttpGet("[action]")]
@@ -102,37 +107,49 @@ namespace InternshipManagementSystem.API.Controllers
 
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAllDocuments(Guid internshipId)
+        public async Task<IActionResult> GetAllForms(Guid internshipId)
         {
-            var data = _internshipDocumentReadRepository.GetWhere(x => x.InternshipID == internshipId, false);
+            var documents = _internshipApplicationFormReadRepository.GetWhere(x => x.InternshipID == internshipId).ToList();
+
+
             return Ok(new ResponseModel()
             {
-                Data = data,
-                IsSuccess = data == null ? false : true,
-                Message = data == null ? "No Document Found" : "Documents Found",
-                StatusCode = data == null ? 404 : 200
+                Data = documents,
+                IsSuccess = documents == null || documents.Count == 0 ? false : true,
+                Message = documents == null || documents.Count == 0 ? "No Document Found" : "Documents Found",
+                StatusCode = documents == null || documents.Count == 0 ? 404 : 200
+            });
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAllBooks(Guid internshipId)
+        {
+            var documents = _internshipBookReadRepository.GetWhere(x => x.InternshipID == internshipId).ToList();
+
+
+            return Ok(new ResponseModel()
+            {
+                Data = documents,
+                IsSuccess = documents == null || documents.Count == 0 ? false : true,
+                Message = documents == null || documents.Count == 0 ? "No Document Found" : "Documents Found",
+                StatusCode = documents == null || documents.Count == 0 ? 404 : 200
             });
         }
 
         [HttpDelete("[action]")]
         public async Task<IActionResult> DeleteFile(Guid id)
         {
-            var data = _internshipDocumentReadRepository.GetByIdAsync(id);
-            if (data == null)
-            {
-                return Ok(new ResponseModel()
-                {
-                    Data = null,
-                    IsSuccess = false,
-                    Message = "File Not Found",
-                    StatusCode = 404
-                });
-            }
-            else
-            {
+            var book = await _internshipBookReadRepository.GetByIdAsync(id);
+            var form = await _internshipApplicationFormReadRepository.GetByIdAsync(id);
+            var data = new object();
 
-                if (await _fileService.DeleteFileAsync(data.Result.FilePath) == false)
+
+            if (book is not null)
+            {
+                data = book;
+                if (await _fileService.DeleteFileAsync(book.FilePath) == false)
                 {
+                    var test = await _internshipBookWriteRepository.RemoveAsync(book.ID);
+                    await _internshipBookWriteRepository.SaveAsync();
                     return Ok(new ResponseModel()
                     {
                         Data = null,
@@ -143,18 +160,56 @@ namespace InternshipManagementSystem.API.Controllers
                 }
                 else
                 {
-
-                    _internshipDocumentWriteRepository.RemoveAsync(id);
+                    var test = await _internshipBookWriteRepository.RemoveAsync(book.ID);
+                    await _internshipBookWriteRepository.SaveAsync();
                     return Ok(new ResponseModel()
                     {
-                        Data = null,
+                        Data = data,
                         IsSuccess = true,
                         Message = "File Deleted",
                         StatusCode = 200
                     });
                 }
 
+
             }
+            else if (form is not null)
+            {
+                if (await _fileService.DeleteFileAsync(form.FilePath) == false)
+                {
+                    var test = await _internshipApplicationFormWriteRepository.RemoveAsync(form.ID);
+                    await _internshipApplicationFormWriteRepository.SaveAsync();
+
+
+                    return Ok(new ResponseModel()
+                    {
+                        Data = null,
+                        IsSuccess = false,
+                        Message = "File Not Deleted",
+                        StatusCode = 404
+                    });
+                }
+                else
+                {
+                    var test = await _internshipApplicationFormWriteRepository.RemoveAsync(form.ID);
+                    await _internshipApplicationFormWriteRepository.SaveAsync();
+
+                    return Ok(new ResponseModel()
+                    {
+                        Data = data,
+                        IsSuccess = true,
+                        Message = "File Deleted",
+                        StatusCode = 200
+                    });
+                }
+            }
+            return BadRequest(new ResponseModel()
+            {
+                Data = data,
+                IsSuccess = true,
+                Message = "File Deleted",
+                StatusCode = 200
+            });
         }
         //
         //
@@ -179,7 +234,7 @@ namespace InternshipManagementSystem.API.Controllers
             }
             catch (Exception ex)
             {
-                return  Ok(new ResponseModel()
+                return Ok(new ResponseModel()
                 {
                     Data = null,
                     IsSuccess = false,
@@ -205,6 +260,40 @@ namespace InternshipManagementSystem.API.Controllers
                 StatusCode = data ? 200 : 400
             });
         }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetInternshipBookIdByInternshipId(Guid internshipId)
+        {
+            var internship = await _internshipReadRepository.GetByIdAsync(internshipId);
+            if (internship == null)
+            {
+                return NotFound();
+            }
+
+            var file = await _internshipBookReadRepository.GetByIdAsync(Guid.Parse(internship.InternshipBookID.ToString()));
+            if (file is null)
+            {
+                return NotFound(
+                    new ResponseModel()
+                    {
+                        Data = null,
+                        IsSuccess = false,
+                        Message = "File is not found",
+                        StatusCode = 400
+                    }
+                    ); ;
+            }
+            else
+            {
+                return Ok(new ResponseModel()
+                {
+                    Data = file.ID,
+                    IsSuccess = true,
+                    Message = "File is found",
+                    StatusCode = 200
+                });
+            }
+        }
+
         [HttpGet("[action]")]
         public async Task<IActionResult> GetInternshipBookByInternshipId(Guid internshipId)
         {
@@ -241,6 +330,8 @@ namespace InternshipManagementSystem.API.Controllers
                 return Ok(filePath);
             }
         }
+
+
         [HttpGet("[action]")]
         public async Task<IActionResult> GetApplicationFormByInternshipId(Guid internshipId)
         {
