@@ -26,7 +26,7 @@ jobs:
       - name: Install Angular CLI
         run: npm install -g @angular/cli
 
-      - name: Build Angular app
+      - name: Build Angular app 
         run: |
           cd angular-app
           npm install
@@ -45,8 +45,8 @@ jobs:
 
       - name: Copy Angular build to ASP.NET Core project
         run: |
-          mkdir -p backend-app/InternshipManagementSystem.API/wwwroot
-          cp -r angular-app/output/browser/* backend-app/InternshipManagementSystem.API/wwwroot/
+          mkdir -p backend-app/InternshipManagementSystem.API/Presentation/InternshipManagementSystem.API/wwwwroot
+          cp -r angular-app/output/browser/* backend-app/InternshipManagementSystem.API/Presentation/InternshipManagementSystem.API/wwwwroot/
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
