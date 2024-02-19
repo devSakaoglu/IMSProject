@@ -35,7 +35,7 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Cr
 
         public string CompanyAddress { get; set; }
 
-        public double RequestedGovernmentAidAmount { get; set; }
+        public bool RequestedGovernmentAidAmount { get; set; }
 
         public bool ReceivesSalary { get; set; }
 

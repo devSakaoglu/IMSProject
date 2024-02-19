@@ -2,6 +2,7 @@
 using InternshipManagementSystem.Application.Features.Internship.Commands;
 using InternshipManagementSystem.Application.Features.Internship.Commands.CreateInternship;
 using InternshipManagementSystem.Application.Features.Internship.Commands.DeleteInternship;
+using InternshipManagementSystem.Application.Features.Internship.Commands.UploadInternshipBook;
 using InternshipManagementSystem.Application.Features.Internship.Queries.GetInternshipByInternshipId;
 using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.Services;
@@ -19,31 +20,23 @@ namespace InternshipManagementSystem.API.Controllers
     public class InternshipController : ControllerBase
     {
 
-        private readonly IStudentReadRepository _studentReadRepository;
-        private readonly IAdvisorReadRepository _advisorReadRepository;
         private readonly IInternshipReadRepository _internshipReadRepository;
-        private readonly IInternshipWriteRepository _internshipWriteRepository;
         private readonly IInternshipDocumentReadRepository _internshipDocumentReadRepository;
         private readonly IInternshipDocumentWriteRepository _internshipDocumentWriteRepository;
         private readonly IFileService _fileService;
         private readonly IMediator _mediator;
         private readonly IInternshipApplicationFormReadRepository _internshipApplicationFormReadRepository;
         private readonly IInternshipBookReadRepository _internshipBookReadRepository;
-        private readonly IInternshipApplicationExcelFormReadRepository _internshipApplicationExcelFormReadRepository;
-        public InternshipController(IStudentReadRepository studentReadRepository, IAdvisorReadRepository advisorReadRepository, IInternshipReadRepository internshipReadRepository, IInternshipWriteRepository internshipWriteRepository, IInternshipDocumentReadRepository internshipDocumentReadRepository, IInternshipDocumentWriteRepository internshipDocumentWriteRepository, IFileService fileService, IMediator mediator
-, IInternshipApplicationFormReadRepository internshipApplicationFormReadRepository, IInternshipBookReadRepository internshipBookReadRepository, IInternshipApplicationExcelFormReadRepository internshipApplicationExcelFormReadRepository)
+
+        public InternshipController(IInternshipReadRepository internshipReadRepository, IInternshipDocumentReadRepository internshipDocumentReadRepository, IInternshipDocumentWriteRepository internshipDocumentWriteRepository, IFileService fileService, IMediator mediator, IInternshipApplicationFormReadRepository internshipApplicationFormReadRepository, IInternshipBookReadRepository internshipBookReadRepository)
         {
-            _studentReadRepository = studentReadRepository;
-            _advisorReadRepository = advisorReadRepository;
             _internshipReadRepository = internshipReadRepository;
-            _internshipWriteRepository = internshipWriteRepository;
             _internshipDocumentReadRepository = internshipDocumentReadRepository;
             _internshipDocumentWriteRepository = internshipDocumentWriteRepository;
             _fileService = fileService;
             _mediator = mediator;
             _internshipApplicationFormReadRepository = internshipApplicationFormReadRepository;
             _internshipBookReadRepository = internshipBookReadRepository;
-            _internshipApplicationExcelFormReadRepository = internshipApplicationExcelFormReadRepository;
         }
 
         [HttpGet("[action]")]
@@ -76,7 +69,7 @@ namespace InternshipManagementSystem.API.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> CreateInternship([FromForm]CreateInternshipCommandRequest request)
+        public async Task<IActionResult> CreateInternship([FromForm] CreateInternshipCommandRequest request)
         {
             CreateInternshipCommandResponse response = await _mediator.Send(request);
             return Ok(response.Response);
@@ -88,7 +81,7 @@ namespace InternshipManagementSystem.API.Controllers
         {
             UpdateInternshipCommandResponse response = await _mediator.Send(request);
             return Ok(response.Response);
-         
+
         }
 
         [HttpPut("[action]")]
@@ -107,7 +100,7 @@ namespace InternshipManagementSystem.API.Controllers
             return Ok(response.Response);
         }
 
-     
+
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllDocuments(Guid internshipId)
         {
@@ -166,23 +159,37 @@ namespace InternshipManagementSystem.API.Controllers
         //
         //
 
-      
 
-       
+
+
         [HttpPost("[action]")]
         public async Task<IActionResult> UploadInternshipBook([FromForm] IFormFileCollection files, [FromForm] Guid internshipId)
         {
-            var fileTest = HttpContext.Request.Form.Files.First();
-            //var file = files.FirstOrDefault();
-            var data = await _fileService.UploadAsync(internshipId, fileTest, filetypes.InternshipBook);
 
-            return Ok(new ResponseModel()
+            try
             {
-                Message = data ? "Successful" : "Unsuccessful",
-                Data = data,
-                IsSuccess = data ? true : false,
-                StatusCode = data ? 200 : 400
-            });
+                var file = HttpContext.Request.Form.Files.FirstOrDefault();
+                UploadInternshipBookCommandRequest request = new UploadInternshipBookCommandRequest()
+                {
+                    File = file,
+                    InternshipId = internshipId
+                };
+                UploadInternshipBookCommandResponse response = await _mediator.Send(request);
+                return Ok(response.ResponseModel);
+            }
+            catch (Exception ex)
+            {
+                return  Ok(new ResponseModel()
+                {
+                    Data = null,
+                    IsSuccess = false,
+                    Message = ex.Message,
+                    StatusCode = 500
+                });
+            }
+
+
+
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> UploadApplicationForm([FromForm] IFormFileCollection files, Guid internshipId)

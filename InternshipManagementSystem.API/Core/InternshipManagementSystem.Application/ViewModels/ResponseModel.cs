@@ -6,6 +6,7 @@ namespace InternshipManagementSystem.Application.ViewModels
    {
       public ResponseModel(bool isSuccess, string message, object data, int statusCodeNumber)
       {
+            
          IsSuccess = isSuccess;
          Message = message;
          Data = data;
