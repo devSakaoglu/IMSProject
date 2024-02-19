@@ -14,7 +14,7 @@ jobs:
       - name: Checkout Client repository
         uses: actions/checkout@v4
         with:
-          repository: https://github.com/devSakaoglu/IMSProject.Client
+          repository: devSakaoglu/IMSProject.Client
           path: angular-app  # Specify the path where the Angular code will be cloned
           ref: Publish
 
@@ -39,7 +39,7 @@ jobs:
       - name: Checkout backend repository 
         uses: actions/checkout@v4
         with:
-          repository: https://github.com/devSakaoglu/IMSProject
+          repository: devSakaoglu/IMSProject
           path: backend-app  # Specify the path where the ASP.NET Core code will be cloned
 
       - name: Copy Angular build to ASP.NET Core project
