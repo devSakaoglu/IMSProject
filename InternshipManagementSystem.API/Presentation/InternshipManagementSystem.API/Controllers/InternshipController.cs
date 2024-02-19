@@ -136,6 +136,132 @@ namespace InternshipManagementSystem.API.Controllers
         }
 
         [HttpDelete("[action]")]
+        public async Task<IActionResult> DeleteBookByInternshipId(Guid internshipId)
+        {
+            var book =  _internshipBookReadRepository.Table.Where(x => x.InternshipID == internshipId).FirstOrDefault();
+            var data = new object();
+
+            if (book is not null)
+            {
+                data = book;
+                if (await _fileService.DeleteFileAsync(book.FilePath) == false)
+                {
+                    var test = await _internshipBookWriteRepository.RemoveAsync(book.ID);
+                    await _internshipBookWriteRepository.SaveAsync();
+                    return Ok(new ResponseModel()
+                    {
+                        Data = null,
+                        IsSuccess = false,
+                        Message = "File Not Deleted",
+                        StatusCode = 404
+                    });
+                }
+                else
+                {
+                    var test = await _internshipBookWriteRepository.RemoveAsync(book.ID);
+                    await _internshipBookWriteRepository.SaveAsync();
+                    return Ok(new ResponseModel()
+                    {
+                        Data = data,
+                        IsSuccess = true,
+                        Message = "File Deleted",
+                        StatusCode = 200
+                    });
+                }
+
+
+            }
+
+            return BadRequest(new ResponseModel()
+            {
+                Data = data,
+                IsSuccess = true,
+                Message = "File Could not be Deleted",
+                StatusCode = 200
+            
+            });
+        }
+        [HttpDelete("[action]")]
+        public async Task<IActionResult> DeleteFormByInternshipId(Guid id)
+        {
+            var book = await _internshipBookReadRepository.GetByIdAsync(id);
+            var form = await _internshipApplicationFormReadRepository.GetByIdAsync(id);
+            var data = new object();
+
+
+            if (book is not null)
+            {
+                data = book;
+                if (await _fileService.DeleteFileAsync(book.FilePath) == false)
+                {
+                    var test = await _internshipBookWriteRepository.RemoveAsync(book.ID);
+                    await _internshipBookWriteRepository.SaveAsync();
+                    return Ok(new ResponseModel()
+                    {
+                        Data = null,
+                        IsSuccess = false,
+                        Message = "File Not Deleted",
+                        StatusCode = 404
+                    });
+                }
+                else
+                {
+                    var test = await _internshipBookWriteRepository.RemoveAsync(book.ID);
+                    await _internshipBookWriteRepository.SaveAsync();
+                    return Ok(new ResponseModel()
+                    {
+                        Data = data,
+                        IsSuccess = true,
+                        Message = "File Deleted",
+                        StatusCode = 200
+                    });
+                }
+
+
+            }
+            else if (form is not null)
+            {
+                if (await _fileService.DeleteFileAsync(form.FilePath) == false)
+                {
+                    var test = await _internshipApplicationFormWriteRepository.RemoveAsync(form.ID);
+                    await _internshipApplicationFormWriteRepository.SaveAsync();
+
+
+                    return Ok(new ResponseModel()
+                    {
+                        Data = null,
+                        IsSuccess = false,
+                        Message = "File Not Deleted",
+                        StatusCode = 404
+                    });
+                }
+                else
+                {
+                    var test = await _internshipApplicationFormWriteRepository.RemoveAsync(form.ID);
+                    await _internshipApplicationFormWriteRepository.SaveAsync();
+
+                    return Ok(new ResponseModel()
+                    {
+                        Data = data,
+                        IsSuccess = true,
+                        Message = "File Deleted",
+                        StatusCode = 200
+                    });
+                }
+            }
+            return BadRequest(new ResponseModel()
+            {
+                Data = data,
+                IsSuccess = true,
+                Message = "File Deleted",
+                StatusCode = 200
+            });
+        }
+
+
+
+
+        [HttpDelete("[action]")]
         public async Task<IActionResult> DeleteFile(Guid id)
         {
             var book = await _internshipBookReadRepository.GetByIdAsync(id);
@@ -247,7 +373,7 @@ namespace InternshipManagementSystem.API.Controllers
 
         }
         [HttpPost("[action]")]
-        public async Task<IActionResult> UploadApplicationForm([FromForm] IFormFileCollection files, Guid internshipId)
+        public async Task<IActionResult> UploadApplicationForm([FromForm] IFormFileCollection files, [FromForm]Guid internshipId)
         {
             var file = files.FirstOrDefault();
             var data = await _fileService.UploadAsync(internshipId, file, filetypes.InternshipApplicationForm);
@@ -303,7 +429,7 @@ namespace InternshipManagementSystem.API.Controllers
                 return NotFound();
             }
 
-            var file = await _internshipBookReadRepository.GetByIdAsync(Guid.Parse(internship.InternshipBookID.ToString()));
+            var file = await _internshipBookReadRepository.GetByIdAsync(internshipId);
             if (file is null)
             {
                 return NotFound(
