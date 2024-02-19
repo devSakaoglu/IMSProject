@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy ASP.Net Core app to Azure Web App - IMSProjectAPI
+name: Build and deploy ASP.Net Core app with Angular to Azure Web App - IMSProjectAPI
 
 on:
   push:
@@ -10,25 +7,56 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Client repository
+        uses: actions/checkout@v4
+        with:
+          repository: https://github.com/devSakaoglu/IMSProject.Client
+          path: angular-app  # Specify the path where the Angular code will be cloned
+          ref: Publish
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli
+
+      - name: Build Angular app
+        run: |
+          cd angular-app
+          npm install
+          ng build --output-path output
+          cd ../
+        env:
+          NG_CLI_ANALYTICS: false
+
+
+      - name: Checkout backend repository 
+        uses: actions/checkout@v4
+        with:
+          repository: https://github.com/devSakaoglu/IMSProject
+          path: backend-app  # Specify the path where the ASP.NET Core code will be cloned
+
+      - name: Copy Angular build to ASP.NET Core project
+        run: |
+          cp -r angular-app/output/browser/* backend-app/InternshipManagementSystem.API/Presentation/InternshipManagementSystem.API/wwwroot/
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '8.x'
           include-prerelease: true
-          
-      
 
       - name: Build with dotnet
-        run: dotnet build InternshipManagementSystem.API --configuration Release
+        run: dotnet build backend-app/InternshipManagementSystem.API --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish InternshipManagementSystem.API -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish backend-app/InternshipManagementSystem.API -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
