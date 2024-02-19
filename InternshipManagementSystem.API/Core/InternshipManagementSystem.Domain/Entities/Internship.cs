@@ -15,7 +15,6 @@
         public Guid? InternshipApplicationExelFormID { get; set; }
         public Guid? InternshipBookID { get; set; }
         public Guid? SPASID { get; set; }
-
     }
     public enum InternshipStatus
     {

@@ -109,7 +109,7 @@ namespace InternshipManagementSystem.Application.Features.AppUser.Commands.Login
                 }
             }
             else if (request.UserName.Length == 11 && long.TryParse(request.UserName, out var x))
-            {
+            {                                 
                 var student = await _studentReadRepository.Table.FirstOrDefaultAsync(s => s.StudentNo == request.UserName);
 
                 if (student != null && request.Password == student.TC_NO)

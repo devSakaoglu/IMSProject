@@ -84,6 +84,7 @@ if (app.Environment.IsDevelopment() || true)
     app.UseSwaggerUI();
 }
 Console.WriteLine(app.Environment.IsDevelopment());
+app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseCors(x => x

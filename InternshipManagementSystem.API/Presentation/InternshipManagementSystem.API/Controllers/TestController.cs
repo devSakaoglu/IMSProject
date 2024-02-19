@@ -1,8 +1,11 @@
-﻿using InternshipManagementSystem.Application.Repositories;
+﻿using Azure.Core;
+using InternshipManagementSystem.Application.Features.AppUser.Commands.LoginUser;
+using InternshipManagementSystem.Application.Repositories;
 using InternshipManagementSystem.Application.Services;
-using InternshipManagementSystem.Application.ViewModels;
-using InternshipManagementSystem.Domain.Entities;
+using InternshipManagementSystem.Domain.Entities.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 namespace InternshipManagementSystem.API.Controllers
 {
@@ -12,6 +15,8 @@ namespace InternshipManagementSystem.API.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
+        readonly UserManager<Domain.Entities.Identity.AppUser> _usermanager;
+        readonly SignInManager<Domain.Entities.Identity.AppUser> _signinmanager;
 
         private readonly IStudentReadRepository _studentReadRepository;
         private readonly IStudentWriteRepository _studentWriteRepository;
@@ -28,8 +33,11 @@ namespace InternshipManagementSystem.API.Controllers
         private readonly IInternshipApplicationFormWriteRepository _internshipApplicationFormWriteRepository;
         private readonly IInternshipBookReadRepository _internshipBookReadRepository;
         private readonly IInternshipBookWriteRepository _internshipBookWriteRepository;
-        public TestController(IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IInternshipReadRepository internshipReadRepository, IInternshipWriteRepository internshipWriteRepository, IInternshipDocumentReadRepository internshipDocumentReadRepository, IInternshipDocumentWriteRepository internshipDocumentWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IMediator mediator, IInternshipApplicationFormReadRepository internshipApplicationFormReadRepository, IInternshipApplicationFormWriteRepository internshipApplicationFormWriteRepository, IInternshipBookReadRepository internshipBookReadRepository, IInternshipBookWriteRepository internshipBookWriteRepository)
+
+        public TestController(UserManager<AppUser> usermanager, SignInManager<AppUser> signinmanager, IStudentReadRepository studentReadRepository, IStudentWriteRepository studentWriteRepository, IAdvisorReadRepository advisorReadRepository, IAdvisorWriteRepository advisorWriteRepository, IInternshipReadRepository internshipReadRepository, IInternshipWriteRepository internshipWriteRepository, IInternshipDocumentReadRepository internshipDocumentReadRepository, IInternshipDocumentWriteRepository internshipDocumentWriteRepository, IWebHostEnvironment webHostEnvironment, IFileService fileService, IMediator mediator, IInternshipApplicationFormReadRepository internshipApplicationFormReadRepository, IInternshipApplicationFormWriteRepository internshipApplicationFormWriteRepository, IInternshipBookReadRepository internshipBookReadRepository, IInternshipBookWriteRepository internshipBookWriteRepository)
         {
+            _usermanager = usermanager;
+            _signinmanager = signinmanager;
             _studentReadRepository = studentReadRepository;
             _studentWriteRepository = studentWriteRepository;
             _advisorReadRepository = advisorReadRepository;
@@ -46,7 +54,6 @@ namespace InternshipManagementSystem.API.Controllers
             _internshipBookReadRepository = internshipBookReadRepository;
             _internshipBookWriteRepository = internshipBookWriteRepository;
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Test()
@@ -67,14 +74,14 @@ namespace InternshipManagementSystem.API.Controllers
 
 
 
-            return Ok($"Connection string health:{envConnectionString != null}, DB connection healthy:{_studentReadRepository != null} Logged in username is:{user} " + 
+            return Ok($"Connection string health:{envConnectionString != null}, DB connection healthy:{_studentReadRepository != null} Logged in username is:{user} " +
                 $"Directory : {currentDirectory}");
         }
 
 
 
         [HttpGet("[action]")]
-        public async Task<IActionResult>DownloadBook(Guid InternshipId)
+        public async Task<IActionResult> DownloadBook(Guid InternshipId)
         {
             var x = await _internshipReadRepository.GetByIdAsync(InternshipId);
             if (x == null)
@@ -82,7 +89,7 @@ namespace InternshipManagementSystem.API.Controllers
                 return NotFound();
             }
 
-            var filename=  await _internshipDocumentReadRepository.GetByIdAsync(Guid.Parse(x.InternshipBookID.ToString())); 
+            var filename = await _internshipDocumentReadRepository.GetByIdAsync(Guid.Parse(x.InternshipBookID.ToString()));
             string directoryPath = await _fileService.GetPath(InternshipId);
             string filePath = Path.Combine(directoryPath, filename.FileName);
 
@@ -98,62 +105,65 @@ namespace InternshipManagementSystem.API.Controllers
             }
         }
 
-        //[HttpPost("[action]")]
-        //public async Task<IActionResult> UploadBook([FromForm] IFormFileCollection files, Guid internshipId)
-        //{
-        //    var file = files.FirstOrDefault();
-        //    var data = await _fileService.UploadAync(internshipId, file, filetypes.InternshipBook);
-
-        //    return Ok(new ResponseModel()
-        //    {
-        //        Message = data ? "Successful" : "Unsuccessful",
-        //        Data = data,
-        //        IsSuccess = data ? true : false,
-        //        StatusCode = data ? 200 : 400
-        //    });
-        //}
-        //[HttpPost("[action]")]
-        //public async Task<IActionResult> UploadApplicationForm([FromForm] IFormFileCollection files, Guid internshipId)
-        //{
-        //    var file = files.FirstOrDefault();
-        //    var data = await _fileService.UploadAync(internshipId, file, filetypes.InternshipApplicationForm);
-
-        //    return Ok(new ResponseModel()
-        //    {
-        //        Message = data ? "Successful" : "Unsuccessful",
-        //        Data = data,
-        //        IsSuccess = data ? true : false,
-        //        StatusCode = data ? 200 : 400
-        //    });
-        //}
-        //[HttpGet("[action]")]
-        //public async Task<IActionResult> GetBookByInternshipId(Guid internshipId)
-        //{
-        //    var internship = await _internshipReadRepository.GetByIdAsync(internshipId);
-        //    var data = _internshipDocumentReadRepository.GetFirst(x => x.ID == internship.InternshipBookID, false);
-
-        //    return Ok(new ResponseModel()
-        //    {
-        //        IsSuccess = true,
-        //        Data = data,
-        //        StatusCode = 200
-        //    });
-        //}
-        //[HttpGet("[action]")]
-        //public async Task<IActionResult> GetApplicationFormByInternshipId(Guid internshipId)
-        //{
-        //    var internship = await _internshipReadRepository.GetByIdAsync(internshipId);
-        //    var data = _internshipApplicationFormReadRepository.GetFirst(x => x.ID == internship.InternAppAcceptFormID, false);
-
-        //    return Ok(new ResponseModel()
-        //    {
-        //        IsSuccess = true,
-        //        Data = data,
-        //        StatusCode = 200
-        //    });
-        //}
 
 
 
+        // Kullanıcı kaydı ve girişi işlemi
+        [HttpPost("register-login")]
+        public async Task<IActionResult> RegisterLogin([FromBody] RegisterLoginViewModel request)
+        {
+            // Kullanıcıyı kullanıcı adı ile bul
+            var user = await _usermanager.FindByNameAsync(request.UserName);
+
+            if (user != null)
+            {
+                //var signInResult = await _signinmanager.PasswordSignInAsync(request.UserName, request.Password, false, false);
+
+                var result = await _usermanager.CheckPasswordAsync(user, request.Password);
+                if (result)
+                {
+                   var data = _signinmanager.SignInAsync(user, true);
+                    var role = await _usermanager.GetRolesAsync(user);
+                    return Ok(new { Message = "Login successful" 
+                    ,
+                        data.Id,
+                        role
+                    });
+
+
+
+                };
+            }
+            else
+            {
+                // Kullanıcı kayıtlı değil, kullanıcı oluştur ve giriş yap
+                var newUser = new AppUser { UserName = request.UserName };
+                var createResult = await _usermanager.CreateAsync(newUser, request.Password);
+
+                if (createResult.Succeeded)
+                {
+                    // Kullanıcı başarıyla oluşturuldu, giriş yap
+                    await _signinmanager.SignInAsync(newUser, isPersistent: false);
+
+                    return Ok(new { Message = "Registration and Login successful" });
+                }
+                else
+                {
+                    // Hata durumunda sonuçları döndür
+                    return BadRequest(new { Errors = createResult.Errors.Select(e => e.Description) });
+                }
+            }
+            return default;
+        }
     }
+
+    public class RegisterLoginViewModel
+    {
+        public string UserName { get; set; }
+        public string Password { get; set; }
+    }
+
+
+
 }
+

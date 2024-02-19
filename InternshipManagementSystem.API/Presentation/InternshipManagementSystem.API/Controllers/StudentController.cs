@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using InternshipManagementSystem.Application.Features;
 using InternshipManagementSystem.Application.Features.Student.Commands.CreateStudent;
 using InternshipManagementSystem.Application.Features.Student.Commands.AddStudentToAdvisor;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InternshipManagementSystem.API.Controllers
 {
@@ -31,7 +32,7 @@ namespace InternshipManagementSystem.API.Controllers
             _advisorWriteRepository = advisorWriteRepository;
             _mediator = mediator;
         }
-
+        [Authorize("Student")]
         [HttpGet]
         public async Task<IActionResult> Get()
         {

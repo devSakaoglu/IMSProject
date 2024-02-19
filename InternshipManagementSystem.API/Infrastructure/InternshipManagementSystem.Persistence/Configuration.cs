@@ -10,7 +10,7 @@ namespace InternshipManagementSystem.Persistence
 
             get
             {
-                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Deasdsavelopment")
+                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
                 {
                     ConfigurationManager configurationManager = new();
                     configurationManager.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../Presentation/InternshipManagementSystem.API"));
