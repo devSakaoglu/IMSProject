@@ -10,7 +10,7 @@ namespace InternshipManagementSystem.Persistence
 
             get
             {
-                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Deasdsavelopment")
+                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
                 {
                     ConfigurationManager configurationManager = new();
                     configurationManager.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../Presentation/InternshipManagementSystem.API"));
@@ -20,8 +20,8 @@ namespace InternshipManagementSystem.Persistence
                 }
                 else
                 {
-                    //var envConnectionString = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DEFAULT");
-                    return "Server=postgreimsdb.postgres.database.azure.com;Database=postgres;Port=5432;User Id=postgreuser;Password=Imsproject18;Ssl Mode=Require;";
+                    var envConnectionString = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DEFAULT");
+                    return envConnectionString;
                 }
 
             }
