@@ -88,7 +88,7 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Cr
                     ReceivesHealthInsurance = request.ReceivesHealthInsurance,
                     EmailSendingDate = request.EmailSendingDate,
                     Level = request.Level,
-                    BirthDate = request.BirthDate
+                    //BirthDate = request.BirthDate
                    
 
                 };

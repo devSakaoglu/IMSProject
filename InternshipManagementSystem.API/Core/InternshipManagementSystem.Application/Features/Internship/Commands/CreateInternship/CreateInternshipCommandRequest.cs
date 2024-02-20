@@ -47,7 +47,6 @@ namespace InternshipManagementSystem.Application.Features.Internship.Commands.Cr
 
         public bool ReceivesHealthInsurance { get; set; }
 
-        public DateOnly BirthDate { get; set; }//
 
         public string EmailSendingDate { get; set; }
 

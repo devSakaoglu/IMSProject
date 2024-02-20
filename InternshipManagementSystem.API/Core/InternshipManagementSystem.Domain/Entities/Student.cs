@@ -14,7 +14,7 @@
         public string StudentGSMNumber { get; set; }
         public string Address { get; set; }
         public string Email { get; set; }
-        public string AdvisorFullName { get; set; }
+        public string ?AdvisorFullName { get; set; }
 
         public ICollection<Internship>? Internships { get; set; }
 

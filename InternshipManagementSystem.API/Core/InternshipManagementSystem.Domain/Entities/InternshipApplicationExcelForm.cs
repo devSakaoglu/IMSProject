@@ -22,7 +22,6 @@ namespace InternshipManagementSystem.Domain.Entities
       public Gender Gender { get; set; }
       public int Age { get; set; }
       public bool ReceivesHealthInsurance { get; set; }
-      public DateOnly BirthDate { get; set; }//
       public string EmailSendingDate { get; set; }
       public InternshipLevel? Level { get; set; }
 
