@@ -3,6 +3,7 @@ using InternshipManagementSystem.Application.Features.Advisor.Commands.CreateAdv
 using InternshipManagementSystem.Application.Features.Advisor.Commands.DeleteAdvisorById;
 using InternshipManagementSystem.Application.Features.Advisor.Commands.UpdateAdvisor;
 using InternshipManagementSystem.Application.Features.Advisor.Queries.GetAdvisorById;
+using InternshipManagementSystem.Application.Features.Advisor.Queries.GetAdvisorNameByInternshipId;
 using InternshipManagementSystem.Application.Features.Advisor.Queries.GetAllAdvisor;
 using InternshipManagementSystem.Application.Features.Advisor.Queries.GetStudentsOfAllAdvisors;
 using InternshipManagementSystem.Application.Repositories;
@@ -40,22 +41,30 @@ namespace InternshipManagementSystem.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAdvisorById(GetAdvisorByIdQueryRequest request)
         {
-           GetAdvisorByIdQueryResponse response= await _mediator.Send(request);
+            GetAdvisorByIdQueryResponse response = await _mediator.Send(request);
             return Ok(response);
         }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAdvisorNameByInternshipId([FromQuery]GetAdvisorNameByInternshipIdRequest request)
+        {
+            GetAdvisorNameByInternshipIdResponse response = await _mediator.Send(request);
+            return Ok(response.Response);
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var req = new GetAllAdvisorQueryRequest();
-            GetAllAdvisorQueryResponse response= await _mediator.Send(req);
+            GetAllAdvisorQueryResponse response = await _mediator.Send(req);
             return Ok(response);
         }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetStudentsOfAllAdvisors(GetStudentsOfAllAdvisorsQueryRequest request)
         {
-           GetStudentsOfAllAdvisorsQueryResponse response= await _mediator.Send(request);
+            GetStudentsOfAllAdvisorsQueryResponse response = await _mediator.Send(request);
             return Ok(response);
         }
         [HttpGet("[action]/{id}")]
@@ -68,7 +77,7 @@ namespace InternshipManagementSystem.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateAdvisorCommandRequest request)
         {
-            CreateAdvisorCommandResponse response= await _mediator.Send(request);
+            CreateAdvisorCommandResponse response = await _mediator.Send(request);
             return Ok(response);
         }
         [HttpPut]
@@ -76,15 +85,15 @@ namespace InternshipManagementSystem.API.Controllers
         {
             UpdateAdvisorCommandResponse response = await _mediator.Send(request);
             return Ok(response);
-           
+
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAdvisorById(DeleteAdvisorByIdCommandRequest request)
         {
-            DeleteAdvisorByIdCommandResponse response= await _mediator.Send(request);
+            DeleteAdvisorByIdCommandResponse response = await _mediator.Send(request);
             return Ok(response);
-
         }
+
 
 
 

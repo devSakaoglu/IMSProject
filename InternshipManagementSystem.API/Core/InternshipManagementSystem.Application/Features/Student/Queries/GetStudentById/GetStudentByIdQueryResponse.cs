@@ -13,7 +13,7 @@ using Student = InternshipManagementSystem.Domain.Entities.Student;
 
     public class GetStudentByIdQueryResponse : IRequest<GetStudentByIdQueryResponse>
     {
-        public string Message { get; set; }
+        public string AdvisorName { get; set; }
         public ResponseModel Response { get; set; }
 
 
