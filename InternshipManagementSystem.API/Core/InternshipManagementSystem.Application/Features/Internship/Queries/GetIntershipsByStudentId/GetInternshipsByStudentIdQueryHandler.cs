@@ -7,8 +7,10 @@ namespace InternshipManagementSystem.Application.Features.Internship
 {
     public class GetInternshipsByStudentIdQueryHandler : IRequestHandler<GetInternshipsByStudentIdQueryRequest, GetInternshipsByStudentIdQueryResponse>
     {
-        IInternshipReadRepository _internshipReadRepository;
-        IInternshipApplicationFormReadRepository _internshipApplicationFormReadRepository;
+        private readonly IInternshipReadRepository _internshipReadRepository;
+        private readonly IInternshipApplicationFormReadRepository _internshipApplicationFormReadRepository;
+        private readonly IInternshipApplicationExcelFormReadRepository _internshipApplicationExcelFormReadRepository;
+
 
         public GetInternshipsByStudentIdQueryHandler(IInternshipReadRepository internshipReadRepository, IInternshipApplicationFormReadRepository internshipApplicationFormReadRepository)
         {
@@ -16,52 +18,73 @@ namespace InternshipManagementSystem.Application.Features.Internship
             _internshipApplicationFormReadRepository = internshipApplicationFormReadRepository;
         }
 
-        public Task<GetInternshipsByStudentIdQueryResponse> Handle(GetInternshipsByStudentIdQueryRequest request, CancellationToken cancellationToken)
+        public async Task<GetInternshipsByStudentIdQueryResponse> Handle(GetInternshipsByStudentIdQueryRequest request, CancellationToken cancellationToken)
         {
-            var internships = _internshipReadRepository.Table.Where(x => x.StudentID == request.StudentId);
-            var excelForms = _internshipApplicationFormReadRepository.Table.ToList();
+            List<internshipAndExcel> internshipsExcelList = new List<internshipAndExcel>();
 
-            var internshipsWithExcelForms = internships
-    .Join(
-        excelForms,
-        internship => internship.InternshipApplicationExelFormID,
-        excelForm => excelForm.ID,
-        (internship, excelForm) => new
-        {
-            Internship = internship,
-            ExcelForm = excelForm
-        })
-
-
-    .ToList();
-   
-            if (internships == null || internships.IsNullOrEmpty())
+            var internshipssList = _internshipReadRepository.GetAll()
+                .Where(x => x.StudentID == request.StudentId).ToList();
+            foreach (var item in internshipssList)
             {
-                return Task.FromResult(new GetInternshipsByStudentIdQueryResponse
+                var excelForm = await _internshipApplicationExcelFormReadRepository.GetByIdAsync(Guid.Parse(item.InternshipApplicationExelFormID.ToString()));
+
+                internshipsExcelList.Add(new internshipAndExcel
                 {
-                    Response = new()
-                    {
-                        Data = null,
-                        Message = "No interships found",
-                        IsSuccess = false,
-                        StatusCode = 404
-                    }
+                    Internship = item,
+                    InternshipApplicationExcelForm = excelForm
                 });
-            }
-            else
-            {
-                return Task.FromResult(new GetInternshipsByStudentIdQueryResponse
+
+
+
+
+                if (internshipsExcelList == null || internshipsExcelList.IsNullOrEmpty())
+                {
+
+
+                    return new GetInternshipsByStudentIdQueryResponse
+                    {
+                        Response = new()
+                        {
+                            Data = null,
+                            Message = "Interships not found",
+                            IsSuccess = false,
+                            StatusCode = 404
+                        }
+                    };
+                }
+                else
+                {
+                    return new GetInternshipsByStudentIdQueryResponse
+                    {
+                        Response = new()
+                        {
+                            Data = internshipsExcelList,
+                            Message = "Interships found",
+                            IsSuccess = true,
+                            StatusCode = 200
+                        }
+                    };
+
+
+                }
+                return new GetInternshipsByStudentIdQueryResponse
                 {
                     Response = new()
                     {
-                        Data = internshipsWithExcelForms,
+                        Data = internshipsExcelList,
                         Message = "Interships found",
                         IsSuccess = true,
                         StatusCode = 200
                     }
-                });
+                };
 
             }
+        }
+        public class internshipAndExcel
+        {
+            public InternshipManagementSystem.Domain.Entities.Internship Internship { get; set; }
+            public InternshipManagementSystem.Domain.Entities.InternshipApplicationExcelForm InternshipApplicationExcelForm { get; set; }
+
         }
     }
 }
