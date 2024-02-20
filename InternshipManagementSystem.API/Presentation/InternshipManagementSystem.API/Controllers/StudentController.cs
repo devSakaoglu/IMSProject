@@ -31,7 +31,9 @@ namespace InternshipManagementSystem.API.Controllers
 
             _mediator = mediator;
         }
-        [Authorize("Student")]
+
+        //[Authorize("Student")]
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {

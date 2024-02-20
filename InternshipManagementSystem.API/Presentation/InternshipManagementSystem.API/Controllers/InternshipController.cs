@@ -55,7 +55,7 @@ namespace InternshipManagementSystem.API.Controllers
         public async Task<IActionResult> GetInternshipByInternshipId([FromQuery] GetInternshipByInternshipIdQueryRequest request)
         {
             GetInternshipByInternshipIdQueryResponse response = await _mediator.Send(request);
-            return Ok();
+            return Ok(response.Response);
 
         }
 

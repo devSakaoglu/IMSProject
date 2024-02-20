@@ -1,4 +1,6 @@
-﻿using InternshipManagementSystem.Application.Repositories;
+﻿using InternshipManagementSystem.Application.Features.Advisor.Queries.GetAdvisorNameByInternshipId;
+using InternshipManagementSystem.Application.Repositories;
+using InternshipManagementSystem.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,17 +15,25 @@ namespace InternshipManagementSystem.Application.Features.Student
     {
         private readonly IStudentWriteRepository _studentWriteRepository;
         private readonly IStudentReadRepository  _studentReadRepository;
+        private readonly IAdvisorReadRepository _advisorReadRepository;
+        private readonly IMediator _mediator;
 
-
-        public GetStudentByIdQueryHandler(IStudentReadRepository studentRepository, IStudentWriteRepository studentWriteRepository)
+        public GetStudentByIdQueryHandler(IStudentWriteRepository studentWriteRepository, IStudentReadRepository studentReadRepository, IAdvisorReadRepository advisorReadRepository, IMediator mediator)
         {
-            _studentReadRepository = studentRepository;
             _studentWriteRepository = studentWriteRepository;
+            _studentReadRepository = studentReadRepository;
+            _advisorReadRepository = advisorReadRepository;
+            _mediator = mediator;
         }
 
         public async Task<GetStudentByIdQueryResponse> Handle(GetStudentByIdQueryRequest request, CancellationToken cancellationToken )
         {
-            var student=  await _studentReadRepository.Table.FirstOrDefaultAsync(x => x.ID == request.Id); 
+            var student=  await _studentReadRepository.Table.FirstOrDefaultAsync(x => x.ID == request.Id);
+            GetAdvisorNameByInternshipIdResponse  response= await _mediator.Send(new GetAdvisorNameByInternshipIdRequest { StudentId  =request.Id});
+            if (student is not null)
+            {
+                student.AdvisorFullName = response.Response.Data.ToString();
+            }
             if (student == null)
             {
                 return new GetStudentByIdQueryResponse { Response=new()
@@ -37,7 +47,7 @@ namespace InternshipManagementSystem.Application.Features.Student
             }
             else
             {
-                return new GetStudentByIdQueryResponse {Message="OK", Response = new()
+                return new GetStudentByIdQueryResponse { Response = new()
                 {
                     Data = student,
                     Message = "Student found",
