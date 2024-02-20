@@ -28,8 +28,7 @@ namespace InternshipManagementSystem.API.Controllers
         {
             _studentReadRepository = studentReadRepository;
             _studentWriteRepository = studentWriteRepository;
-            _advisorReadRepository = advisorReadRepository;
-            _advisorWriteRepository = advisorWriteRepository;
+
             _mediator = mediator;
         }
         [Authorize("Student")]
