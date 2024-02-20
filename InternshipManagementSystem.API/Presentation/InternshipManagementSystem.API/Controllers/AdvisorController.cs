@@ -26,6 +26,7 @@ namespace InternshipManagementSystem.API.Controllers
             _studentReadRepository = studentReadRepository;
             _studentWriteRepository = studentWriteRepository;
         }
+        //[Authorize(Roles =UserType.Advisor)]
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
