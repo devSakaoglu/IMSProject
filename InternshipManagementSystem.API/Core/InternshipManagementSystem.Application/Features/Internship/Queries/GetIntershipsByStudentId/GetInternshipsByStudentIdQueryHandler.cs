@@ -1,23 +1,41 @@
 ﻿using InternshipManagementSystem.Application.Repositories;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace InternshipManagementSystem.Application.Features.Internship
 {
     public class GetInternshipsByStudentIdQueryHandler : IRequestHandler<GetInternshipsByStudentIdQueryRequest, GetInternshipsByStudentIdQueryResponse>
     {
         IInternshipReadRepository _internshipReadRepository;
+        IInternshipApplicationFormReadRepository _internshipApplicationFormReadRepository;
 
-        public GetInternshipsByStudentIdQueryHandler(IInternshipReadRepository internshipReadRepository)
+        public GetInternshipsByStudentIdQueryHandler(IInternshipReadRepository internshipReadRepository, IInternshipApplicationFormReadRepository internshipApplicationFormReadRepository)
         {
             _internshipReadRepository = internshipReadRepository;
+            _internshipApplicationFormReadRepository = internshipApplicationFormReadRepository;
         }
-
-
 
         public Task<GetInternshipsByStudentIdQueryResponse> Handle(GetInternshipsByStudentIdQueryRequest request, CancellationToken cancellationToken)
         {
-            var interships = _internshipReadRepository.GetWhere(i => i.StudentID == request.StudentId).ToList();
-            if (interships == null || interships.Count == 0)
+            var internships = _internshipReadRepository.Table.Where(x => x.StudentID == request.StudentId);
+            var excelForms = _internshipApplicationFormReadRepository.Table.ToList();
+
+            var internshipsWithExcelForms = internships
+    .Join(
+        excelForms,
+        internship => internship.InternshipApplicationExelFormID,
+        excelForm => excelForm.ID,
+        (internship, excelForm) => new
+        {
+            Internship = internship,
+            ExcelForm = excelForm
+        })
+
+
+    .ToList();
+   
+            if (internships == null || internships.IsNullOrEmpty())
             {
                 return Task.FromResult(new GetInternshipsByStudentIdQueryResponse
                 {
@@ -36,7 +54,7 @@ namespace InternshipManagementSystem.Application.Features.Internship
                 {
                     Response = new()
                     {
-                        Data = interships,
+                        Data = internshipsWithExcelForms,
                         Message = "Interships found",
                         IsSuccess = true,
                         StatusCode = 200
