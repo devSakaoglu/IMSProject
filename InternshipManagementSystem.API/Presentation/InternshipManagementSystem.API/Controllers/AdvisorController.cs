@@ -45,9 +45,10 @@ namespace InternshipManagementSystem.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(GetAllAdvisorQueryRequest request)
+        public async Task<IActionResult> GetAll()
         {
-            GetAllAdvisorQueryResponse response= await _mediator.Send(request);
+            var req = new GetAllAdvisorQueryRequest();
+            GetAllAdvisorQueryResponse response= await _mediator.Send(req);
             return Ok(response);
         }
 
