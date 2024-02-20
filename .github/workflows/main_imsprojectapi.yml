@@ -45,13 +45,8 @@ jobs:
 
       - name: Copy Angular build to ASP.NET Core project
         run: |
-          ls angular-app/output/browser/
           mkdir -p backend-app/InternshipManagementSystem.API/Presentation/InternshipManagementSystem.API/wwwwroot
           cp -r angular-app/output/browser/* backend-app/InternshipManagementSystem.API/Presentation/InternshipManagementSystem.API/wwwwroot/
-
-      - name: List wwwroot
-        run: |
-          ls backend-app/InternshipManagementSystem.API/Presentation/InternshipManagementSystem.API/wwwwroot/
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
@@ -71,9 +66,10 @@ jobs:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
 
-      - name: List Angular build output
+      - name: Copy Angular build to ASP.NET Core project
         run: |
-          ls ${{env.DOTNET_ROOT}}/myapp
+          cp -r angular-app/output/browser/* ${{env.DOTNET_ROOT}}/myapp/wwwroot/
+
   deploy:
     runs-on: windows-latest
     needs: build-and-deploy
